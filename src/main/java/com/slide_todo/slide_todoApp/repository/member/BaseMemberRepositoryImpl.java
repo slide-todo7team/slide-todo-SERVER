@@ -43,10 +43,10 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
 
   @Override
   public Boolean existsByNickname(String nickname) {
-    return !em.createQuery("select count(m) from Member m"
+    return em.createQuery("select count(m) from Member m"
             + " where m.nickname = :nickname", Long.class)
         .setParameter("nickname", nickname)
-        .getResultList().isEmpty();
+        .getSingleResult() != 0;
   }
 
   @Override
@@ -64,7 +64,7 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
             + " where m.role = :role", Member.class)
         .setParameter("role", role)
         .setFirstResult(first)
-        .setMaxResults(first+limit)
+        .setMaxResults(first + limit)
         .getResultList();
   }
 
@@ -79,7 +79,7 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
     int first = (page - 1) * limit;
     return em.createQuery("select m from Member m", Member.class)
         .setFirstResult(first)
-        .setMaxResults(first+limit)
+        .setMaxResults(first + limit)
         .getResultList();
   }
 }
