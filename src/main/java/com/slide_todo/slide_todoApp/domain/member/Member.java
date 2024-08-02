@@ -40,12 +40,12 @@ public class Member {
   private LocalDateTime updatedAt;
 
   @Builder
-  public Member(String email, String password, String name, String nickname, MemberRole role) {
+  public Member(String email, String password, String name, String nickname) {
     this.email = email;
     this.password = password;
     this.name = name;
     this.nickname = nickname;
-    this.role = role;
+    this.role = MemberRole.USER;
     this.updatedAt = LocalDateTime.now();
   }
 

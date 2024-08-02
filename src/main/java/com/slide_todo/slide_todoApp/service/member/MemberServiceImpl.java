@@ -1,6 +1,7 @@
 package com.slide_todo.slide_todoApp.service.member;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
+import com.slide_todo.slide_todoApp.domain.member.MemberRole;
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
@@ -49,7 +50,6 @@ public class MemberServiceImpl implements MemberService {
         .password(passwordEncoder.encode(request.getPassword()))
         .name(request.getName())
         .nickname(request.getNickname())
-        .role(request.getRole())
         .build();
     memberRepository.save(member);
 

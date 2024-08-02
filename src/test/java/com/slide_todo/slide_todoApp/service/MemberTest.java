@@ -59,8 +59,7 @@ public class MemberTest {
         generator.generateRandomEmail(),
         password,
         generator.generateRandomString(10),
-        generator.generateRandomString(10),
-        MemberRole.USER
+        generator.generateRandomString(10)
     );
 
     Long savedId = jwtProvider.getMemberIdFromToken(
@@ -74,7 +73,6 @@ public class MemberTest {
     assertEquals(request.getEmail(), result.getEmail());
     assertEquals(request.getName(), result.getName());
     assertEquals(request.getNickname(), result.getNickname());
-    assertEquals(request.getRole(), result.getRole());
     assertNotEquals(request.getPassword(), result.getPassword());
   }
 
