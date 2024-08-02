@@ -16,6 +16,8 @@ public enum Exceptions {
   REGISTERED_EMAIL(400, "Email already exists"),
   EXIST_NICKNAME(400, "Nickname already exists"),
   INVALID_EMAIL(400, "Invalid email format"),
+  INVALID_PASSWORD(400, "Invalid password. Password must be at least 8 characters"
+      + " long and include a mix of letters, numbers, and symbols."),
 
 
   /*401 UNAUTHORIZED*/
@@ -38,8 +40,6 @@ public enum Exceptions {
   GOAL_NOT_FOUND(404, "Goal not exists"),
   MEMBER_NOT_FOUND(404, "Member not exists"),
   MEMBER_WITH_EMAIL_NOT_FOUND(404, "Member with email not found"),
-  INVALID_PASSWORD(404, "Invalid password. Password must be at least 8 characters"
-      + " long and include a mix of letters, numbers, and symbols."),
   TASK_NOT_FOUND(404, "Task not exists"),
   NOTE_NOT_FOUND(404, "Note not exists"),
 
