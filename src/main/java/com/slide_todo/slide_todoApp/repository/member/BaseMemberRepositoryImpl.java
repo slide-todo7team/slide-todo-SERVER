@@ -41,10 +41,11 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
 
   @Override
   public Boolean existsByEmail(String email) {
-    return em.createQuery("select count(m) from Member m"
-            + " where m.email =:email", Long.class)
+    return !em.createQuery("select m from Member m"
+            + " where m.email =:email", Member.class)
         .setParameter("email", email)
-        .getSingleResult() > 0;
+        .setMaxResults(1)
+        .getResultList().isEmpty();
   }
 
   @Override
@@ -61,10 +62,11 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
 
   @Override
   public Boolean existsByNickname(String nickname) {
-    return em.createQuery("select count(m) from Member m"
-            + " where m.email =:nickname", Long.class)
+    return !em.createQuery("select m from Member m"
+            + " where m.nickname =:nickname", Member.class)
         .setParameter("nickname", nickname)
-        .getSingleResult() > 0;
+        .setMaxResults(1)
+        .getResultList().isEmpty();
   }
 
   @Override
