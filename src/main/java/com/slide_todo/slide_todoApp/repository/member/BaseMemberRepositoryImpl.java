@@ -29,7 +29,7 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
                 + " where m.email = :email", Member.class)
             .setParameter("email", email)
             .getSingleResult())
-        .orElseThrow(() -> new CustomException(Exceptions.MEMBER_NOT_FOUND));
+        .orElseThrow(() -> new CustomException(Exceptions.MEMBER_WITH_EMAIL_NOT_FOUND));
   }
 
   @Override
@@ -39,6 +39,14 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
             .setParameter("nickname", nickname)
             .getSingleResult())
         .orElseThrow(() -> new CustomException(Exceptions.MEMBER_NOT_FOUND));
+  }
+
+  @Override
+  public Boolean existsByNickname(String nickname) {
+    return !em.createQuery("select count(m) from Member m"
+            + " where m.nickname = :nickname", Long.class)
+        .setParameter("nickname", nickname)
+        .getResultList().isEmpty();
   }
 
   @Override

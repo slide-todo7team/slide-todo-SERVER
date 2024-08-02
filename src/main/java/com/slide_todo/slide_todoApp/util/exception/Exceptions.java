@@ -34,6 +34,8 @@ public enum Exceptions {
   /*404 NOT_FOUND*/
   GOAL_NOT_FOUND(404, "Goal not exists"),
   MEMBER_NOT_FOUND(404, "Member not exists"),
+  MEMBER_WITH_EMAIL_NOT_FOUND(404, "Member with email not found"),
+  INVALID_PASSWORD(404, "Invalid password"),
   TASK_NOT_FOUND(404, "Task not exists"),
   NOTE_NOT_FOUND(404, "Note not exists"),
 

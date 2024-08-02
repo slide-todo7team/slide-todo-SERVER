@@ -12,6 +12,8 @@ public interface BaseMemberRepository {
 
   Member findByNickname(String nickname);
 
+  Boolean existsByNickname(String nickname);
+
   Long countByRole(MemberRole role);
 
   List<Member> findByRoll(MemberRole role, int page, int limit);

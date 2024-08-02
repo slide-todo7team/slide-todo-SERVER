@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -38,6 +39,7 @@ public class Member {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
+  @Builder
   public Member(String email, String password, String name, String nickname, MemberRole role) {
     this.email = email;
     this.password = password;
