@@ -10,6 +10,8 @@ public interface BaseMemberRepository {
 
   Member findByEmail(String email);
 
+  Boolean existsByEmail(String email);
+
   Member findByNickname(String nickname);
 
   Boolean existsByNickname(String nickname);

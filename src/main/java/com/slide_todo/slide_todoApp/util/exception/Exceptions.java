@@ -13,6 +13,9 @@ public enum Exceptions {
   UPDATE_CONTENT_REQUIRED(400, "Content is required"),
   INVALID_GOAL_ID(400, "Goal id is number only"),
   TITLE_TOO_LONG(400, "The title can be up to 30 characters."),
+  REGISTERED_EMAIL(400, "Email already exists"),
+  EXIST_NICKNAME(400, "Nickname already exists"),
+  INVALID_EMAIL(400, "Invalid email format"),
 
 
   /*401 UNAUTHORIZED*/
