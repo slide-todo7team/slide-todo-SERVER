@@ -1,7 +1,6 @@
 package com.slide_todo.slide_todoApp.service.member;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
-import com.slide_todo.slide_todoApp.domain.member.MemberRole;
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
@@ -30,11 +29,11 @@ public class MemberServiceImpl implements MemberService {
   private final PasswordEncoder passwordEncoder;
   private final JwtProvider jwtProvider;
 
-  private final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+  private final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.$";
   private final Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
 
-  private static final String PASSWORD_PATTERN =
-      "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";;
+  private final String PASSWORD_PATTERN =
+      "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=!.])(?=\\S+$).{8,}$";
   private final Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
 
 
