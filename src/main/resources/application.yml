@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: slide_todoApp
+  profiles.include:
+    - local
+    - prod
+springdoc:
+  swagger-ui:
+    path: /api-docs
