@@ -30,22 +30,19 @@ public class MemberServiceImpl implements MemberService {
   private final JwtProvider jwtProvider;
 
   private final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-  private final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+  private final Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
+
+  private static final String PASSWORD_PATTERN =
+      "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";;
+  private final Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
 
 
   @Override
   @Transactional
   public ResponseDTO<TokenPairDTO> signup(SignupDTO request) {
-    if (memberRepository.existsByEmail(request.getEmail())) {
-      throw new CustomException(Exceptions.REGISTERED_EMAIL);
-    }
-    if (memberRepository.existsByNickname(request.getNickname())) {
-      throw new CustomException(Exceptions.EXIST_NICKNAME);
-    }
-    if (!pattern.matcher(request.getEmail()).matches()) {
-      throw new CustomException(Exceptions.INVALID_EMAIL);
-    }
-
+    validateEmail(request.getEmail());
+    validateNickname(request.getNickname());
+    validatePassword(request.getPassword());
 
     Member member = Member.builder()
         .email(request.getEmail())
@@ -96,13 +93,9 @@ public class MemberServiceImpl implements MemberService {
   @Override
   @Transactional
   public ResponseDTO<MemberUpdateDTO> updateMember(Long memberId, MemberUpdateDTO request) {
+    validateEmail(request.getEmail());
     Member member = memberRepository.findByMemberId(memberId);
-    if (memberRepository.existsByNickname(request.getNickname())) {
-      throw new CustomException(Exceptions.EXIST_NICKNAME);
-    }
-    if (memberRepository.existsByEmail(request.getEmail())) {
-      throw new CustomException(Exceptions.REGISTERED_EMAIL);
-    }
+    validateNickname(request.getNickname());
 
     member.updateMember(request.getEmail(), request.getName(), request.getNickname());
     return new ResponseDTO<>(new MemberUpdateDTO(
@@ -123,5 +116,29 @@ public class MemberServiceImpl implements MemberService {
     Member member = memberRepository.findByMemberId(memberId);
     memberRepository.delete(member);
     return new ResponseDTO<>(null, Responses.OK);
+  }
+
+  /*이메일 유효성 및 중복 검사*/
+  private void validateEmail(String email) {
+    if (memberRepository.existsByEmail(email)) {
+      throw new CustomException(Exceptions.REGISTERED_EMAIL);
+    }
+    if (!emailPattern.matcher(email).matches()) {
+      throw new CustomException(Exceptions.INVALID_EMAIL);
+    }
+  }
+
+  /*비밀번호 유효성 검사*/
+  private void validatePassword(String password) {
+    if (!passwordPattern.matcher(password).matches()) {
+      throw new CustomException(Exceptions.INVALID_PASSWORD);
+    }
+  }
+
+  /*닉네임 중복 검사*/
+  private void validateNickname(String nickname) {
+    if (memberRepository.existsByNickname(nickname)) {
+      throw new CustomException(Exceptions.EXIST_NICKNAME);
+    }
   }
 }

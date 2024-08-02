@@ -25,7 +25,6 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
     } catch (NoResultException e) {
       throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
     }
-
   }
 
   @Override
@@ -63,7 +62,7 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   @Override
   public Boolean existsByNickname(String nickname) {
     return em.createQuery("select count(m) from Member m"
-            + " where m.nickname =:nickname", Long.class)
+            + " where m.email =:nickname", Long.class)
         .setParameter("nickname", nickname)
         .getSingleResult() > 0;
   }
