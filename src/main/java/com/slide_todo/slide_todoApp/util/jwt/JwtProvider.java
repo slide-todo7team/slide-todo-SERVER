@@ -70,7 +70,7 @@ public class JwtProvider {
       throw new CustomException(Exceptions.INVALID_TOKEN);
     }
     if (claims.getPayload().getIssuedAt().after(new Date())) {
-      throw new CustomException(Exceptions.INVALID_ISSUED_TIME);
+      throw new CustomException(Exceptions.PREMATURE_TOKEN);
     }
     Date expireAt = claims.getPayload().getExpiration();
     if (expireAt.before(new Date())) {
