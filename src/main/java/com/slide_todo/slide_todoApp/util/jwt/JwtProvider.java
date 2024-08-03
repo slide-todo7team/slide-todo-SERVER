@@ -1,6 +1,6 @@
 package com.slide_todo.slide_todoApp.util.jwt;
 
-import com.slide_todo.slide_todoApp.dto.TokenDTO;
+import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import io.jsonwebtoken.Claims;
@@ -63,14 +63,14 @@ public class JwtProvider {
 
 
   /*리프레시 토큰 검증 후 새로운 액세스 토큰 발급*/
-  public TokenDTO refreshAccessToken(String refreshToken) {
+  public TokenPairDTO refreshAccessToken(String refreshToken) {
     Jws<Claims> claims = Jwts.parser().verifyWith(secretKey).build()
         .parseSignedClaims(refreshToken);
     if (!claims.getPayload().get("type").equals(TokenType.REFRESH.name())) {
       throw new CustomException(Exceptions.INVALID_TOKEN);
     }
     if (claims.getPayload().getIssuedAt().after(new Date())) {
-      throw new CustomException(Exceptions.INVALID_ISSUED_TIME);
+      throw new CustomException(Exceptions.PREMATURE_TOKEN);
     }
     Date expireAt = claims.getPayload().getExpiration();
     if (expireAt.before(new Date())) {
@@ -81,7 +81,7 @@ public class JwtProvider {
     }
     Long memberId = Long.parseLong(claims.getPayload().getSubject());
     blacklist.putToken(refreshToken, expireAt.toString());
-    return new TokenDTO(createToken(memberId, TokenType.REFRESH),
+    return new TokenPairDTO(createToken(memberId, TokenType.REFRESH),
         createToken(memberId, TokenType.REFRESH));
   }
 
@@ -124,4 +124,22 @@ public class JwtProvider {
     return bearerToken.replace("Bearer ", "");
   }
 
+
+  /*토큰에서 ID 추출*/
+  public Long getMemberIdFromToken(String token) {
+    Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token)
+        .getPayload();
+    Date now = new Date();
+
+    if (blacklist.containsToken(token)) {
+      throw new CustomException(Exceptions.BLACKLISTED_TOKEN);
+    } else if (claims.getExpiration().before(now)) {
+      throw new CustomException(Exceptions.EXPIRED_TOKEN);
+    } else if (claims.getIssuedAt().after(new Date())) {
+      throw new CustomException(Exceptions.PREMATURE_TOKEN);
+    } else if (!claims.get("type").equals(TokenType.ACCESS.name())) {
+      throw new CustomException(Exceptions.NOT_ACCESS_TOKEN);
+    }
+    return Long.parseLong(claims.getSubject());
+  }
 }
