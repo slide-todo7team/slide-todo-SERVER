@@ -9,6 +9,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@DiscriminatorValue("I")
 public class IndividualGoal extends Goal {
 
     @ManyToOne

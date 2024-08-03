@@ -11,11 +11,12 @@ import org.apache.el.parser.BooleanNode;
 public abstract class Goal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "goal_id")
     private Long id;
 
     private String title;
 
-    private Integer progress_rate;
+    private Integer progressRate;
 
     private Boolean isDeleted;
 

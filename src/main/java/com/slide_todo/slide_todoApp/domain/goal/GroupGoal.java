@@ -1,17 +1,15 @@
 package com.slide_todo.slide_todoApp.domain.goal;
 
 import com.slide_todo.slide_todoApp.domain.group.Group;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
+@DiscriminatorValue("G")
 public class GroupGoal extends Goal {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private Group group;
 
