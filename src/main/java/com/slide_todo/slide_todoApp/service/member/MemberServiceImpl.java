@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
   private final PasswordEncoder passwordEncoder;
   private final JwtProvider jwtProvider;
 
-  private final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.$";
+  private final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
   private final Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
 
   private final String PASSWORD_PATTERN =
@@ -92,9 +92,17 @@ public class MemberServiceImpl implements MemberService {
   @Override
   @Transactional
   public ResponseDTO<MemberUpdateDTO> updateMember(Long memberId, MemberUpdateDTO request) {
-    validateEmail(request.getEmail());
     Member member = memberRepository.findByMemberId(memberId);
-    validateNickname(request.getNickname());
+    if (request.getEmail() != null) {
+      if (!request.getEmail().equals(member.getEmail())) {
+        validateEmail(request.getEmail());
+      }
+    }
+    if (request.getNickname() != null) {
+      if (!request.getNickname().equals(member.getNickname())) {
+        validateNickname(request.getNickname());
+      }
+    }
 
     member.updateMember(request.getEmail(), request.getName(), request.getNickname());
     return new ResponseDTO<>(new MemberUpdateDTO(

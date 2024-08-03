@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,12 +57,12 @@ public class MemberController {
   @Operation(summary = "로그인", description = "로그인 API입니다.")
   @ApiResponse(responseCode = "200", description = "로그인 성공")
   public ResponseDTO<TokenPairDTO> signin(
-      @RequestBody  SigninDTO request) {
+      @RequestBody SigninDTO request) {
     return memberService.signin(request);
   }
 
 
-  @GetMapping("/token/refresh")
+  @PostMapping("/token/refresh")
   @Operation(summary = "토큰 갱신", description = "토큰 갱신 API입니다.")
   @ApiResponse(responseCode = "200", description = "토큰 갱신 성공")
   public ResponseDTO<TokenPairDTO> refreshToken(
@@ -70,7 +71,7 @@ public class MemberController {
   }
 
 
-  @GetMapping("/logout")
+  @PostMapping("/logout")
   @Operation(summary = "로그아웃", description = "로그아웃 API입니다.")
   @ApiResponse(responseCode = "200", description = "로그아웃 성공")
   public ResponseDTO<?> logout(@RequestBody TokenPairDTO request) {
