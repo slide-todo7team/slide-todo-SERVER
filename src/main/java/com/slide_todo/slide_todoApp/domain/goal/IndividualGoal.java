@@ -1,11 +1,19 @@
 package com.slide_todo.slide_todoApp.domain.goal;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
+import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -16,5 +24,13 @@ public class IndividualGoal extends Goal {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Builder
+    public IndividualGoal(String title, Member member) {
+        super(title);
+        this.member = member;
+    }
 
+    protected IndividualGoal() {
+        super();
+    }
 }
