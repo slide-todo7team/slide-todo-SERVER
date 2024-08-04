@@ -1,6 +1,8 @@
 package com.slide_todo.slide_todoApp.domain.group;
 
 
+import java.util.Random;
+
 public enum ColorEnum {
     COLOR_1("#B07100"),
     COLOR_2("#FF284F"),
@@ -30,4 +32,8 @@ public enum ColorEnum {
         this.hexCode = hexCode;
     }
 
+    public String getHexCode() {
+        return hexCode;
+    }
 }
+

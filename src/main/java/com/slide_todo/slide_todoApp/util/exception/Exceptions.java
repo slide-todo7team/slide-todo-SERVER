@@ -42,6 +42,8 @@ public enum Exceptions {
   MEMBER_WITH_EMAIL_NOT_FOUND(404, "Member with email not found"),
   TASK_NOT_FOUND(404, "Task not exists"),
   NOTE_NOT_FOUND(404, "Note not exists"),
+  CODE_NOT_FOUND(404, "없는 초대코드 입니다."),
+  GROUP_NOT_FOUND(404, "없는 그룹입니다."),
 
   /*405 METHOD_NOT_ALLOWED*/
   METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
@@ -51,6 +53,7 @@ public enum Exceptions {
 
   /*409 CONFLICT*/
   NOTE_ALREADY_EXISTS(409, "Note of the task already exists"),
+  GROUP_ALREADY_EXISTS(409, "이미 사용 중인 이름입니다."),
 
   /*500 INTERNAL_SERVER_ERROR*/
   INTERNAL_SERVER_ERROR(500, "Internal server error");

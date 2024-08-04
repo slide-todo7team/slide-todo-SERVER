@@ -1,10 +1,12 @@
 package com.slide_todo.slide_todoApp.domain.group;
 
+import com.slide_todo.slide_todoApp.dto.group.GroupCreateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import com.slide_todo.slide_todoApp.domain.member.Member;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "`group`")
@@ -24,7 +27,7 @@ public class Group {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "create_member_id")
+    @JoinColumn(name = "create_member_id") //그룹을 생성한 사람
     private Member member;
 
     private String title;
@@ -39,6 +42,13 @@ public class Group {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Group(GroupCreateDTO groupCreateDTO, Member member) {
+        this.title = groupCreateDTO.getTitle();
+        this.secretCode = groupCreateDTO.getSecretCode();
+        this.member = member;
+    }
+
 
     @Builder
     public Group(Member createdMember, String title, String secretCode) {
