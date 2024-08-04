@@ -2,6 +2,7 @@ package com.slide_todo.slide_todoApp.domain.group;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,4 +39,11 @@ public class Group {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Builder
+    public Group(Member createdMember, String title, String secretCode) {
+        this.member = createdMember;
+        this.title = title;
+        this.secretCode = secretCode;
+    }
 }

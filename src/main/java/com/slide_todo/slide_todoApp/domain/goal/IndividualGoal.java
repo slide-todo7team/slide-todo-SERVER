@@ -10,7 +10,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -21,6 +24,13 @@ public class IndividualGoal extends Goal {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "individualGoal", fetch = FetchType.LAZY)
-    private List<IndividualTodo> individualTodos = new ArrayList<>();
+    @Builder
+    public IndividualGoal(String title, Member member) {
+        super(title);
+        this.member = member;
+    }
+
+    protected IndividualGoal() {
+        super();
+    }
 }

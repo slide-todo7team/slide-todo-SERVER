@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.domain.todo;
 
+import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import jakarta.persistence.Column;
@@ -12,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -39,6 +42,10 @@ public abstract class Todo {
   private String linkUrl;
   private Boolean isDeleted;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "goal_id")
+  private Goal goal;
+
   @OneToOne(mappedBy = "todo", fetch = FetchType.LAZY)
   private Note note;
 
@@ -47,9 +54,12 @@ public abstract class Todo {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  public Todo(String title, String linkUrl) {
+  public Todo(String title, String linkUrl, Goal goal) {
     this.title = title;
     this.linkUrl = linkUrl;
+    this.isDeleted = false;
+    this.goal = goal;
+    this.goal.getTodos().add(this);
   }
 
   /**

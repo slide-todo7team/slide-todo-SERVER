@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.domain.todo;
 
+import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import jakarta.persistence.DiscriminatorValue;
@@ -22,17 +23,9 @@ public class GroupTodo extends Todo {
   @JoinColumn(name = "done_group_member_id")
   private GroupMember groupMember;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "group_goal_id")
-  private GroupGoal groupGoal;
-
   @Builder
-  public GroupTodo(String title, String linkUrl, GroupGoal groupGoal) {
-    super(title, linkUrl);
-
-    /*연관 관계 편의 메소드*/
-    this.groupGoal = groupGoal;
-    this.groupGoal.getGroupTodos().add(this);
+  public GroupTodo(String title, String linkUrl, Goal groupGoal) {
+    super(title, linkUrl, groupGoal);
   }
 
   public void doneTodo(GroupMember groupMember) {

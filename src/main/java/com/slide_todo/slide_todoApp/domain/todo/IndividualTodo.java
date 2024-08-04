@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.domain.todo;
 
+import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -17,20 +18,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class IndividualTodo extends Todo {
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "individual_goal_id")
-  private IndividualGoal individualGoal;
 
   private Boolean isDone;
 
   @Builder
-  public IndividualTodo(String title, String linkUrl, IndividualGoal individualGoal) {
-    super(title, linkUrl);
+  public IndividualTodo(String title, String linkUrl, Goal individualGoal) {
+    super(title, linkUrl, individualGoal);
     this.isDone = false;
-
-    /*연관 관계 편의 메소드*/
-    this.individualGoal = individualGoal;
-    this.individualGoal.getIndividualTodos().add(this);
   }
 
   public void doneTodo() {
