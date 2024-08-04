@@ -84,7 +84,6 @@ public class GroupServiceImpl implements GroupService {
 
     //그룹 리스트 조회
     @Override
-    @Transactional
     public ResponseDTO<List<GroupDTO>> getGroupList(Long memberId){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(Exceptions.MEMBER_NOT_FOUND));
@@ -100,7 +99,6 @@ public class GroupServiceImpl implements GroupService {
 
     //그룹 상세 조회
     @Override
-    @Transactional
     public ResponseDTO<GroupInfoDTO> getGroupInfo(Long groupId){
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
         List<GroupMember> groupMembers = groupMemberRepository.findByGroup(group);
@@ -156,7 +154,6 @@ public class GroupServiceImpl implements GroupService {
 
     //새로운 초대코드 발급
     @Override
-    @Transactional
     public ResponseDTO<GroupCodeDTO> getNewSecretCode(Long groupId){
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
         int newCode = generateRandomNumber();
