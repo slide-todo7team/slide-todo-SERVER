@@ -14,13 +14,15 @@ import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Service
+@Transactional(readOnly = true)
 public class GroupServiceImpl implements GroupService {
 
     GroupRepository groupRepository;
@@ -35,6 +37,7 @@ public class GroupServiceImpl implements GroupService {
 
     //그룹 생성하기
     @Override
+    @Transactional
     public ResponseDTO<GroupResponseDTO> createGroup(String title, Long memberId){
 
         //그룹 이름 중복 확인
@@ -57,10 +60,12 @@ public class GroupServiceImpl implements GroupService {
         GroupResponseDTO responseDTO = new GroupResponseDTO(group); //그룹 테이블에 정보 저장
 
         saveGroupMemInfo(group,member,true);
-        return new ResponseDTO<>(responseDTO,Responses.OK);
+        return new ResponseDTO<>(responseDTO,Responses.CREATED);
     }
 
     //그룹 참여하기
+    @Override
+    @Transactional
     public ResponseDTO<GroupResponseDTO> joinGroup(String secretCode, Long memberId){
 
         //초대코드 존재 확인
@@ -78,6 +83,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     //그룹 리스트 조회
+    @Override
+    @Transactional
     public ResponseDTO<List<GroupDTO>> getGroupList(Long memberId){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(Exceptions.MEMBER_NOT_FOUND));
@@ -92,6 +99,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     //그룹 상세 조회
+    @Override
+    @Transactional
     public ResponseDTO<GroupInfoDTO> getGroupInfo(Long groupId){
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
         List<GroupMember> groupMembers = groupMemberRepository.findByGroup(group);
@@ -123,6 +132,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     //그룹 삭제하기
+    @Override
     @Transactional
     public ResponseDTO<?> deleteGroup(Long groupId){
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
@@ -130,10 +140,11 @@ public class GroupServiceImpl implements GroupService {
         groupMemberRepository.deleteByGroup(group);
         groupRepository.deleteById(groupId);
 
-        return new ResponseDTO<>(null, Responses.OK);
+        return new ResponseDTO<>(null, Responses.NO_CONTENT);
     }
 
     //그룹 탈퇴
+    @Override
     @Transactional
     public ResponseDTO<?> leaveGroup(Long groupId, Long memberId){
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
@@ -144,6 +155,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     //새로운 초대코드 발급
+    @Override
+    @Transactional
     public ResponseDTO<GroupCodeDTO> getNewSecretCode(Long groupId){
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
         int newCode = generateRandomNumber();
@@ -156,6 +169,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     //새로운 초대코드 저장
+    @Override
+    @Transactional
     public ResponseDTO<GroupInfoDTO> saveNewSecretCode(Long groupId, String secretCode) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
 
@@ -174,6 +189,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     //그룹 멤버 저장
+    @Transactional
     public void saveGroupMemInfo(Group group, Member member, Boolean isLeader) {
 
         List<GroupMember> groupMembers = groupMemberRepository.findByGroup(group);
