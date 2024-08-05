@@ -1,6 +1,8 @@
 package com.slide_todo.slide_todoApp.util.jwt;
 
+import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
+import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import io.jsonwebtoken.Claims;
@@ -31,6 +33,7 @@ public class JwtProvider {
   private String key;
   private SecretKey secretKey;
   private final Blacklist blacklist;
+  private final MemberRepository memberRepository;
 
 
   @PostConstruct
@@ -39,8 +42,9 @@ public class JwtProvider {
   }
 
 
-  /*액세스 토큰 발급*/
+  /*토큰 발급*/
   public String createToken(Long memberId, TokenType tokenType) {
+    Member member = memberRepository.findByMemberId(memberId);
     Date expiration;
     Date now = new Date();
     if (tokenType == TokenType.ACCESS) {
@@ -55,6 +59,7 @@ public class JwtProvider {
         .issuer(issuer)
         .subject(memberId.toString())
         .claim("type", tokenType.name())
+        .claim("role", member.getRole().name())
         .issuedAt(now)
         .expiration(expiration)
         .signWith(secretKey, Jwts.SIG.HS512)
