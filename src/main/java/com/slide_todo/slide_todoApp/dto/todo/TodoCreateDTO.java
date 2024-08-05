@@ -11,4 +11,10 @@ public class TodoCreateDTO {
   private String title;
   @JsonProperty("link_url")
   private String linkUrl;
+
+  public TodoCreateDTO(Long goalId, String title, String linkUrl) {
+    this.goalId = goalId;
+    this.title = title;
+    this.linkUrl = linkUrl;
+  }
 }

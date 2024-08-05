@@ -47,7 +47,6 @@ public class Note {
   @CreatedDate
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime createdAt;
-  @LastModifiedDate
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime updatedAt;
 
@@ -56,6 +55,7 @@ public class Note {
     this.title = title;
     this.content = content;
     this.isDeleted = false;
+    this.updatedAt = LocalDateTime.now();
 
     /*연관 관계 편의 메소드*/
     this.todo = todo;
@@ -69,9 +69,11 @@ public class Note {
     if (content != null) {
       this.content = content;
     }
+    this.updatedAt = LocalDateTime.now();
   }
 
   public void deleteNote() {
     this.isDeleted = true;
+    this.updatedAt = LocalDateTime.now();
   }
 }

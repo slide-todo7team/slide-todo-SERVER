@@ -12,4 +12,9 @@ public class RetrieveIndividualTodoDTO {
   private List<Long> goalIds;
   @JsonProperty("is_done")
   private Boolean isDone;
+
+  public RetrieveIndividualTodoDTO(List<Long> goalIds, Boolean isDone) {
+    this.goalIds = goalIds;
+    this.isDone = isDone;
+  }
 }

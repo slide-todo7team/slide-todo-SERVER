@@ -31,7 +31,11 @@ public class IndividualTodoDTO {
     this.linkUrl = todo.getLinkUrl();
     this.createdAt = todo.getCreatedAt().toString();
     this.updatedAt = todo.getUpdatedAt().toString();
-    this.noteId = todo.getNote().getId();
+    if (todo.getNote() != null) {
+      this.noteId = todo.getNote().getId();
+    } else {
+      this.noteId = null;
+    }
     this.goal = new GoalInTodoDTO(goal);
   }
 

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.note.Note;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
@@ -17,6 +19,8 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,7 +36,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "DTYPE")
+@DiscriminatorColumn(name = "dtype")
 @SQLRestriction("is_deleted = false")
 public abstract class Todo {
 
@@ -50,16 +54,14 @@ public abstract class Todo {
   @JoinColumn(name = "goal_id")
   private Goal goal;
 
+  @Nullable
   @OneToOne(mappedBy = "todo", fetch = FetchType.LAZY)
   private Note note;
 
-  @Column(name = "DTYPE", insertable = false, updatable = false)
-  private String dtype;
 
   @CreatedDate
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime createdAt;
-  @LastModifiedDate
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime updatedAt;
 
@@ -70,6 +72,12 @@ public abstract class Todo {
     this.isDone = false;
     this.goal = goal;
     this.goal.getTodos().add(this);
+    this.updatedAt = LocalDateTime.now();
+  }
+
+  @Transient
+  public String getDtype() {
+    return this.getClass().getAnnotation(DiscriminatorValue.class).value();
   }
 
   /**
@@ -79,6 +87,7 @@ public abstract class Todo {
    */
   public void writeNote(Note note) {
     this.note = note;
+    this.updatedAt = LocalDateTime.now();
   }
 
   /**
@@ -89,6 +98,7 @@ public abstract class Todo {
     if (this.note != null) {
       this.note.deleteNote();
     }
+    this.updatedAt = LocalDateTime.now();
   }
 
   /**
@@ -104,6 +114,7 @@ public abstract class Todo {
     if (linkUrl != null) {
       this.linkUrl = linkUrl;
     }
+    this.updatedAt = LocalDateTime.now();
   }
 
   /**
@@ -111,6 +122,7 @@ public abstract class Todo {
    */
   void updateDone() {
     this.isDone = !this.isDone;
+    this.updatedAt = LocalDateTime.now();
   }
 
   /**

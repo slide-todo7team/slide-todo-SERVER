@@ -10,6 +10,7 @@ import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
+import com.slide_todo.slide_todoApp.dto.group.GroupCreateDTO;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import java.security.SecureRandom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,10 +152,13 @@ public class TestGenerator {
   }
 
   public Group createGroup(Member member) {
-    return Group.builder()
+    GroupCreateDTO dto = GroupCreateDTO.builder()
         .title(generateRandomString(10))
         .secretCode(generateRandomString(10))
-        .createdMember(member)
+        .build();
+    return Group.builder()
+        .groupCreateDTO(dto)
+        .member(member)
         .build();
   }
 

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@DiscriminatorValue("Individual")
+@DiscriminatorValue("I")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class IndividualTodo extends Todo {
 

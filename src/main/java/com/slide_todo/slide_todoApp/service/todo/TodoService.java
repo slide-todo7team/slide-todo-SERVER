@@ -19,7 +19,7 @@ public interface TodoService {
   ResponseDTO<?> changeTodoDone(Long memberId, Long todoId);
 
   /*할 일 삭제*/
-  ResponseDTO<?> deleteTodoById(Long memberId, Long todoId);
+  ResponseDTO<?> deleteTodo(Long memberId, Long todoId);
 
   /*개인의 모든 할 일 조회*/
   ResponseDTO<List<IndividualTodoDTO>> getIndividualTodoList(Long memberId, RetrieveIndividualTodoDTO request);

@@ -24,15 +24,23 @@ public class GroupTodoDTO {
   private Long noteId;
   private GoalInTodoDTO goal;
 
-  public GroupTodoDTO(GroupTodo groupTodo, Goal goal) {
-    this.id = groupTodo.getId();
-    this.title = groupTodo.getTitle();
-    this.isDone = groupTodo.getIsDone();
-    this.doneGroupMemberId = groupTodo.getGroupMember().getId();
-    this.linkUrl = groupTodo.getLinkUrl();
-    this.createdAt = groupTodo.getCreatedAt().toString();
-    this.updatedAt = groupTodo.getUpdatedAt().toString();
-    this.noteId = groupTodo.getNote().getId();
+  public GroupTodoDTO(GroupTodo todo, Goal goal) {
+    this.id = todo.getId();
+    this.title = todo.getTitle();
+    this.isDone = todo.getIsDone();
+    if (todo.getGroupMember() != null) {
+      this.doneGroupMemberId = todo.getGroupMember().getId();
+    } else {
+      this.doneGroupMemberId = null;
+    }
+    this.linkUrl = todo.getLinkUrl();
+    this.createdAt = todo.getCreatedAt().toString();
+    this.updatedAt = todo.getUpdatedAt().toString();
+    if (todo.getNote() != null) {
+      this.noteId = todo.getNote().getId();
+    } else {
+      this.noteId = null;
+    }
     this.goal = new GoalInTodoDTO(goal);
   }
 }

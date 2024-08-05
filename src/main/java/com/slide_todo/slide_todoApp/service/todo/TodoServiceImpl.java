@@ -42,9 +42,11 @@ public class TodoServiceImpl implements TodoService {
   public ResponseDTO<?> createTodo(Long memberId, TodoCreateDTO request) {
     Goal goal = goalRepository.findByGoalId(request.getGoalId());
     if (goal.getDtype().equals("G")) {
-      return new ResponseDTO<>(createGroupTodoDTO(memberId, request), Responses.CREATED);
+      GroupTodo todo =  createGroupTodo(memberId, request);
+      return new ResponseDTO<>(new GroupTodoDTO(todo, todo.getGoal()), Responses.CREATED);
     }
-    return new ResponseDTO<>(createIndividualTodoDTO(memberId, request), Responses.CREATED);
+    IndividualTodo todo = createIndividualTodo(memberId, request);
+    return new ResponseDTO<>(new IndividualTodoDTO(todo, todo.getGoal()), Responses.CREATED);
   }
 
   @Override
@@ -52,10 +54,12 @@ public class TodoServiceImpl implements TodoService {
   public ResponseDTO<?> updateTodo(Long memberId, Long todoId, TodoUpdateDTO request) {
     Todo todo = todoRepository.findByTodoId(todoId);
     if (todo.getDtype().equals("G")) {
-      return new ResponseDTO<>(updateGroupTodoDTO(memberId, (GroupTodo) todo, request),
+      GroupTodo newTodo = updateGroupTodo(memberId, (GroupTodo) todo, request);
+      return new ResponseDTO<>(new GroupTodoDTO(newTodo, newTodo.getGoal()),
           Responses.OK);
     }
-    return new ResponseDTO<>(updateIndividualTodoDTO(memberId, (IndividualTodo) todo, request),
+    IndividualTodo newTodo = updateIndividualTodo(memberId, (IndividualTodo) todo, request);
+    return new ResponseDTO<>(new IndividualTodoDTO(newTodo, newTodo.getGoal()),
         Responses.OK);
   }
 
@@ -64,15 +68,17 @@ public class TodoServiceImpl implements TodoService {
   public ResponseDTO<?> changeTodoDone(Long memberId, Long todoId) {
     Todo todo = todoRepository.findByTodoId(todoId);
     if (todo.getDtype().equals("G")) {
-
-      return new ResponseDTO<>(doneGroupTodo(memberId, (GroupTodo) todo), Responses.OK);
+      GroupTodo newTodo = doneGroupTodo(memberId, (GroupTodo) todo);
+      return new ResponseDTO<>(new GroupTodoDTO(newTodo, newTodo.getGoal()), Responses.OK);
     }
-    return new ResponseDTO<>(doneIndividualTodo(memberId, (IndividualTodo) todo), Responses.OK);
+    IndividualTodo newTodo = doneIndividualTodo(memberId, (IndividualTodo) todo);
+    return new ResponseDTO<>(new IndividualTodoDTO(newTodo, newTodo.getGoal())
+        , Responses.OK);
   }
 
   @Override
   @Transactional
-  public ResponseDTO<?> deleteTodoById(Long memberId, Long todoId) {
+  public ResponseDTO<?> deleteTodo(Long memberId, Long todoId) {
     Todo todo = todoRepository.findByTodoId(todoId);
     if (todo.getDtype().equals("G")) {
       GroupGoal goal = groupGoalRepository.findById(todo.getGoal().getId())
@@ -121,7 +127,7 @@ public class TodoServiceImpl implements TodoService {
    * @param request
    * @return
    */
-  private GroupTodoDTO createGroupTodoDTO(Long memberId, TodoCreateDTO request) {
+  private GroupTodo createGroupTodo(Long memberId, TodoCreateDTO request) {
     GroupGoal goal = groupGoalRepository.findById(request.getGoalId())
         .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
     checkGroupPermission(memberId, goal.getGroup().getId());
@@ -131,9 +137,7 @@ public class TodoServiceImpl implements TodoService {
         .linkUrl(request.getLinkUrl())
         .groupGoal(goal)
         .build();
-    todoRepository.save(groupTodo);
-
-    return new GroupTodoDTO(groupTodo, goal);
+    return todoRepository.save(groupTodo);
   }
 
   /**
@@ -143,7 +147,7 @@ public class TodoServiceImpl implements TodoService {
    * @param request
    * @return
    */
-  private IndividualTodoDTO createIndividualTodoDTO(Long memberId, TodoCreateDTO request) {
+  private IndividualTodo createIndividualTodo(Long memberId, TodoCreateDTO request) {
     IndividualGoal goal = individualGoalRepository.findById(request.getGoalId())
         .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
 
@@ -152,9 +156,7 @@ public class TodoServiceImpl implements TodoService {
         .linkUrl(request.getLinkUrl())
         .individualGoal(goal)
         .build();
-    todoRepository.save(individualTodo);
-
-    return new IndividualTodoDTO(individualTodo, goal);
+    return todoRepository.save(individualTodo);
   }
 
   /**
@@ -165,7 +167,7 @@ public class TodoServiceImpl implements TodoService {
    * @param request
    * @return
    */
-  private GroupTodoDTO updateGroupTodoDTO(Long memberId, GroupTodo todo, TodoUpdateDTO request) {
+  private GroupTodo updateGroupTodo(Long memberId, GroupTodo todo, TodoUpdateDTO request) {
     GroupGoal goal = groupGoalRepository.findById(todo.getGoal().getId())
         .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
     checkGroupPermission(memberId, goal.getGroup().getId());
@@ -174,7 +176,7 @@ public class TodoServiceImpl implements TodoService {
         request.getTitle(),
         request.getLinkUrl()
     );
-    return new GroupTodoDTO(todo, todo.getGoal());
+    return todo;
   }
 
   /**
@@ -185,13 +187,13 @@ public class TodoServiceImpl implements TodoService {
    * @param request
    * @return
    */
-  private IndividualTodoDTO updateIndividualTodoDTO(Long memberId, IndividualTodo todo,
+  private IndividualTodo updateIndividualTodo(Long memberId, IndividualTodo todo,
       TodoUpdateDTO request) {
     todo.updateTodo(
         request.getTitle(),
         request.getLinkUrl()
     );
-    return new IndividualTodoDTO(todo, todo.getGoal());
+    return todo;
   }
 
   /**
@@ -201,17 +203,17 @@ public class TodoServiceImpl implements TodoService {
    * @param todo
    * @return
    */
-  private GroupTodoDTO doneGroupTodo(Long memberId, GroupTodo todo) {
+  private GroupTodo doneGroupTodo(Long memberId, GroupTodo todo) {
     GroupGoal goal = groupGoalRepository.findById(todo.getGoal().getId())
         .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
     GroupMember groupMember = checkGroupPermission(memberId, goal.getGroup().getId());
 
     todo.doneGroupTodo(groupMember);
-    return new GroupTodoDTO(todo, goal);
+    return todo;
   }
 
-  private IndividualTodoDTO doneIndividualTodo(Long memberId, IndividualTodo todo) {
+  private IndividualTodo doneIndividualTodo(Long memberId, IndividualTodo todo) {
     todo.updateIndividualTodoDone();
-    return new IndividualTodoDTO(todo, todo.getGoal());
+    return todo;
   }
 }

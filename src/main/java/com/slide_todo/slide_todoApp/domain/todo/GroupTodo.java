@@ -2,6 +2,7 @@ package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,10 +15,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@DiscriminatorValue("Group")
+@DiscriminatorValue("G")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupTodo extends Todo {
 
+  @Nullable
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "done_group_member_id")
   private GroupMember groupMember;
