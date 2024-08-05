@@ -12,6 +12,7 @@ import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +25,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class IndividualGoalServiceImpl implements IndividualGoalService {
 
     private final MemberRepository memberRepository;
     private final IndividualGoalRepository individualGoalRepository;
     private final TodoRepository todoRepository;
-
-    public IndividualGoalServiceImpl(MemberRepository memberRepository, IndividualGoalRepository individualGoalRepository, TodoRepository todoRepository) {
-        this.memberRepository = memberRepository;
-        this.individualGoalRepository = individualGoalRepository;
-        this.todoRepository = todoRepository;
-    }
 
     //개인 목표 생성
     @Override
@@ -149,7 +145,8 @@ public class IndividualGoalServiceImpl implements IndividualGoalService {
         IndividualGoal individualGoal = individualGoalRepository.findById(goalId)
                 .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
 
-        individualGoal.setIsDeleted(true);
+//        individualGoal.setIsDeleted(true);
+        individualGoal.deleteGoal();
         individualGoalRepository.save(individualGoal);
 
         return new ResponseDTO<>(null, Responses.NO_CONTENT);

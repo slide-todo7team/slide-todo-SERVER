@@ -14,31 +14,29 @@ import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class GroupGoalServiceImpl implements GroupGoalService {
 
     private final TodoRepository todoRepository;
-    IndividualGoalService individualGoalService;
-    GroupRepository groupRepository;
-    GroupGoalRepository groupGoalRepository;
-    GroupMemberRepository groupMemberRepository;
-
-    public GroupGoalServiceImpl(IndividualGoalService individualGoalService, GroupRepository groupRepository, GroupGoalRepository groupGoalRepository, GroupMemberRepository groupMemberRepository, TodoRepository todoRepository) {
-        this.individualGoalService = individualGoalService;
-        this.groupRepository = groupRepository;
-        this.groupGoalRepository = groupGoalRepository;
-        this.groupMemberRepository = groupMemberRepository;
-        this.todoRepository = todoRepository;
-    }
+    private final IndividualGoalServiceImpl individualGoalServiceImpl;
+    private final GroupRepository groupRepository;
+    private final GroupGoalRepository groupGoalRepository;
+    private final GroupMemberRepository groupMemberRepository;
 
     //그룹 목표 생성
+    @Override
+    @Transactional
     public ResponseDTO<GroupGoalDTO> createGroupGoal(Long groupId,String title){
-        individualGoalService.checkTitleLength(title);
+        individualGoalServiceImpl.checkTitleLength(title);
 
         Group group = groupRepository.findById(groupId).get();
 
@@ -53,6 +51,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     }
 
     //그룹 목표 리스트 조회
+    @Override
     public ResponseDTO<?> getGroupGoals(Long groupId){
         Group group = groupRepository.findById(groupId).get();
         List<GroupGoal> groupGoals = groupGoalRepository.findAllByGroup(group);
@@ -71,6 +70,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
 
 
     //그룹 목표 & 할일 리스트 조회
+    @Override
     public ResponseDTO<GoalTodosResponseDTO<GroupGoalTodoDTO>> getGroupGoalTodos(Long groupId,Long cursor,Integer limit){
         List<GroupGoal> groupGoals;
         Group group = groupRepository.findById(groupId).get();
@@ -131,8 +131,10 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     }
 
     //그룹 목표 수정
+    @Override
+    @Transactional
     public ResponseDTO<GroupGoalDTO> updateGroupGoal(Long groupId, Long goalId, String title){
-        individualGoalService.checkTitleLength(title);
+        individualGoalServiceImpl.checkTitleLength(title);
         Group group = groupRepository.findById(groupId).get();
 
         GroupGoal groupGoal = groupGoalRepository.findByGroupAndId(group,goalId);
@@ -143,11 +145,14 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     }
 
     //그룹 목표 삭제
+    @Override
+    @Transactional
     public ResponseDTO<?> deleteGroupGoal(Long groupId, Long goalId){
         Group group = groupRepository.findById(groupId).get();
         GroupGoal groupGoal = groupGoalRepository.findByGroupAndId(group,goalId);
 
-        groupGoal.setIsDeleted(true);
+//        groupGoal.setIsDeleted(true);
+        groupGoal.deleteGoal();
         groupGoalRepository.save(groupGoal);
 
         return new ResponseDTO<>(null,Responses.NO_CONTENT);

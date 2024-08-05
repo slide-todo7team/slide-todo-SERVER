@@ -14,6 +14,7 @@ import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +24,18 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
-    GroupRepository groupRepository;
-    MemberRepository memberRepository;
-    GroupMemberRepository groupMemberRepository;
+    private final GroupRepository groupRepository;
+    private final MemberRepository memberRepository;
+    private final GroupMemberRepository groupMemberRepository;
 
-    public GroupServiceImpl(GroupRepository groupRepository,MemberRepository memberRepository,GroupMemberRepository groupMemberRepository) {
-        this.groupRepository = groupRepository;
-        this.memberRepository = memberRepository;
-        this.groupMemberRepository = groupMemberRepository;
-    }
+//    public GroupServiceImpl(GroupRepository groupRepository,MemberRepository memberRepository,GroupMemberRepository groupMemberRepository) {
+//        this.groupRepository = groupRepository;
+//        this.memberRepository = memberRepository;
+//        this.groupMemberRepository = groupMemberRepository;
+//    }
 
     //그룹 생성하기
     @Override

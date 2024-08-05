@@ -90,6 +90,10 @@ public class Group {
         groupMember.updateIsLeader(true);
     }
 
+    public void setSecretCode(String secretCode) {
+        this.secretCode = secretCode;
+    }
+
 
 //    @Builder
 //    public Group(Member createdMember, String title, String secretCode) {
