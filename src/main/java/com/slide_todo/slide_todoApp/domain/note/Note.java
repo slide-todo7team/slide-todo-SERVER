@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.domain.note;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,8 +45,10 @@ public class Note {
   private Boolean isDeleted;
 
   @CreatedDate
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime createdAt;
   @LastModifiedDate
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime updatedAt;
 
   @Builder

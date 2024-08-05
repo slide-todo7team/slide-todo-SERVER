@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.domain.todo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.note.Note;
@@ -53,8 +54,10 @@ public abstract class Todo {
   private Note note;
 
   @CreatedDate
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime createdAt;
   @LastModifiedDate
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime updatedAt;
 
   public Todo(String title, String linkUrl, Goal goal) {
