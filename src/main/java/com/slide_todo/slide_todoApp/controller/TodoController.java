@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.controller;
 
+import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoListDTO;
 import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoCreateDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoUpdateDTO;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -101,11 +104,13 @@ public class TodoController {
       @ApiResponse(responseCode = "200", description = "개인의 모든 할 일 조회 성공"),
       @ApiResponse(responseCode = "400", description = "개인의 모든 할 일 조회 실패")
   })
-  public ResponseDTO<?> getIndividualTodoList(
+  public ResponseDTO<IndividualTodoListDTO> getIndividualTodoList(
       HttpServletRequest request,
+      @Parameter(name = "page") @RequestParam Long page,
+      @Parameter(name = "limit") @RequestParam Long limit,
       @RequestBody RetrieveIndividualTodoDTO dto
   ) {
     Long memberId = jwtProvider.getMemberId(request);
-    return todoService.getIndividualTodoList(memberId, dto);
+    return todoService.getIndividualTodoList(memberId, page, limit, dto);
   }
 }

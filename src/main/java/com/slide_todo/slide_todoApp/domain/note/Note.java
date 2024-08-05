@@ -1,6 +1,7 @@
 package com.slide_todo.slide_todoApp.domain.note;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -18,9 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -39,9 +37,14 @@ public class Note {
   @JoinColumn(name = "todo_id")
   private Todo todo;
 
+  @OneToOne
+  @JoinColumn(name = "modified_group_member_id")
+  private GroupMember modifiedGroupMember;
+
   private String title;
   @Lob
   private String content;
+  private String linkUrl;
   private Boolean isDeleted;
 
   @CreatedDate
@@ -51,10 +54,12 @@ public class Note {
   private LocalDateTime updatedAt;
 
   @Builder
-  public Note(Todo todo, String title, String content) {
+  public Note(Todo todo, String title, String content, String linkUrl, GroupMember modifiedGroupMember) {
     this.title = title;
     this.content = content;
+    this.linkUrl = linkUrl;
     this.isDeleted = false;
+    this.modifiedGroupMember = modifiedGroupMember;
     this.updatedAt = LocalDateTime.now();
 
     /*연관 관계 편의 메소드*/
@@ -62,13 +67,14 @@ public class Note {
     this.todo.writeNote(this);
   }
 
-  public void updateNote(String title, String content) {
+  public void updateNote(String title, String content, GroupMember modifiedGroupMember) {
     if (title != null) {
       this.title = title;
     }
     if (content != null) {
       this.content = content;
     }
+    this.modifiedGroupMember = modifiedGroupMember;
     this.updatedAt = LocalDateTime.now();
   }
 

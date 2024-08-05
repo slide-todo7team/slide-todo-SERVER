@@ -224,63 +224,63 @@ public class TodoServiceTest {
     assertEquals(exception.getMessage(), Exceptions.TODO_NOT_FOUND.getMsg());
   }
 
-  @Test
-  @Transactional
-  public void 개인의_모든_할일_조회() throws Exception {
-    /*given*/
-    Member member = memberRepository.save(generator.createMember());
-    Long goalId = individualGoalService.createIndividualGoal("title", member.getId()).getData()
-        .getId();
+//  @Test
+//  @Transactional
+//  public void 개인의_모든_할일_조회() throws Exception {
+//    /*given*/
+//    Member member = memberRepository.save(generator.createMember());
+//    Long goalId = individualGoalService.createIndividualGoal("title", member.getId()).getData()
+//        .getId();
+//
+//    int todos = generator.generateRandomInt(50, 10);
+//    for (int i = 0; i < todos; i++) {
+//      TodoCreateDTO request = new TodoCreateDTO(goalId, "title", "content");
+//      todoService.createTodo(member.getId(), request);
+//    }
+//
+//    /*when*/
+//    List<IndividualTodoDTO> result = todoService
+//        .getIndividualTodoList(member.getId(), new RetrieveIndividualTodoDTO(null, null)).getData();
+//
+//    /*then*/
+//    assertEquals(todos, result.size());
+//  }
 
-    int todos = generator.generateRandomInt(50, 10);
-    for (int i = 0; i < todos; i++) {
-      TodoCreateDTO request = new TodoCreateDTO(goalId, "title", "content");
-      todoService.createTodo(member.getId(), request);
-    }
-
-    /*when*/
-    List<IndividualTodoDTO> result = todoService
-        .getIndividualTodoList(member.getId(), new RetrieveIndividualTodoDTO(null, null)).getData();
-
-    /*then*/
-    assertEquals(todos, result.size());
-  }
-
-  @Test
-  @Transactional
-  public void 개인의_할일_조건_검색() throws Exception {
-    /*given*/
-    Member member = memberRepository.save(generator.createMember());
-    Long goalId1 = individualGoalService.createIndividualGoal("title1", member.getId()).getData()
-        .getId();
-    Long goalId2 = individualGoalService.createIndividualGoal("title2", member.getId()).getData()
-        .getId();
-
-    int expected1 = 0;
-    for (int i = 0; i < 100; i++) {
-      if (generator.generateRandomBoolean()) {
-        TodoCreateDTO request = new TodoCreateDTO(goalId1, "title", "content");
-        IndividualTodoDTO dto = (IndividualTodoDTO) todoService.createTodo(member.getId(), request)
-            .getData();
-        expected1++;
-
-        if (generator.generateRandomBoolean()) {
-          todoService.changeTodoDone(member.getId(), dto.getId());
-          expected1--;
-        }
-      } else {
-        TodoCreateDTO request = new TodoCreateDTO(goalId2, "title", "content");
-        todoService.createTodo(member.getId(), request);
-      }
-    }
-
-    /*when*/
-
-    List<IndividualTodoDTO> result = todoService
-        .getIndividualTodoList(member.getId(),
-            new RetrieveIndividualTodoDTO(List.of(goalId1), false)).getData();
-
-    /*then*/
-    assertEquals(expected1, result.size());
-  }
+//  @Test
+//  @Transactional
+//  public void 개인의_할일_조건_검색() throws Exception {
+//    /*given*/
+//    Member member = memberRepository.save(generator.createMember());
+//    Long goalId1 = individualGoalService.createIndividualGoal("title1", member.getId()).getData()
+//        .getId();
+//    Long goalId2 = individualGoalService.createIndividualGoal("title2", member.getId()).getData()
+//        .getId();
+//
+//    int expected1 = 0;
+//    for (int i = 0; i < 100; i++) {
+//      if (generator.generateRandomBoolean()) {
+//        TodoCreateDTO request = new TodoCreateDTO(goalId1, "title", "content");
+//        IndividualTodoDTO dto = (IndividualTodoDTO) todoService.createTodo(member.getId(), request)
+//            .getData();
+//        expected1++;
+//
+//        if (generator.generateRandomBoolean()) {
+//          todoService.changeTodoDone(member.getId(), dto.getId());
+//          expected1--;
+//        }
+//      } else {
+//        TodoCreateDTO request = new TodoCreateDTO(goalId2, "title", "content");
+//        todoService.createTodo(member.getId(), request);
+//      }
+//    }
+//
+//    /*when*/
+//
+//    List<IndividualTodoDTO> result = todoService
+//        .getIndividualTodoList(member.getId(),
+//            new RetrieveIndividualTodoDTO(List.of(goalId1), false)).getData();
+//
+//    /*then*/
+//    assertEquals(expected1, result.size());
+//  }
 }

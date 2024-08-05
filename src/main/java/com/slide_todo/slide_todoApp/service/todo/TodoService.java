@@ -1,6 +1,7 @@
 package com.slide_todo.slide_todoApp.service.todo;
 
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoDTO;
+import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoListDTO;
 import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoCreateDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoUpdateDTO;
@@ -22,5 +23,5 @@ public interface TodoService {
   ResponseDTO<?> deleteTodo(Long memberId, Long todoId);
 
   /*개인의 모든 할 일 조회*/
-  ResponseDTO<List<IndividualTodoDTO>> getIndividualTodoList(Long memberId, RetrieveIndividualTodoDTO request);
+  ResponseDTO<IndividualTodoListDTO> getIndividualTodoList(Long memberId, Long page, Long limit, RetrieveIndividualTodoDTO request);
 }

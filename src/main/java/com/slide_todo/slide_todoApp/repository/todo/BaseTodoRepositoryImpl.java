@@ -25,7 +25,15 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
   }
 
   @Override
-  public List<IndividualTodo> findAllIndividualTodoByMemberId(Long memberId, List<Long> goalIds,
+  public Long countAllByGoalId(Long goalId) {
+    return em.createQuery("select count(t) from Todo t"
+            + " where t.goal.id = :goalId", Long.class)
+        .setParameter("goalId", goalId)
+        .getSingleResult();
+  }
+
+  @Override
+  public List<IndividualTodo> findAllIndividualTodoByMemberId(Long memberId, Long start, Long limit, List<Long> goalIds,
       Boolean isDone) {
     if (goalIds == null) {
       goalIds = em.createQuery("select g.id from IndividualGoal g"
@@ -42,7 +50,27 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
             IndividualTodo.class)
         .setParameter("goalIds", goalIds)
         .setParameter("isDone", isDone)
-        .getResultList();
+        .setFirstResult(start.intValue())
+        .setMaxResults(limit.intValue())
+         .getResultList();
+  }
+
+  @Override
+  public Long countAllIndividualTodoByMemberId(Long memberId, List<Long> goalIds, Boolean isDone) {
+    if (goalIds == null) {
+      goalIds = em.createQuery("select g.id from IndividualGoal g"
+              + " left join g.member m"
+              + " where g.member.id = :memberId", Long.class)
+          .setParameter("memberId", memberId)
+          .getResultList().stream().toList();
+    }
+    return em.createQuery("select count(t) from IndividualTodo t"
+            + " where t.isDeleted = false"
+            + " and t.goal.id in :goalIds"
+            + " and (:isDone is null or t.isDone = :isDone)", Long.class)
+        .setParameter("goalIds", goalIds)
+        .setParameter("isDone", isDone)
+        .getSingleResult();
   }
 
   @Override
