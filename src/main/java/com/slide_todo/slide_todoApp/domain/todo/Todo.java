@@ -61,6 +61,7 @@ public abstract class Todo {
     this.title = title;
     this.linkUrl = linkUrl;
     this.isDeleted = false;
+    this.isDone = false;
     this.goal = goal;
     this.goal.getTodos().add(this);
   }
@@ -100,9 +101,17 @@ public abstract class Todo {
   }
 
   /**
-   * 할 일을 완료 처리
-   *
+   * 할 일의 완료 상태 변경
+   */
+  void updateDone() {
+    this.isDone = !this.isDone;
+  }
+
+  /**
+   * 할 일의 완료 여부를 확인
    * @return
    */
-  public abstract Boolean checkDone();
+  public Boolean checkDone() {
+    return this.isDone;
+  };
 }

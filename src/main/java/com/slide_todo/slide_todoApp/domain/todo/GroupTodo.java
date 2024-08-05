@@ -28,12 +28,15 @@ public class GroupTodo extends Todo {
     super(title, linkUrl, groupGoal);
   }
 
-  public void doneTodo(GroupMember groupMember) {
-    this.groupMember = groupMember;
-  }
-
-  @Override
-  public Boolean checkDone() {
-    return this.groupMember != null;
+  /**
+   * 그룹 할 일의 완료 상태 변경
+   */
+  public void doneGroupTodo(GroupMember groupMember) {
+    this.updateDone();
+    if (this.getIsDone()) {
+      this.groupMember = groupMember;
+    } else {
+      this.groupMember = null;
+    }
   }
 }
