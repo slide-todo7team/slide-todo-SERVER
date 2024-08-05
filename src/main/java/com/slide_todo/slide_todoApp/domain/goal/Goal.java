@@ -9,12 +9,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.el.parser.BooleanNode;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DTYPE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@SQLRestriction("is_deleted = false") // 논리 삭제된 데이터는 조회하지 않도록 설정
 public abstract class Goal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +38,21 @@ public abstract class Goal {
         this.isDeleted = false;
     }
 
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * 목표의 할 일을 모두 논리 삭제
+     */
+    public void deleteGoal() {
+        this.isDeleted = true;
+        for (Todo todo : todos) {
+            todo.deleteTodo();
+        }
+    }
+
+    /**
+     * 목표 진행률 계산 메소드 필요
+     */
 }

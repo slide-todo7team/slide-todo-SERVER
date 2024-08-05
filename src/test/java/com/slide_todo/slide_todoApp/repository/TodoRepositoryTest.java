@@ -14,7 +14,7 @@ import com.slide_todo.slide_todoApp.domain.member.MemberRole;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
-import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
+//import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.note.NoteRepository;
