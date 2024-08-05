@@ -17,5 +17,6 @@ public interface BaseTodoRepository {
             Long memberId, List<Long> goalIds, Boolean isDone
     );
 
-
+    /*목표의 ID를 통해 단건 조회*/
+    Todo findByTodoId(Long todoId);
 }

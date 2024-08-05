@@ -31,7 +31,7 @@ public class IndividualTodo extends Todo {
   /**
    * 개인 할 일을 완료 처리
    */
-  public void updateIndividualTodo() {
+  public void updateIndividualTodoDone() {
     this.updateDone();
   }
 }

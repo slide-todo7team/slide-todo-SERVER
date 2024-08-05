@@ -32,7 +32,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TYPE")
+@DiscriminatorColumn(name = "DTYPE")
 @SQLRestriction("is_deleted = false")
 public abstract class Todo {
 
@@ -52,6 +52,9 @@ public abstract class Todo {
 
   @OneToOne(mappedBy = "todo", fetch = FetchType.LAZY)
   private Note note;
+
+  @Column(name = "DTYPE", insertable = false, updatable = false)
+  private String dtype;
 
   @CreatedDate
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")

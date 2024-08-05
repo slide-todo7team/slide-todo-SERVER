@@ -2,9 +2,12 @@ package com.slide_todo.slide_todoApp.repository.todo;
 
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
+import com.slide_todo.slide_todoApp.util.exception.CustomException;
+import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 public class BaseTodoRepositoryImpl implements BaseTodoRepository {
 
@@ -39,5 +42,15 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
         .setParameter("goalIds", goalIds)
         .setParameter("isDone", isDone)
         .getResultList();
+  }
+
+  @Override
+  public Todo findByTodoId(Long todoId) {
+    return Optional.ofNullable(em.createQuery("select t from Todo t"
+            + " left join fetch t.note"
+            + " where t.id = :todoId", Todo.class)
+        .setParameter("todoId", todoId)
+        .getSingleResult())
+        .orElseThrow(() -> new CustomException(Exceptions.TODO_NOT_FOUND));
   }
 }

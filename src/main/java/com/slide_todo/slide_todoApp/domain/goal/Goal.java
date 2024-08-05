@@ -38,6 +38,9 @@ public abstract class Goal {
 
     private Boolean isDeleted;
 
+    @Column(name = "DTYPE", insertable = false, updatable = false)
+    private String dtype;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
