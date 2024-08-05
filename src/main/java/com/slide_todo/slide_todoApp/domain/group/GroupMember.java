@@ -59,4 +59,8 @@ public class GroupMember {
     public void updateIsLeader(Boolean isLeader) {
         this.isLeader = isLeader;
     }
+    ////
+    public Object getName() {
+        return member.getName();
+    }
 }

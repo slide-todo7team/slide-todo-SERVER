@@ -15,6 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter

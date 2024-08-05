@@ -17,6 +17,8 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember,Long> {
 
     void deleteByGroupAndMemberId(Group group, Long memberId);
 
+    List<GroupMember> findAllByGroupId(Long groupId);
+
     /*그룹 리더가 계정 삭제 시, 다음 그룹 리더를 찾기 위한 메소드*/
     @Query("SELECT gm FROM GroupMember  gm"
         + " LEFT JOIN FETCH gm.member"

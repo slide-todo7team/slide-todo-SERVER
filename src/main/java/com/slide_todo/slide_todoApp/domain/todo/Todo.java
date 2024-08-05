@@ -43,6 +43,7 @@ public abstract class Todo {
   private String title;
   private String linkUrl;
   private Boolean isDeleted;
+  private Boolean isDone;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "goal_id")

@@ -1,18 +1,25 @@
 package com.slide_todo.slide_todoApp.controller;
 
+import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
+import com.slide_todo.slide_todoApp.domain.group.Group;
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.group.*;
+import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
+import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.service.group.GroupService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/groups")
@@ -22,6 +29,8 @@ public class GroupController {
 
     private final JwtProvider jwtProvider;
     private final GroupService groupService;
+    private final GroupRepository groupRepository;
+    private final MemberRepository memberRepository;
 
     @PostMapping("")
     @Operation(summary = "그룹 생성")
@@ -76,6 +85,4 @@ public class GroupController {
         String secretCode = groupCodeDTO.getSecretCode();
         return groupService.saveNewSecretCode(groupId,secretCode);
     }
-
-
 }
