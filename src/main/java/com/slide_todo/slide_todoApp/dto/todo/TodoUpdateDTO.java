@@ -7,11 +7,11 @@ import lombok.Data;
 public class TodoUpdateDTO {
 
   private String title;
-  @JsonProperty("link_url")
-  private String linkUrl;
+  @JsonProperty("content")
+  private String content;
 
-  public TodoUpdateDTO(String title, String linkUrl) {
+  public TodoUpdateDTO(String title, String content) {
     this.title = title;
-    this.linkUrl = linkUrl;
+    this.content = content;
   }
 }

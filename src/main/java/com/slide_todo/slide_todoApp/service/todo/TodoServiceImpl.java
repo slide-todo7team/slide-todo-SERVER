@@ -134,7 +134,7 @@ public class TodoServiceImpl implements TodoService {
 
     GroupTodo groupTodo = GroupTodo.builder()
         .title(request.getTitle())
-        .linkUrl(request.getLinkUrl())
+        .content(request.getContent())
         .groupGoal(goal)
         .build();
     return todoRepository.save(groupTodo);
@@ -153,7 +153,7 @@ public class TodoServiceImpl implements TodoService {
 
     IndividualTodo individualTodo = IndividualTodo.builder()
         .title(request.getTitle())
-        .linkUrl(request.getLinkUrl())
+        .content(request.getContent())
         .individualGoal(goal)
         .build();
     return todoRepository.save(individualTodo);
@@ -174,7 +174,7 @@ public class TodoServiceImpl implements TodoService {
 
     todo.updateTodo(
         request.getTitle(),
-        request.getLinkUrl()
+        request.getContent()
     );
     return todo;
   }
@@ -191,7 +191,7 @@ public class TodoServiceImpl implements TodoService {
       TodoUpdateDTO request) {
     todo.updateTodo(
         request.getTitle(),
-        request.getLinkUrl()
+        request.getContent()
     );
     return todo;
   }

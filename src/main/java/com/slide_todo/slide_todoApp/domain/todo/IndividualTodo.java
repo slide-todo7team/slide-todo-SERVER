@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 public class IndividualTodo extends Todo {
 
   @Builder
-  public IndividualTodo(String title, String linkUrl, Goal individualGoal) {
-    super(title, linkUrl, individualGoal);
+  public IndividualTodo(String title, String content, Goal individualGoal) {
+    super(title, content, individualGoal);
   }
 
   @Override

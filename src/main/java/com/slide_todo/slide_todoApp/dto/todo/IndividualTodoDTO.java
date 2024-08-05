@@ -3,8 +3,6 @@ package com.slide_todo.slide_todoApp.dto.todo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
-import com.slide_todo.slide_todoApp.domain.todo.Todo;
-import com.slide_todo.slide_todoApp.dto.goal.GoalTitleDTO;
 import lombok.Data;
 
 @Data
@@ -14,8 +12,8 @@ public class IndividualTodoDTO {
   private String title;
   @JsonProperty("is_done")
   private Boolean isDone;
-  @JsonProperty("link_url")
-  private String linkUrl;
+  @JsonProperty("content")
+  private String content;
   @JsonProperty("created_at")
   private String createdAt;
   @JsonProperty("updated_at")
@@ -28,7 +26,7 @@ public class IndividualTodoDTO {
     this.id = todo.getId();
     this.title = todo.getTitle();
     this.isDone = todo.getIsDone();
-    this.linkUrl = todo.getLinkUrl();
+    this.content = todo.getContent();
     this.createdAt = todo.getCreatedAt().toString();
     this.updatedAt = todo.getUpdatedAt().toString();
     if (todo.getNote() != null) {

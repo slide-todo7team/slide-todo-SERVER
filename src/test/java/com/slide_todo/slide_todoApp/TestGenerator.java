@@ -125,7 +125,7 @@ public class TestGenerator {
     return IndividualTodo.builder()
         .individualGoal(goal)
         .title(generateRandomString(10))
-        .linkUrl(generateRandomString(10))
+        .content(generateRandomString(10))
         .build();
   }
 
@@ -133,7 +133,7 @@ public class TestGenerator {
     return GroupTodo.builder()
         .groupGoal(goal)
         .title(generateRandomString(10))
-        .linkUrl(generateRandomString(10))
+        .content(generateRandomString(10))
         .build();
   }
 

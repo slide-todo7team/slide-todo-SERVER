@@ -14,8 +14,8 @@ public class GroupTodoDTO {
   private Boolean isDone;
   @JsonProperty("done_group_member_id")
   private Long doneGroupMemberId;
-  @JsonProperty("link_url")
-  private String linkUrl;
+  @JsonProperty("content")
+  private String content;
   @JsonProperty("created_at")
   private String createdAt;
   @JsonProperty("updated_at")
@@ -33,7 +33,7 @@ public class GroupTodoDTO {
     } else {
       this.doneGroupMemberId = null;
     }
-    this.linkUrl = todo.getLinkUrl();
+    this.content = todo.getContent();
     this.createdAt = todo.getCreatedAt().toString();
     this.updatedAt = todo.getUpdatedAt().toString();
     if (todo.getNote() != null) {

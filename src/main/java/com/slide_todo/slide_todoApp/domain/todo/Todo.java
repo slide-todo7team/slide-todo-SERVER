@@ -2,7 +2,6 @@ package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
-import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -19,16 +18,13 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PostLoad;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -46,7 +42,7 @@ public abstract class Todo {
   private Long id;
 
   private String title;
-  private String linkUrl;
+  private String content;
   private Boolean isDeleted;
   private Boolean isDone;
 
@@ -65,9 +61,9 @@ public abstract class Todo {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime updatedAt;
 
-  public Todo(String title, String linkUrl, Goal goal) {
+  public Todo(String title, String content, Goal goal) {
     this.title = title;
-    this.linkUrl = linkUrl;
+    this.content = content;
     this.isDeleted = false;
     this.isDone = false;
     this.goal = goal;
@@ -105,14 +101,14 @@ public abstract class Todo {
    * 할 일의 제목과 링크를 수정.
    *
    * @param title
-   * @param linkUrl
+   * @param content
    */
-  public void updateTodo(String title, String linkUrl) {
+  public void updateTodo(String title, String content) {
     if (title != null) {
       this.title = title;
     }
-    if (linkUrl != null) {
-      this.linkUrl = linkUrl;
+    if (content != null) {
+      this.content = content;
     }
     this.updatedAt = LocalDateTime.now();
   }
