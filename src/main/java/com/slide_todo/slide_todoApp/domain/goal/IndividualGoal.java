@@ -1,7 +1,6 @@
 package com.slide_todo.slide_todoApp.domain.goal;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
-import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,10 +12,13 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.DialectOverride;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
+@Setter
 @DiscriminatorValue("I")
 public class IndividualGoal extends Goal {
 

@@ -33,7 +33,7 @@ public class GroupInfoDTO {
     public GroupInfoDTO(Group group) {
         this.id = group.getId();
         this.title = group.getTitle();
-        this.createUser = group.getMember().getNickname();
+        this.createUser = group.getCreatedGroupMember().getMember().getNickname();
         this.secretCode = group.getSecretCode();
         this.createdAt = group.getCreatedAt();
         this.updatedAt = group.getUpdatedAt();

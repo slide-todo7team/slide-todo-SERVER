@@ -59,4 +59,28 @@ public class GroupMember {
     public void updateIsLeader(Boolean isLeader) {
         this.isLeader = isLeader;
     }
+    ////
+    public String getName() {
+        return member.getName();
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setIsLeader(Boolean isLeader) {
+        this.isLeader = isLeader;
+    }
+
+    public void setTodoCount(int i) {
+        this.todoCount = i;
+    }
+
+    public void setColor(ColorEnum randomColor) {
+        this.color = randomColor;
+    }
 }

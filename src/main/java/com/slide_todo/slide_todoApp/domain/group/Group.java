@@ -15,6 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -87,6 +88,10 @@ public class Group {
         this.createdGroupMember.updateIsLeader(false);
         this.createdGroupMember = groupMember;
         groupMember.updateIsLeader(true);
+    }
+
+    public void setSecretCode(String secretCode) {
+        this.secretCode = secretCode;
     }
 
 
