@@ -1,7 +1,15 @@
 package com.slide_todo.slide_todoApp;
 
+import com.slide_todo.slide_todoApp.domain.goal.Goal;
+import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
+import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
+import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.member.MemberRole;
+import com.slide_todo.slide_todoApp.domain.note.Note;
+import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
+import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
+import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import java.security.SecureRandom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,25 +102,67 @@ public class TestGenerator {
     return generateRandomString(10) + "@" + generateRandomString(5) + ".com";
   }
 
-  @Transactional
   public Member createMember() {
     return Member.builder()
         .email(generateRandomEmail())
         .password(passwordEncoder.encode(generateRandomString(10)))
         .name(generateRandomString(10))
         .nickname(generateRandomString(10))
-        .role(MemberRole.USER)
         .build();
   }
 
-  @Transactional
   public Member createMember(String password) {
     return Member.builder()
         .email(generateRandomEmail())
         .password(passwordEncoder.encode(password))
         .name(generateRandomString(10))
         .nickname(generateRandomString(10))
-        .role(MemberRole.USER)
+        .build();
+  }
+
+  public IndividualTodo createIndividualTodo(Goal goal) {
+    return IndividualTodo.builder()
+        .individualGoal(goal)
+        .title(generateRandomString(10))
+        .linkUrl(generateRandomString(10))
+        .build();
+  }
+
+  public GroupTodo createGroupTodo(Goal goal) {
+    return GroupTodo.builder()
+        .groupGoal(goal)
+        .title(generateRandomString(10))
+        .linkUrl(generateRandomString(10))
+        .build();
+  }
+
+  public IndividualGoal createIndividualGoal(Member member) {
+    return IndividualGoal.builder()
+        .member(member)
+        .title(generateRandomString(10))
+        .build();
+  }
+
+  public GroupGoal createGroupGoal(Group group) {
+    return GroupGoal.builder()
+        .group(group)
+        .title(generateRandomString(10))
+        .build();
+  }
+
+  public Group createGroup(Member member) {
+    return Group.builder()
+        .title(generateRandomString(10))
+        .secretCode(generateRandomString(10))
+        .createdMember(member)
+        .build();
+  }
+
+  public Note createNote(Todo todo, String title, String content) {
+    return Note.builder()
+        .todo(todo)
+        .title(title)
+        .content(content)
         .build();
   }
 }
