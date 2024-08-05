@@ -1,7 +1,6 @@
 package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
-import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@DiscriminatorValue("G")
+@DiscriminatorValue("Group")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupTodo extends Todo {
 
