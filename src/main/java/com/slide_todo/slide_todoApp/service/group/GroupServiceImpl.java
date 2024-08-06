@@ -61,7 +61,7 @@ public class GroupServiceImpl implements GroupService {
 
         GroupResponseDTO responseDTO = new GroupResponseDTO(group); //그룹 테이블에 정보 저장
 
-        saveGroupMemInfo(group,member,true);
+//        saveGroupMemInfo(group,member,true);
         return new ResponseDTO<>(responseDTO,Responses.CREATED);
     }
 

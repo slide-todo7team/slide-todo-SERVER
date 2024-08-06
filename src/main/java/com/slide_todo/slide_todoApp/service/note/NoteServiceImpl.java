@@ -39,7 +39,6 @@ public class NoteServiceImpl implements NoteService {
 
   private final NoteRepository noteRepository;
   private final TodoRepository todoRepository;
-  private final MemberRepository memberRepository;
   private final GroupMemberRepository groupMemberRepository;
   private final GroupRepository groupRepository;
   private final GoalRepository goalRepository;
@@ -137,6 +136,11 @@ public class NoteServiceImpl implements NoteService {
     Todo todo = todoRepository.findByTodoId(todoId);
 
     if (todo.getDtype().equals("G")) {
+      GroupGoal groupGoal = groupGoalRepository.findById(todo.getGoal().getId())
+          .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
+
+      Group group = groupGoal.getGroup();
+      groupMemberRepository.findByMemberIdAndGroupId(memberId, group.getId());
       return new ResponseDTO<>(new GroupNoteDTO(note), Responses.OK);
     }
     return new ResponseDTO<>(new IndividualNoteDTO(note), Responses.OK);
@@ -145,12 +149,14 @@ public class NoteServiceImpl implements NoteService {
   @Override
   public ResponseDTO<?> getNotesByGoal(Long memberId, Long goalId, Long page, Long limit) {
     Long start = (page - 1) * limit;
-
     List<Note> notes = noteRepository.findAllByGoalId(goalId, start, limit);
     Goal goal = goalRepository.findByGoalId(goalId);
     Long totalCount = noteRepository.countAllByGoalId(goalId);
 
     if (goal.getDtype().equals("G")) {
+      GroupGoal groupGoal = (GroupGoal) goal;
+      Group group = groupGoal.getGroup();
+      groupMemberRepository.findByMemberIdAndGroupId(memberId, group.getId());
       return new ResponseDTO<>(new GroupNoteListDTO(totalCount, page, notes), Responses.OK);
     }
     return new ResponseDTO<>(new IndividualNoteListDTO(totalCount, page, notes), Responses.OK);
