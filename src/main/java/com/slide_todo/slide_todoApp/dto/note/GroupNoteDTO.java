@@ -3,6 +3,7 @@ package com.slide_todo.slide_todoApp.dto.note;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
+import com.slide_todo.slide_todoApp.dto.group.GroupMemberDTO;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -36,7 +37,7 @@ public class GroupNoteDTO {
 
     private Long id;
     @JsonProperty("charged_group_member_id")
-    private Long chargedGroupMemberId;
+    private GroupMemberDTO chargedGroupMember;
     private String title;
     private String content;
     @JsonProperty("is_done")
@@ -45,9 +46,9 @@ public class GroupNoteDTO {
     public GroupTodoInNoteDTO(GroupTodo todo) {
       this.id = todo.getId();
       if (todo.getMemberInCharge() == null) {
-        this.chargedGroupMemberId = null;
+        this.chargedGroupMember = null;
       } else {
-        this.chargedGroupMemberId = todo.getMemberInCharge().getId();
+        this.chargedGroupMember = new GroupMemberDTO(todo.getMemberInCharge());
       }
       this.title = todo.getTitle();
       this.content = todo.getContent();

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 
-public interface GroupMemberRepository extends JpaRepository<GroupMember,Long> {
+public interface GroupMemberRepository extends JpaRepository<GroupMember,Long>, BaseGroupMemberRepository {
     List<GroupMember> findByGroup(Group group);
 
     List<GroupMember> findByMember(Member member);
@@ -25,11 +25,4 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember,Long> {
         + " WHERE gm.group.id = :groupId"
         + " ORDER BY gm.id ASC")
     GroupMember findFirstByGroupId(Long groupId);
-
-
-    /*유저 ID와 그룹 ID를 통해 그룹 멤버 엔티티 조회*/
-    @Query("SELECT gm FROM GroupMember gm"
-        + " WHERE gm.member.id = :memberId"
-        + " AND gm.group.id = :groupId")
-    GroupMember findByMemberIdAndGroupId(Long memberId, Long groupId);
 }

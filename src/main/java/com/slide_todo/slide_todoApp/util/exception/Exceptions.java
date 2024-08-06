@@ -32,6 +32,9 @@ public enum Exceptions {
   NO_PERMISSION_FOR_THE_GROUP(401, "No permission for the group"),
   NOT_CHARGED_GROUP_MEMBER(401, "Not charged group member"),
   MUST_CHARGE_BEFORE_DONE_GROUP_TODO(401, "Must charge before done group todo"),
+  MUST_CHARGE_BEFORE_CREATE_GROUP_NOTE(401, "Must charge before create group note"),
+  MUST_CHARGE_BEFORE_UPDATE_GROUP_NOTE(401, "Must charge before update group note"),
+  MUST_CHARGE_BEFORE_DELETE_GROUP_NOTE(401, "Must charge before delete group note"),
 
   /*403 FORBIDDEN*/
   DELETE_FORBIDDEN(403, "Have no permission to delete"),
