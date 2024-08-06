@@ -58,6 +58,7 @@ public enum Exceptions {
   /*409 CONFLICT*/
   NOTE_ALREADY_EXISTS(409, "Note of the task already exists"),
   GROUP_ALREADY_EXISTS(409, "이미 사용 중인 이름입니다."),
+  ALREADY_JOINED_GROUP(409, "이미 가입한 그룹입니다."),
 
   /*500 INTERNAL_SERVER_ERROR*/
   INTERNAL_SERVER_ERROR(500, "Internal server error");

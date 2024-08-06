@@ -77,6 +77,13 @@ public class GroupServiceImpl implements GroupService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(Exceptions.MEMBER_NOT_FOUND));
 
+        List<GroupMember> groupMembers = group.getGroupMembers();
+        for (GroupMember gm : groupMembers) {
+            if (gm.getMember().equals(member)) {
+                throw new CustomException(Exceptions.ALREADY_JOINED_GROUP);
+            }
+        }
+
         saveGroupMemInfo(group,member,false);
         GroupResponseDTO responseDTO = new GroupResponseDTO(group);
 
