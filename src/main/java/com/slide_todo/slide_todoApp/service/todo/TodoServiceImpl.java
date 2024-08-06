@@ -3,6 +3,7 @@ package com.slide_todo.slide_todoApp.service.todo;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
+import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
@@ -17,6 +18,7 @@ import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.goal.IndividualGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
+import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
@@ -37,13 +39,14 @@ public class TodoServiceImpl implements TodoService {
   private final GroupMemberRepository groupMemberRepository;
   private final GroupGoalRepository groupGoalRepository;
   private final IndividualGoalRepository individualGoalRepository;
+  private final GroupRepository groupRepository;
 
   @Override
   @Transactional
   public ResponseDTO<?> createTodo(Long memberId, TodoCreateDTO request) {
     Goal goal = goalRepository.findByGoalId(request.getGoalId());
     if (goal.getDtype().equals("G")) {
-      GroupTodo todo =  createGroupTodo(memberId, request);
+      GroupTodo todo = createGroupTodo(memberId, request);
       return new ResponseDTO<>(new GroupTodoDTO(todo, todo.getGoal()), Responses.CREATED);
     }
     IndividualTodo todo = createIndividualTodo(memberId, request);
@@ -98,16 +101,47 @@ public class TodoServiceImpl implements TodoService {
     Long start = (page - 1) * limit;
 
     List<IndividualTodo> individualTodos = todoRepository
-        .findAllIndividualTodoByMemberId(memberId, start, limit, request.getGoalIds(), request.getIsDone());
+        .findAllIndividualTodoByMemberId(memberId, start, limit, request.getGoalIds(),
+            request.getIsDone());
 
     List<IndividualTodoDTO> result = individualTodos.stream()
         .map(todo -> new IndividualTodoDTO(todo, todo.getGoal()))
         .toList();
-    Long total = todoRepository.countAllIndividualTodoByMemberId(memberId, request.getGoalIds(), request.getIsDone());
+    Long total = todoRepository.countAllIndividualTodoByMemberId(memberId, request.getGoalIds(),
+        request.getIsDone());
 
     IndividualTodoListDTO response = new IndividualTodoListDTO(total, page, result);
 
     return new ResponseDTO<>(response, Responses.OK);
+  }
+
+  @Override
+  @Transactional
+  public ResponseDTO<GroupTodoDTO> updateChargingGroupMember(Long memberId, Long todoId) {
+    GroupTodo groupTodo = (GroupTodo) todoRepository.findByTodoId(todoId);
+
+    GroupGoal groupGoal = (GroupGoal) groupTodo.getGoal();
+    Group group = groupRepository.findGroupWithGroupMembers(groupGoal.getGroup().getId());
+    GroupMember groupMember = groupMemberRepository.findByMemberIdAndGroupId(memberId,
+        group.getId());
+
+    if (!group.getGroupMembers().contains(groupMember)) {
+      throw new CustomException(Exceptions.NO_PERMISSION_FOR_THE_GROUP);
+    }
+    if (groupTodo.getMemberInCharge() != null) {
+      if (groupTodo.getMemberInCharge().equals(groupMember)) {
+        groupTodo.updateMemberInCharge(null);
+      } else {
+        throw new CustomException(Exceptions.ALREADY_CHARGED_TODO);
+      }
+    } else {
+      groupTodo.updateMemberInCharge(groupMember);
+    }
+
+    return new ResponseDTO<>(
+        new GroupTodoDTO(groupTodo, groupGoal),
+        Responses.OK
+    );
   }
 
 
@@ -216,7 +250,15 @@ public class TodoServiceImpl implements TodoService {
         .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
     GroupMember groupMember = checkGroupPermission(memberId, goal.getGroup().getId());
 
-    todo.doneGroupTodo(groupMember);
+    if (todo.getMemberInCharge() == null) {
+      throw new CustomException(Exceptions.MUST_CHARGE_BEFORE_DONE_GROUP_TODO);
+    }
+
+    if (!todo.getMemberInCharge().equals(groupMember)) {
+      throw new CustomException(Exceptions.NOT_CHARGED_GROUP_MEMBER);
+    }
+
+    todo.updateGroupTodoDone();
     return todo;
   }
 

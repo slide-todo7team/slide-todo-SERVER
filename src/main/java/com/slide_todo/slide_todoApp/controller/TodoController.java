@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.controller;
 
+import com.slide_todo.slide_todoApp.dto.todo.GroupTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoListDTO;
 import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoCreateDTO;
@@ -112,5 +113,22 @@ public class TodoController {
   ) {
     Long memberId = jwtProvider.getMemberId(request);
     return todoService.getIndividualTodoList(memberId, page, limit, dto);
+  }
+
+
+  @PatchMapping("/group/charge/{todoId}")
+  @Operation(summary = "그룹 할 일의 담당자 변경", description = "개인 할 일의 담당자를 변경합니다.<br>"
+      + "자세한 명세는 노션을 확인해주세요.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "할 일의 담당자 변경 성공"),
+      @ApiResponse(responseCode = "400", description = "담당자 변경 실패"),
+      @ApiResponse(responseCode = "401", description = "담당자 변경 권한 없음")
+  })
+  public ResponseDTO<GroupTodoDTO> chargeGroupTodo(
+      HttpServletRequest request,
+      @Parameter(name = "todo_id") @PathVariable Long todoId
+  ) {
+    Long memberId = jwtProvider.getMemberId(request);
+    return todoService.updateChargingGroupMember(memberId, todoId);
   }
 }

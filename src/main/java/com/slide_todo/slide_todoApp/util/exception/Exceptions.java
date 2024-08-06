@@ -18,6 +18,7 @@ public enum Exceptions {
   INVALID_EMAIL(400, "Invalid email format"),
   INVALID_PASSWORD(400, "Invalid password. Password must be at least 8 characters"
       + " long and include a mix of letters, numbers, and symbols."),
+  ALREADY_CHARGED_TODO(400, "Already charged todo"),
 
 
   /*401 UNAUTHORIZED*/
@@ -29,6 +30,8 @@ public enum Exceptions {
   EXPIRED_TOKEN(401, "Expired token"),
   PREMATURE_TOKEN(401, "Premature token"),
   NO_PERMISSION_FOR_THE_GROUP(401, "No permission for the group"),
+  NOT_CHARGED_GROUP_MEMBER(401, "Not charged group member"),
+  MUST_CHARGE_BEFORE_DONE_GROUP_TODO(401, "Must charge before done group todo"),
 
   /*403 FORBIDDEN*/
   DELETE_FORBIDDEN(403, "Have no permission to delete"),

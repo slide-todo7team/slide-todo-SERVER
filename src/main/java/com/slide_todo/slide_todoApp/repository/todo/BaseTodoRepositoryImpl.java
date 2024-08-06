@@ -78,6 +78,7 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
     try {
       return em.createQuery("select t from Todo t"
               + " left join fetch t.note"
+              + " left join fetch t.goal"
               + " where t.id = :todoId", Todo.class)
           .setParameter("todoId", todoId)
           .getSingleResult();

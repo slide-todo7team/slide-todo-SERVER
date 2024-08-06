@@ -17,6 +17,7 @@ public class BaseNoteRepositoryImpl implements BaseNoteRepository {
   public Note findByNoteId(Long noteId) {
     try {
       return em.createQuery("select n from Note n"
+              + " left join fetch n.modifiedGroupMember"
               + " where n.id = :noteId", Note.class)
           .setParameter("noteId", noteId)
           .getSingleResult();

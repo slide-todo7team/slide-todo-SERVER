@@ -25,4 +25,11 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember,Long> {
         + " WHERE gm.group.id = :groupId"
         + " ORDER BY gm.id ASC")
     GroupMember findFirstByGroupId(Long groupId);
+
+
+    /*유저 ID와 그룹 ID를 통해 그룹 멤버 엔티티 조회*/
+    @Query("SELECT gm FROM GroupMember gm"
+        + " WHERE gm.member.id = :memberId"
+        + " AND gm.group.id = :groupId")
+    GroupMember findByMemberIdAndGroupId(Long memberId, Long groupId);
 }

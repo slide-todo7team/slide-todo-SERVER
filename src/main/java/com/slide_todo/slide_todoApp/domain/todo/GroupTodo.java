@@ -21,8 +21,8 @@ public class GroupTodo extends Todo {
 
   @Nullable
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "done_group_member_id")
-  private GroupMember groupMember;
+  @JoinColumn(name = "charged_group_member_id")
+  private GroupMember memberInCharge;
 
   @Builder
   public GroupTodo(String title, String content, Goal groupGoal) {
@@ -30,14 +30,20 @@ public class GroupTodo extends Todo {
   }
 
   /**
-   * 그룹 할 일의 완료 상태 변경
+   * 그룹 할 일의 담당자 변경
    */
-  public void doneGroupTodo(GroupMember groupMember) {
-    this.updateDone();
-    if (this.getIsDone()) {
-      this.groupMember = groupMember;
+  public void updateMemberInCharge(GroupMember memberInCharge) {
+    if (this.getMemberInCharge() == null) {
+      this.memberInCharge = memberInCharge;
     } else {
-      this.groupMember = null;
+      this.memberInCharge = null;
     }
+  }
+
+  /**
+   * 그룹 할 일을 완료 처리
+   */
+  public void updateGroupTodoDone() {
+    this.updateDone();
   }
 }

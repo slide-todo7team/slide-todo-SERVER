@@ -162,7 +162,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     public Integer calContributionPercent(List<GroupTodo> groupTodos, Long memberId){
         Integer totalDoneCount = groupTodos.size();
         Integer contributionCount = (int) groupTodos.stream()
-                .filter(todo -> todo.getIsDone() && Objects.equals(todo.getGroupMember().getMember().getId(), memberId))
+                .filter(todo -> todo.getIsDone() && Objects.equals(todo.getMemberInCharge().getMember().getId(), memberId))
                 .count();
 
         if(totalDoneCount == 0){
