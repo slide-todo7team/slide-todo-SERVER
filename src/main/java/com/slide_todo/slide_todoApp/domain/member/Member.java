@@ -1,5 +1,7 @@
 package com.slide_todo.slide_todoApp.domain.member;
 
+import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -8,7 +10,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +31,12 @@ public class Member {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "member_id")
   private Long id;
+
+  @OneToMany(mappedBy = "member")
+  private List<IndividualGoal> individualGoals = new ArrayList<>();
+
+  @OneToMany(mappedBy = "member")
+  private List<GroupMember> groupMembers = new ArrayList<>();
 
   private String email;
   private String password;

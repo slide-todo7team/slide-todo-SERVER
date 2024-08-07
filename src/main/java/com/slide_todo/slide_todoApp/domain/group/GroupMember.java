@@ -2,11 +2,12 @@ package com.slide_todo.slide_todoApp.domain.group;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Getter
@@ -34,6 +35,10 @@ public class GroupMember {
 
     @Enumerated(EnumType.STRING)
     private ColorEnum color;
+
+    @CreationTimestamp
+    @Column(name = "registered_at", updatable = false)
+    private LocalDateTime registeredAt;
 
     @Builder
     public GroupMember(Member member, Group group, Boolean isLeader, ColorEnum color) {

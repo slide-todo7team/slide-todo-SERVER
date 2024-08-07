@@ -7,9 +7,10 @@ import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import javax.swing.text.html.Option;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -102,4 +103,59 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
         .setMaxResults(first + limit)
         .getResultList();
   }
+
+  @Override
+  public List<Member> findByNameAndNicknameAndEmailAndCreatedAt(String name, String nickname,
+      String email, String createdAt, long start, long limit) {
+    StringBuilder queryString = new StringBuilder("select m from Member m where 1=1");
+
+    if (name !=null) {
+      queryString.append(" and replace(m.name, ' ', '') like :name");
+    }
+    if (nickname != null) {
+      queryString.append(" and replace(m.nickname, ' ', '') like :nickname");
+    }
+    if (email != null) {
+      queryString.append(" and replace(m.email, ' ', '') like :email");
+    }
+    if (createdAt != null) {
+      queryString.append(" and m.createdAt > :createdAt");
+    }
+
+    TypedQuery<Member> query = em.createQuery(queryString.toString(), Member.class);
+    if (name != null) {
+      query.setParameter("name", "%" + name + "%");
+    }
+    if (nickname != null) {
+      query.setParameter("nickname", "%" + nickname + "%");
+    }
+    if (email != null) {
+      query.setParameter("email", "%" + email + "%");
+    }
+    if (createdAt != null) {
+      LocalDateTime createdAtDateTime = LocalDate.parse(createdAt.replace(" ", "")).atStartOfDay();
+      query.setParameter("createdAt", createdAtDateTime);
+    }
+
+    query.setFirstResult((int) start);
+    query.setMaxResults((int) limit);
+
+    return query.getResultList();
+  }
+
+  @Override
+  public Member findMemberWithGoalAndGroupMember(Long memberId) {
+    try {
+      return em.createQuery("select m from Member m"
+          + " left join fetch m.individualGoals ig"
+          + " left join fetch m.groupMembers gm"
+          + " where m.id =:memberId", Member.class)
+          .setParameter("memberId", memberId)
+          .getSingleResult();
+    } catch (NoResultException e) {
+      throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
+    }
+  }
+
+
 }

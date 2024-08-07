@@ -23,4 +23,10 @@ public interface BaseMemberRepository {
   Long countAll();
 
   List<Member> findAll(int page, int limit);
+
+  List<Member> findByNameAndNicknameAndEmailAndCreatedAt(
+      String name, String nickname, String email, String createdAt, long start, long limit
+  );
+
+  Member findMemberWithGoalAndGroupMember(Long memberId);
 }
