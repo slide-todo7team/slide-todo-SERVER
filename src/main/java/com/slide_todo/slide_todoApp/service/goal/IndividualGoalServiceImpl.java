@@ -2,6 +2,7 @@ package com.slide_todo.slide_todoApp.service.goal;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
+import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
 import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalDTO;
 import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalTodoDTO;
@@ -69,20 +70,19 @@ public class IndividualGoalServiceImpl implements IndividualGoalService {
 
     //개인 목표 & 할일 리스트 조회
     @Override
-    @Transactional
-    public ResponseDTO<GoalTodosResponseDTO<IndividualGoalTodoDTO>> getIndividualGoalTodos(Long memberId, Long cursor, Integer limit) {
+    public ResponseDTO<GoalTodosResponseDTO<IndividualGoalTodoDTO>> getIndividualGoalTodos(Long memberId, int page, Integer limit) {
         Member member = memberRepository.findByMemberId(memberId);
         List<IndividualGoal> individualGoals;
 
         if (limit == 0) {
+            // limit가 0이면 모든 데이터를 가져옴
             individualGoals = individualGoalRepository.findAllByMember(member);
         } else {
-            individualGoals = individualGoalRepository.findAllByMemberAndIdGreaterThan(member, cursor, PageRequest.of(0, limit));
-
+            PageRequest pageRequest = PageRequest.of(page - 1, limit);
+            individualGoals = individualGoalRepository.findAllByMember(member, pageRequest);
         }
 
         List<IndividualGoalTodoDTO> individualGoalTodoDTOS = new ArrayList<>();
-        Long nextCursor = null;
 
         for (IndividualGoal individualGoal : individualGoals) {
             IndividualGoalTodoDTO individualGoalTodoDTO = IndividualGoalTodoDTO.builder()
@@ -91,37 +91,41 @@ public class IndividualGoalServiceImpl implements IndividualGoalService {
                     .memberId(memberId)
                     .updatedAt(individualGoal.getUpdatedAt())
                     .createdAt(individualGoal.getCreatedAt())
-                    .progress(individualGoal.getProgressRate())
                     .build();
 
-            //할 일 리스트
+            // 할 일 리스트
             List<IndividualTodo> individualTodos = todoRepository.findAllByGoal(individualGoal);
+
+            // 진행률 계산
+            long totalTodos = individualTodos.size();
+            long completedTodos = individualTodos.stream().filter(IndividualTodo::getIsDone).count();
+            double progress = totalTodos > 0 ? (double) completedTodos / totalTodos * 100 : 0.0;
+            progress = Math.round(progress * 10.0) / 10.0; // 소수점 한 자리까지 반올림
+
+            // 진행률 설정
+            individualGoalTodoDTO.setProgress(progress);
 
             List<IndividualGoalTodoDTO.IndividualTodoDto> todoDtos = individualTodos.stream()
                     .map(todo -> IndividualGoalTodoDTO.IndividualTodoDto.builder()
                             .id(todo.getId())
-                            .noteId(todo.getNote()!= null ? todo.getNote().getId() : null)
+                            .noteId(todo.getNote() != null ? todo.getNote().getId() : null)
                             .title(todo.getTitle())
                             .done(todo.getIsDone())
                             .build())
                     .collect(Collectors.toList());
 
-            //할 일 리스트 설정
+            // 할 일 리스트 설정
             individualGoalTodoDTO.setTodos(todoDtos);
-            //DTO 에 추가
+            // DTO에 추가
             individualGoalTodoDTOS.add(individualGoalTodoDTO);
-
-            //다음 cursor 업데이트
-            nextCursor = individualGoal.getId();
         }
 
         Long totalCount = individualGoalRepository.countByMember(member);
 
-        //다음 커서 설정
-        nextCursor = individualGoals.isEmpty() ? null : nextCursor;
-
-        return new ResponseDTO<>(new GoalTodosResponseDTO<>(nextCursor,totalCount,individualGoalTodoDTOS), Responses.OK);
+        return new ResponseDTO<>(new GoalTodosResponseDTO<>(page, totalCount, individualGoalTodoDTOS), Responses.OK);
     }
+
+
 
     //개인 목표 수정
     @Override
@@ -157,5 +161,14 @@ public class IndividualGoalServiceImpl implements IndividualGoalService {
         if(title.length() > 30){
             throw new CustomException(Exceptions.TITLE_TOO_LONG);
         }
+    }
+
+    //진행률 계산 메소드
+    public double calProgress(List<IndividualTodo> todos){
+        long totalTodos = todos.size();
+        long completedTodos = todos.stream().filter(IndividualTodo::getIsDone).count();
+        double progress = totalTodos > 0 ? (double) completedTodos / totalTodos * 100 : 0.0;
+        progress = Math.round(progress * 10.0) / 10.0; // 소수점 한 자리까지 반올림
+        return progress;
     }
 }

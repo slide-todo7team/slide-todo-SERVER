@@ -12,8 +12,9 @@ import java.util.List;
 
 public interface IndividualGoalRepository extends JpaRepository<IndividualGoal,Long> {
     List<IndividualGoal> findAllByMember(Member member);
-    List<IndividualGoal> findAllByMemberAndIdGreaterThan(Member member, Long cursor, Pageable pageable);
+
     Long countByMember(Member member);
+    List<IndividualGoal> findAllByMember(Member member, Pageable pageable);
 
     @Query("SELECT ig FROM IndividualGoal ig LEFT JOIN FETCH ig.todos WHERE ig.id = :goalId")
     IndividualGoal findIndividualGoalWithTodos(@Param("goalId") Long goalId);

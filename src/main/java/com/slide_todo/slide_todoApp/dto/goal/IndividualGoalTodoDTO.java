@@ -16,7 +16,7 @@ public class IndividualGoalTodoDTO {
     private Long memberId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Integer progress;
+    private Double progress;
     private List<IndividualTodoDto> todos;
 
     @Getter

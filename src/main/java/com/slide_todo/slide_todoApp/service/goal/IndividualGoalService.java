@@ -10,8 +10,7 @@ public interface IndividualGoalService {
 
     ResponseDTO<?> getIndividualGoals(Long memberId);
 
-    ResponseDTO<GoalTodosResponseDTO<IndividualGoalTodoDTO>> getIndividualGoalTodos(Long memberId, Long cursor, Integer li
-    );
+    ResponseDTO<GoalTodosResponseDTO<IndividualGoalTodoDTO>> getIndividualGoalTodos(Long memberId, int page, Integer limit);
 
     ResponseDTO<IndividualGoalDTO> updateIndividualGoal(Long goalId, String title);
 

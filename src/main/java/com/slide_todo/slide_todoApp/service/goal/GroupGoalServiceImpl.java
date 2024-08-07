@@ -71,13 +71,15 @@ public class GroupGoalServiceImpl implements GroupGoalService {
 
     //그룹 목표 & 할일 리스트 조회
     @Override
-    public ResponseDTO<GoalTodosResponseDTO<GroupGoalTodoDTO>> getGroupGoalTodos(Long groupId,Long cursor,Integer limit){
+    public ResponseDTO<GoalTodosResponseDTO<GroupGoalTodoDTO>> getGroupGoalTodos(Long groupId,int page,Integer limit){
         List<GroupGoal> groupGoals;
         Group group = groupRepository.findById(groupId).get();
+
         if (limit == 0) {
             groupGoals = groupGoalRepository.findAllByGroup(group);
         } else {
-            groupGoals = groupGoalRepository.findAllByGroupAndIdGreaterThan(group, cursor, PageRequest.of(0,limit));
+            PageRequest pageRequest = PageRequest.of(page-1, limit);
+            groupGoals = groupGoalRepository.findAllByGroup(group,pageRequest);
         }
 
         List<GroupGoalTodoDTO> groupGoalTodoDTOS = new ArrayList<>();
@@ -125,9 +127,8 @@ public class GroupGoalServiceImpl implements GroupGoalService {
             groupGoalTodoDTOS.add(groupGoalTodoDTO);
         }
 
-        Long nextCursor = groupGoals.isEmpty() ? null : groupGoals.get(groupGoals.size() - 1).getId();
         Long totalCount = groupGoalRepository.countByGroup(group);
-        return new ResponseDTO<>(new GoalTodosResponseDTO<>(nextCursor,totalCount,groupGoalTodoDTOS),Responses.OK);
+        return new ResponseDTO<>(new GoalTodosResponseDTO<>(page,totalCount,groupGoalTodoDTOS),Responses.OK);
     }
 
     //그룹 목표 수정
