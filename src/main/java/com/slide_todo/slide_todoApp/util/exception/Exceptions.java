@@ -29,18 +29,19 @@ public enum Exceptions {
   TOKEN_NOT_FOUND(401, "Token not found"),
   EXPIRED_TOKEN(401, "Expired token"),
   PREMATURE_TOKEN(401, "Premature token"),
-  NO_PERMISSION_FOR_THE_GROUP(401, "No permission for the group"),
-  NOT_CHARGED_GROUP_MEMBER(401, "Not charged group member"),
-  MUST_CHARGE_BEFORE_DONE_GROUP_TODO(401, "Must charge before done group todo"),
-  MUST_CHARGE_BEFORE_CREATE_GROUP_NOTE(401, "Must charge before create group note"),
-  MUST_CHARGE_BEFORE_UPDATE_GROUP_NOTE(401, "Must charge before update group note"),
-  MUST_CHARGE_BEFORE_DELETE_GROUP_NOTE(401, "Must charge before delete group note"),
 
   /*403 FORBIDDEN*/
   DELETE_FORBIDDEN(403, "Have no permission to delete"),
   CREATE_FORBIDDEN(403, "Have no permission to create"),
   RETRIEVE_FORBIDDEN(403, "Have no permission to retrieve"),
   UPDATE_FORBIDDEN(403, "Have no permission to update"),
+  NO_PERMISSION_FOR_THE_GROUP(403, "No permission for the group"),
+  NOT_CHARGED_GROUP_MEMBER(403, "Not charged group member"),
+  MUST_CHARGE_BEFORE_DONE_GROUP_TODO(403, "Must charge before done group todo"),
+  MUST_CHARGE_BEFORE_CREATE_GROUP_NOTE(403, "Must charge before create group note"),
+  MUST_CHARGE_BEFORE_UPDATE_GROUP_NOTE(403, "Must charge before update group note"),
+  MUST_CHARGE_BEFORE_DELETE_GROUP_NOTE(403, "Must charge before delete group note"),
+  ADMIN_ONLY(403, "Admin only"),
 
 
   /*404 NOT_FOUND*/
