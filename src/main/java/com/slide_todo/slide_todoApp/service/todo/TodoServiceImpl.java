@@ -98,7 +98,14 @@ public class TodoServiceImpl implements TodoService {
   public ResponseDTO<IndividualTodoListDTO> getIndividualTodoList(Long memberId,
       Long page, Long limit, RetrieveIndividualTodoDTO request
   ) {
-    Long start = (page - 1) * limit;
+    long start;
+    if (limit != 0) {
+      start = (page - 1) * limit;
+    } else {
+      start = 0L;
+      limit = todoRepository.count();
+    }
+
 
     List<IndividualTodo> individualTodos = todoRepository
         .findAllIndividualTodoByMemberId(memberId, start, limit, request.getGoalIds(),

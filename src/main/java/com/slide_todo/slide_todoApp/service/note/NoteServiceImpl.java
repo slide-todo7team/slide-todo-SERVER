@@ -148,7 +148,13 @@ public class NoteServiceImpl implements NoteService {
 
   @Override
   public ResponseDTO<?> getNotesByGoal(Long memberId, Long goalId, Long page, Long limit) {
-    Long start = (page - 1) * limit;
+    long start;
+    if (limit != 0) {
+      start = (page - 1) * limit;
+    } else {
+      start = 0L;
+      limit = todoRepository.count();
+    }
     List<Note> notes = noteRepository.findAllByGoalId(goalId, start, limit);
     Goal goal = goalRepository.findByGoalId(goalId);
     Long totalCount = noteRepository.countAllByGoalId(goalId);

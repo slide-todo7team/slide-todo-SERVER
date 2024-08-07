@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -49,7 +48,7 @@ public class TodoController {
   }
 
 
-  @PatchMapping("/update/{todoId}")
+  @PatchMapping("/update/{todo_id}")
   @Operation(summary = "할 일 수정", description = "할 일의 내용을 수정합니다.<br>"
       + "자세한 명세는 노션을 확인해주세요.")
   @ApiResponses(value = {
@@ -58,7 +57,7 @@ public class TodoController {
   })
   public ResponseDTO<?> updateTodo(
       HttpServletRequest request,
-      @Parameter(name = "todo_id") @PathVariable Long todoId,
+      @Parameter(description = "수정할 할 일의 ID") @PathVariable(name =  "todo_id") Long todoId,
       @RequestBody TodoUpdateDTO todoUpdateDTO
   ) {
     Long memberId = jwtProvider.getMemberId(request);
@@ -66,7 +65,7 @@ public class TodoController {
   }
 
 
-  @PatchMapping("/done/{todoId}")
+  @PatchMapping("/done/{todo_id}")
   @Operation(summary = "할 일 완료 여부 변경", description = "할 일의 완료 여부를 변경합니다.<br>"
       + "자세한 명세는 노션을 확인해주세요.")
   @ApiResponses(value = {
@@ -75,14 +74,14 @@ public class TodoController {
   })
   public ResponseDTO<?> changeTodoDone(
       HttpServletRequest request,
-      @Parameter(name = "todo_id") @PathVariable Long todoId
+      @Parameter(description = "완료 여부를 변경할 할 일의 ID") @PathVariable(name =  "todo_id") Long todoId
   ) {
     Long memberId = jwtProvider.getMemberId(request);
     return todoService.changeTodoDone(memberId, todoId);
   }
 
 
-  @DeleteMapping("/delete/{todoId}")
+  @DeleteMapping("/delete/{todo_id}")
   @Operation(summary = "할 일 삭제", description = "할 일을 삭제합니다.<br>"
       + "자세한 명세는 노션을 확인해주세요.")
   @ApiResponses(value = {
@@ -91,7 +90,7 @@ public class TodoController {
   })
   public ResponseDTO<?> deleteTodo(
       HttpServletRequest request,
-      @Parameter(name = "todo_id") @PathVariable Long todoId
+      @Parameter(description = "삭제할 할 일의 ID") @PathVariable(name = "todo_id") Long todoId
   ) {
     Long memberId = jwtProvider.getMemberId(request);
     return todoService.deleteTodo(memberId, todoId);
@@ -116,7 +115,7 @@ public class TodoController {
   }
 
 
-  @PatchMapping("/group/charge/{todoId}")
+  @PatchMapping("/group/charge/{todo_id}")
   @Operation(summary = "그룹 할 일의 담당자 변경", description = "개인 할 일의 담당자를 변경합니다.<br>"
       + "자세한 명세는 노션을 확인해주세요.")
   @ApiResponses(value = {
@@ -126,7 +125,7 @@ public class TodoController {
   })
   public ResponseDTO<GroupTodoDTO> chargeGroupTodo(
       HttpServletRequest request,
-      @Parameter(name = "todo_id") @PathVariable Long todoId
+      @Parameter(description = "담당자를 변경할 할 일의 ID") @PathVariable(name = "todo_id") Long todoId
   ) {
     Long memberId = jwtProvider.getMemberId(request);
     return todoService.updateChargingGroupMember(memberId, todoId);

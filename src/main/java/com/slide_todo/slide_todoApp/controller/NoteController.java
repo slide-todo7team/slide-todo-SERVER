@@ -6,6 +6,7 @@ import com.slide_todo.slide_todoApp.service.note.NoteService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +47,7 @@ public class NoteController {
   }
 
 
-  @PatchMapping("/update/{noteId}")
+  @PatchMapping("/update/{note_id}")
   @Operation(summary = "노트 수정", description = "노트의 내용을 수정합니다.<br>"
       + "자세한 명세는 노션을 확인해주세요.")
   @ApiResponses(value = {
@@ -57,7 +58,7 @@ public class NoteController {
   })
   public ResponseDTO<?> updateNote(
       HttpServletRequest request,
-      @PathVariable Long noteId,
+      @Parameter(description = "수정할 노트의 ID") @PathVariable(name = "note_id") Long noteId,
       @RequestBody NoteUpdateDTO noteUpdateDTO
   ) {
     Long memberId = jwtProvider.getMemberId(request);
@@ -65,7 +66,7 @@ public class NoteController {
   }
 
 
-  @DeleteMapping("/delete/{noteId}")
+  @DeleteMapping("/delete/{note_id}")
   @Operation(summary = "노트 삭제", description = "노트를 삭제합니다.<br>"
       + "자세한 명세는 노션을 확인해주세요.")
   @ApiResponses(value = {
@@ -73,14 +74,14 @@ public class NoteController {
   })
   public ResponseDTO<?> deleteNote(
       HttpServletRequest request,
-      @PathVariable Long noteId
+      @Parameter(description = "삭제할 노트의 ID") @PathVariable(name = "note_id") Long noteId
   ) {
     Long memberId = jwtProvider.getMemberId(request);
     return noteService.deleteNote(memberId, noteId);
   }
 
 
-  @GetMapping("/get/{noteId}")
+  @GetMapping("/get/{note_id}")
   @Operation(summary = "단일 노트 조회", description = "노트를 조회합니다.<br>"
       + "자세한 명세는 노션을 확인해주세요.")
   @ApiResponses(value = {
@@ -89,14 +90,14 @@ public class NoteController {
   })
   public ResponseDTO<?> getOneNote(
       HttpServletRequest request,
-      @PathVariable Long noteId
+      @Parameter(description = "조회할 노트의 ID") @PathVariable(name = "note_id") Long noteId
   ) {
     Long memberId = jwtProvider.getMemberId(request);
     return noteService.getOneNote(memberId, noteId);
   }
 
 
-  @GetMapping("/list/goal/{goalId}")
+  @GetMapping("/list/goal/{goal_id}")
   @Operation(summary = "목표에 따른 노트 리스트 조회", description = "목표에 따른 노트 리스트를 조회합니다.<br>"
       + "자세한 명세는 노션을 확인해주세요.")
   @ApiResponses(value = {
@@ -107,7 +108,7 @@ public class NoteController {
       HttpServletRequest request,
       @RequestParam Long page,
       @RequestParam Long limit,
-      @PathVariable Long goalId
+      @Parameter(description = "노트를 조회할 목표의 ID") @PathVariable(name = "goal_id") Long goalId
   ) {
     Long memberId = jwtProvider.getMemberId(request);
     return noteService.getNotesByGoal(memberId, goalId, page, limit);
