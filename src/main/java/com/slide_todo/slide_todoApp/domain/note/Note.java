@@ -1,5 +1,7 @@
 package com.slide_todo.slide_todoApp.domain.note;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,17 +11,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -39,20 +40,25 @@ public class Note {
   private Todo todo;
 
   private String title;
-  @Lob
+  @Length(max = 10000)
+  @Size(max = 10000)
   private String content;
+  private String linkUrl;
   private Boolean isDeleted;
 
   @CreatedDate
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime createdAt;
-  @LastModifiedDate
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime updatedAt;
 
   @Builder
-  public Note(Todo todo, String title, String content) {
+  public Note(Todo todo, String title, String content, String linkUrl) {
     this.title = title;
     this.content = content;
+    this.linkUrl = linkUrl;
     this.isDeleted = false;
+    this.updatedAt = LocalDateTime.now();
 
     /*연관 관계 편의 메소드*/
     this.todo = todo;
@@ -66,9 +72,11 @@ public class Note {
     if (content != null) {
       this.content = content;
     }
+    this.updatedAt = LocalDateTime.now();
   }
 
   public void deleteNote() {
     this.isDeleted = true;
+    this.updatedAt = LocalDateTime.now();
   }
 }

@@ -1,8 +1,8 @@
 package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
-import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,21 +19,31 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupTodo extends Todo {
 
+  @Nullable
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "done_group_member_id")
-  private GroupMember groupMember;
+  @JoinColumn(name = "charged_group_member_id")
+  private GroupMember memberInCharge;
 
   @Builder
-  public GroupTodo(String title, String linkUrl, Goal groupGoal) {
-    super(title, linkUrl, groupGoal);
+  public GroupTodo(String title, String content, Goal groupGoal) {
+    super(title, content, groupGoal);
   }
 
-  public void doneTodo(GroupMember groupMember) {
-    this.groupMember = groupMember;
+  /**
+   * 그룹 할 일의 담당자 변경
+   */
+  public void updateMemberInCharge(GroupMember memberInCharge) {
+    if (this.getMemberInCharge() == null) {
+      this.memberInCharge = memberInCharge;
+    } else {
+      this.memberInCharge = null;
+    }
   }
 
-  @Override
-  public Boolean checkDone() {
-    return this.groupMember != null;
+  /**
+   * 그룹 할 일을 완료 처리
+   */
+  public void updateGroupTodoDone() {
+    this.updateDone();
   }
 }

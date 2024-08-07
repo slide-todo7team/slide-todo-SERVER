@@ -18,6 +18,7 @@ public enum Exceptions {
   INVALID_EMAIL(400, "Invalid email format"),
   INVALID_PASSWORD(400, "Invalid password. Password must be at least 8 characters"
       + " long and include a mix of letters, numbers, and symbols."),
+  ALREADY_CHARGED_TODO(400, "Already charged todo"),
 
 
   /*401 UNAUTHORIZED*/
@@ -28,6 +29,12 @@ public enum Exceptions {
   TOKEN_NOT_FOUND(401, "Token not found"),
   EXPIRED_TOKEN(401, "Expired token"),
   PREMATURE_TOKEN(401, "Premature token"),
+  NO_PERMISSION_FOR_THE_GROUP(401, "No permission for the group"),
+  NOT_CHARGED_GROUP_MEMBER(401, "Not charged group member"),
+  MUST_CHARGE_BEFORE_DONE_GROUP_TODO(401, "Must charge before done group todo"),
+  MUST_CHARGE_BEFORE_CREATE_GROUP_NOTE(401, "Must charge before create group note"),
+  MUST_CHARGE_BEFORE_UPDATE_GROUP_NOTE(401, "Must charge before update group note"),
+  MUST_CHARGE_BEFORE_DELETE_GROUP_NOTE(401, "Must charge before delete group note"),
 
   /*403 FORBIDDEN*/
   DELETE_FORBIDDEN(403, "Have no permission to delete"),
@@ -40,7 +47,7 @@ public enum Exceptions {
   GOAL_NOT_FOUND(404, "Goal not exists"),
   MEMBER_NOT_FOUND(404, "Member not exists"),
   MEMBER_WITH_EMAIL_NOT_FOUND(404, "Member with email not found"),
-  TASK_NOT_FOUND(404, "Task not exists"),
+  TODO_NOT_FOUND(404, "Todo not exists"),
   NOTE_NOT_FOUND(404, "Note not exists"),
   CODE_NOT_FOUND(404, "없는 초대코드 입니다."),
   GROUP_NOT_FOUND(404, "없는 그룹입니다."),
@@ -54,6 +61,7 @@ public enum Exceptions {
   /*409 CONFLICT*/
   NOTE_ALREADY_EXISTS(409, "Note of the task already exists"),
   GROUP_ALREADY_EXISTS(409, "이미 사용 중인 이름입니다."),
+  ALREADY_JOINED_GROUP(409, "Already joined group"),
 
   /*500 INTERNAL_SERVER_ERROR*/
   INTERNAL_SERVER_ERROR(500, "Internal server error");

@@ -18,20 +18,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class IndividualTodo extends Todo {
 
-
-  private Boolean isDone;
-
   @Builder
-  public IndividualTodo(String title, String linkUrl, Goal individualGoal) {
-    super(title, linkUrl, individualGoal);
-    this.isDone = false;
+  public IndividualTodo(String title, String content, Goal individualGoal) {
+    super(title, content, individualGoal);
   }
 
-  public void doneTodo() {
-    this.isDone = true;
-  }
-
+  @Override
   public Boolean checkDone() {
-    return this.isDone;
+    return this.getIsDone();
+  }
+
+  /**
+   * 개인 할 일을 완료 처리
+   */
+  public void updateIndividualTodoDone() {
+    this.updateDone();
   }
 }

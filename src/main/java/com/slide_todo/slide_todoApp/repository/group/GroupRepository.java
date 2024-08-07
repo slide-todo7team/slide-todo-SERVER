@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface GroupRepository extends JpaRepository<Group, Long> {
     Optional<Group> findByTitle(String title);
 
+    @Query("SELECT g FROM Group g LEFT JOIN FETCH g.groupMembers WHERE g.secretCode = :secretCode")
     Optional<Group>  findBySecretCode(String secretCode);
 
     @Query("SELECT g FROM Group g LEFT JOIN FETCH g.groupMembers WHERE g.id = :groupId")

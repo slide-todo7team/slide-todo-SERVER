@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "DTYPE")
+@DiscriminatorColumn(name = "dtype")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
@@ -38,6 +38,7 @@ public abstract class Goal {
 
     private Boolean isDeleted;
 
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -49,6 +50,11 @@ public abstract class Goal {
         this.title = title;
         this.progressRate = 0;
         this.isDeleted = false;
+    }
+
+    @Transient
+    public String getDtype() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
     }
 
     public void updateTitle(String title) {
