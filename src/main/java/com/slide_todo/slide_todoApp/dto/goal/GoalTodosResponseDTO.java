@@ -6,12 +6,12 @@ import java.util.List;
 
 @Data
 public class GoalTodosResponseDTO<T> {
-    private Long nextCursor;
+    private int currPage;
     private Long totalCount;
     private List<T> goals;
 
-    public GoalTodosResponseDTO(Long nextCursor, Long totalCount,List<T> goals) {
-        this.nextCursor = nextCursor;
+    public GoalTodosResponseDTO(int currPage, Long totalCount,List<T> goals) {
+        this.currPage = currPage;
         this.totalCount = totalCount;
         this.goals = goals;
     }

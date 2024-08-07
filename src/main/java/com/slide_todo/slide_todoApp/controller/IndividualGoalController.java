@@ -39,9 +39,9 @@ public class IndividualGoalController {
     @GetMapping("/todos")
     @Operation(summary = "개인 목표 & 할일 리스트 조회")
     public ResponseDTO<GoalTodosResponseDTO<IndividualGoalTodoDTO>> getIndividualGoalTodos(HttpServletRequest request,
-                                                                                           @RequestParam(defaultValue =  "0") Long cursor, @RequestParam Integer limit) {
+                                                                                           @RequestParam(defaultValue =  "0") int page, @RequestParam Integer limit) {
         Long memberId = jwtProvider.getMemberId(request);
-        return individualGoalService.getIndividualGoalTodos(memberId,cursor,limit);
+        return individualGoalService.getIndividualGoalTodos(memberId,page,limit);
     }
 
     @PatchMapping("/{goalId}")

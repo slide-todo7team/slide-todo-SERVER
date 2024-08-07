@@ -37,8 +37,8 @@ public class GroupGoalController {
     @GetMapping("/todos/{groupId}")
     @Operation(summary = "모든 그룹의 목표 및 할일 리스트 조회")
     public ResponseDTO<GoalTodosResponseDTO<GroupGoalTodoDTO>> getGroupGoalTodos(@PathVariable Long groupId,
-                                                                                 @RequestParam(defaultValue =  "0") Long cursor, @RequestParam Integer limit){
-        return groupGoalService.getGroupGoalTodos(groupId,cursor,limit);
+                                                                                 @RequestParam(defaultValue =  "0") int page, @RequestParam Integer limit){
+        return groupGoalService.getGroupGoalTodos(groupId,page,limit);
     }
 
     @PatchMapping("/{groupId}/{goalId}")

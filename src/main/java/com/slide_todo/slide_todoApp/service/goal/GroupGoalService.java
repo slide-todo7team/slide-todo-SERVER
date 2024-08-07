@@ -12,7 +12,7 @@ public interface GroupGoalService {
 
     ResponseDTO<?> getGroupGoals(Long groupId);
 
-    ResponseDTO<GoalTodosResponseDTO<GroupGoalTodoDTO>> getGroupGoalTodos(Long groupId,Long cursor,Integer limit);
+    ResponseDTO<GoalTodosResponseDTO<GroupGoalTodoDTO>> getGroupGoalTodos(Long groupId,int page,Integer limit);
 
     ResponseDTO<GroupGoalDTO> updateGroupGoal(Long groupId, Long goalId, String title);
 
