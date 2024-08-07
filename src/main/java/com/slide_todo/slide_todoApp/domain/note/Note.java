@@ -43,6 +43,8 @@ public class Note {
   @Length(max = 10000)
   @Size(max = 10000)
   private String content;
+  @Length(max = 255)
+  @Size(max = 255)
   private String linkUrl;
   private Boolean isDeleted;
 

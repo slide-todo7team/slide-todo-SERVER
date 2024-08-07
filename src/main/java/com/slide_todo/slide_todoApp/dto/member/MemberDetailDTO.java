@@ -18,7 +18,9 @@ public class MemberDetailDTO {
   private String name;
   private String nickname;
   private String role;
+  @JsonProperty("created_at")
   private LocalDateTime createdAt;
+  @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
   @JsonProperty("groups")
   private List<GroupInMemberDetailDTO> groups;

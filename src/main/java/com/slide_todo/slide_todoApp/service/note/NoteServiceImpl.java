@@ -47,11 +47,8 @@ public class NoteServiceImpl implements NoteService {
   @Override
   @Transactional
   public ResponseDTO<?> createNote(Long memberId, NoteCreateDTO request) {
+    validateNote(request.getTitle(), request.getContent(), request.getLinkUrl());
     Todo todo = todoRepository.findByTodoId(request.getTodoId());
-
-    if (request.getTitle().length() > 30) {
-      throw new CustomException(Exceptions.TITLE_TOO_LONG);
-    }
 
     if (todo.getDtype().equals("G")) {
       GroupTodo groupTodo = (GroupTodo) todo;
@@ -70,13 +67,10 @@ public class NoteServiceImpl implements NoteService {
   @Override
   @Transactional
   public ResponseDTO<?> updateNote(Long memberId, Long noteId, NoteUpdateDTO request) {
+    validateNote(request.getTitle(), request.getContent(), request.getLinkUrl());
     Note note = noteRepository.findByNoteId(noteId);
     Long todoId = note.getTodo().getId();
     Todo todo = todoRepository.findByTodoId(todoId);
-
-    if (request.getTitle().length() > 30) {
-      throw new CustomException(Exceptions.TITLE_TOO_LONG);
-    }
 
     if (todo.getDtype().equals("G")) {
       GroupTodo groupTodo = (GroupTodo) todo;
@@ -227,5 +221,17 @@ public class NoteServiceImpl implements NoteService {
         .build();
     noteRepository.save(note);
     return new GroupNoteDTO(note);
+  }
+
+  private void validateNote(String title, String content, String url) {
+    if (title.length() > 30) {
+      throw new CustomException(Exceptions.TITLE_TOO_LONG);
+    }
+    if (content.length() > 10000) {
+      throw new CustomException(Exceptions.CONTENT_TOO_LONG);
+    }
+    if (url.length() > 255) {
+      throw new CustomException(Exceptions.URL_TOO_LONG);
+    }
   }
 }
