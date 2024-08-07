@@ -18,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -25,6 +26,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
+@SQLRestriction("is_deleted = false")
 public class Member {
 
   @Id
@@ -42,6 +44,7 @@ public class Member {
   private String password;
   private String name;
   private String nickname;
+  private Boolean isDeleted;
 
   @Enumerated(EnumType.STRING)
   private MemberRole role;
@@ -58,6 +61,7 @@ public class Member {
     this.nickname = nickname;
     this.role = MemberRole.USER;
     this.updatedAt = LocalDateTime.now();
+    this.isDeleted = false;
   }
 
   public void updateMember(String email, String name, String nickname) {
@@ -65,5 +69,12 @@ public class Member {
     if (name != null) {this.name = name;}
     if (nickname != null) {this.nickname = nickname;} // 서비스 로직에서 닉네임 중복 여부 확인 필요
     this.updatedAt = LocalDateTime.now();
+  }
+
+  public void deleteMember() {
+    this.getIndividualGoals().forEach(IndividualGoal::deleteGoal);
+    this.getGroupMembers().forEach(GroupMember::deleteGroupMember);
+    this.updatedAt = LocalDateTime.now();
+    this.isDeleted = true;
   }
 }

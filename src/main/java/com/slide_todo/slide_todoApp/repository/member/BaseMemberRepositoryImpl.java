@@ -2,6 +2,7 @@ package com.slide_todo.slide_todoApp.repository.member;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.member.MemberRole;
+import com.slide_todo.slide_todoApp.dto.member.MemberSearchResultDTO;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.persistence.EntityManager;
@@ -105,42 +106,59 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   }
 
   @Override
-  public List<Member> findByNameAndNicknameAndEmailAndCreatedAt(String name, String nickname,
-      String email, String createdAt, long start, long limit) {
+  public MemberSearchResultDTO findByNameAndNicknameAndEmailAndCreatedAt(String name, String nickname,
+      String email, LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
     StringBuilder queryString = new StringBuilder("select m from Member m where 1=1");
+    StringBuilder countQueryString = new StringBuilder("select count(m) from Member m where 1=1");
 
     if (name !=null) {
       queryString.append(" and replace(m.name, ' ', '') like :name");
+      countQueryString.append(" and replace(m.name, ' ', '') like :name");
     }
     if (nickname != null) {
       queryString.append(" and replace(m.nickname, ' ', '') like :nickname");
+      countQueryString.append(" and replace(m.nickname, ' ', '') like :nickname");
     }
     if (email != null) {
       queryString.append(" and replace(m.email, ' ', '') like :email");
+      countQueryString.append(" and replace(m.email, ' ', '') like :email");
     }
-    if (createdAt != null) {
-      queryString.append(" and m.createdAt > :createdAt");
+    if (createdAfter != null) {
+      queryString.append(" and m.createdAt > :createdAfter");
+      countQueryString.append(" and m.createdAt > :createdAfter");
+    }
+    if (createdBefore != null) {
+      queryString.append(" and m.createdAt < :createdBefore");
+      countQueryString.append(" and m.createdAt < :createdBefore");
     }
 
     TypedQuery<Member> query = em.createQuery(queryString.toString(), Member.class);
+    TypedQuery<Long> countQuery = em.createQuery(countQueryString.toString(), Long.class);
     if (name != null) {
       query.setParameter("name", "%" + name + "%");
+      countQuery.setParameter("name", "%" + name + "%");
     }
     if (nickname != null) {
       query.setParameter("nickname", "%" + nickname + "%");
+      countQuery.setParameter("nickname", "%" + nickname + "%");
     }
     if (email != null) {
       query.setParameter("email", "%" + email + "%");
+      countQuery.setParameter("email", "%" + email + "%");
     }
-    if (createdAt != null) {
-      LocalDateTime createdAtDateTime = LocalDate.parse(createdAt.replace(" ", "")).atStartOfDay();
-      query.setParameter("createdAt", createdAtDateTime);
+    if (createdAfter != null) {
+      query.setParameter("createdAfter", createdAfter);
+      countQuery.setParameter("createdAfter", createdAfter);
+    }
+    if (createdBefore != null) {
+      query.setParameter("createdBefore", createdBefore);
+      countQuery.setParameter("createdBefore", createdBefore);
     }
 
     query.setFirstResult((int) start);
     query.setMaxResults((int) limit);
 
-    return query.getResultList();
+    return new MemberSearchResultDTO(query.getResultList(), countQuery.getSingleResult());
   }
 
   @Override
@@ -155,6 +173,17 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
     } catch (NoResultException e) {
       throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
     }
+  }
+
+  @Override
+  public List<Member> findMembersToDelete(List<Long> ids) {
+    return em.createQuery("select m from Member m"
+            + " left join fetch m.individualGoals ig"
+            + " left join fetch m.groupMembers gm"
+            + " left join fetch gm.chargingTodos ct"
+            + " where m.id in :ids", Member.class)
+        .setParameter("ids", ids)
+        .getResultList();
   }
 
 
