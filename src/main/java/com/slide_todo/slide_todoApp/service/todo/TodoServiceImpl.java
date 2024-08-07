@@ -44,6 +44,7 @@ public class TodoServiceImpl implements TodoService {
   @Override
   @Transactional
   public ResponseDTO<?> createTodo(Long memberId, TodoCreateDTO request) {
+    validateTodo(request.getTitle(), request.getContent());
     Goal goal = goalRepository.findByGoalId(request.getGoalId());
     if (goal.getDtype().equals("G")) {
       GroupTodo todo = createGroupTodo(memberId, request);
@@ -56,6 +57,7 @@ public class TodoServiceImpl implements TodoService {
   @Override
   @Transactional
   public ResponseDTO<?> updateTodo(Long memberId, Long todoId, TodoUpdateDTO request) {
+    validateTodo(request.getTitle(), request.getContent());
     Todo todo = todoRepository.findByTodoId(todoId);
     if (todo.getDtype().equals("G")) {
       GroupTodo newTodo = updateGroupTodo(memberId, (GroupTodo) todo, request);
@@ -280,5 +282,14 @@ public class TodoServiceImpl implements TodoService {
     IndividualGoal goal = individualGoalRepository.findIndividualGoalWithTodos(todo.getGoal().getId());
     goal.updateProgressRate();
     return todo;
+  }
+
+  private void validateTodo(String title, String content) {
+    if (title.length() > 30) {
+      throw new CustomException(Exceptions.TITLE_TOO_LONG);
+    }
+    if (content.length() > 255) {
+      throw new CustomException(Exceptions.TODO_CONTENT_TOO_LONG);
+    }
   }
 }
