@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "할 일(Todo) API")
 @RequestMapping("/todo")
 @RequiredArgsConstructor
 public class TodoController {
@@ -106,8 +108,8 @@ public class TodoController {
   })
   public ResponseDTO<IndividualTodoListDTO> getIndividualTodoList(
       HttpServletRequest request,
-      @Parameter(name = "page") @RequestParam Long page,
-      @Parameter(name = "limit") @RequestParam Long limit,
+      @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
+      @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
       @RequestBody RetrieveIndividualTodoDTO dto
   ) {
     Long memberId = jwtProvider.getMemberId(request);

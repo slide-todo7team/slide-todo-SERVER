@@ -2,8 +2,10 @@ package com.slide_todo.slide_todoApp.dto.member;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
+import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
@@ -18,9 +20,9 @@ public class MemberDetailDTO {
   private String role;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-  @JsonProperty("goals")
+  @JsonProperty("groups")
   private List<GroupInMemberDetailDTO> groups;
-  @JsonProperty("goals")
+  @JsonProperty("individual_goals")
   private List<GoalInMemberDetailDTO> goals;
 
   public MemberDetailDTO(Member member) {
@@ -57,10 +59,13 @@ public class MemberDetailDTO {
 
     private Long id;
     private String title;
+    @JsonProperty("progress_rate")
+    private BigDecimal progressRate;
 
-    public GoalInMemberDetailDTO(Goal goal) {
+    public GoalInMemberDetailDTO(IndividualGoal goal) {
       this.id = goal.getId();
       this.title = goal.getTitle();
+      this.progressRate = goal.getProgressRate();
     }
   }
 }

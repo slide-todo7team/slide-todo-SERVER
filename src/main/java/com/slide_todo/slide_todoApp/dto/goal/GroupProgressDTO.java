@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.dto.goal;
 
+import java.math.BigDecimal;
 import lombok.*;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupProgressDTO {
-    private Integer completedPercent;
+    private BigDecimal completedPercent;
     private List<GroupGoalMemDTO> memebers;
 
     @Builder

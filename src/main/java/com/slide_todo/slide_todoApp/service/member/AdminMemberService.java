@@ -5,13 +5,13 @@ import com.slide_todo.slide_todoApp.dto.member.MemberIdsDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberListDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
-import java.time.LocalDate;
-import org.apache.coyote.Response;
+import jakarta.annotation.Nullable;
 
 public interface AdminMemberService {
 
   /*어드민 페이지에서 유저 리스트 조회*/
-  ResponseDTO<MemberListDTO> getAllMembers(long page, long limit, String name, String nickname, String email, String createdAfter, String createdBefore);
+  ResponseDTO<MemberListDTO> getAllMembers(long page, long limit, @Nullable String name, @Nullable String nickname,
+      @Nullable String email, @Nullable String createdAfter, @Nullable String createdBefore);
 
   /*어드민 페이지에서 유저 상세정보 조회*/
   ResponseDTO<MemberDetailDTO> getMemberDetail(Long memberId);

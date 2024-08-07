@@ -1,7 +1,9 @@
 package com.slide_todo.slide_todoApp.repository.member;
 
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.member.MemberRole;
+import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.dto.member.MemberSearchResultDTO;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
@@ -163,13 +165,30 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
 
   @Override
   public Member findMemberWithGoalAndGroupMember(Long memberId) {
+//    try {
+//      return em.createQuery("select m from Member m"
+//          + " left join fetch m.individualGoals ig"
+//          + " left join fetch m.groupMembers gm"
+//          + " where m.id =:memberId", Member.class)
+//          .setParameter("memberId", memberId)
+//          .getSingleResult();
+//    } catch (NoResultException e) {
+//      throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
+//    }
     try {
-      return em.createQuery("select m from Member m"
-          + " left join fetch m.individualGoals ig"
-          + " left join fetch m.groupMembers gm"
-          + " where m.id =:memberId", Member.class)
+      Member member = em.createQuery("select m from Member m"
+              + " left join fetch m.individualGoals ig"
+              + " where m.id =:memberId", Member.class)
           .setParameter("memberId", memberId)
           .getSingleResult();
+
+      member.updateGroupMembers(em.createQuery("select gm from GroupMember  gm"
+          + " where gm.member in :member", GroupMember.class)
+          .setParameter("member", member)
+          .getResultList());
+
+      return member;
+
     } catch (NoResultException e) {
       throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
     }
@@ -177,14 +196,22 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
 
   @Override
   public List<Member> findMembersToDelete(List<Long> ids) {
-    return em.createQuery("select m from Member m"
+    List<Member> members = em.createQuery("select m from Member m"
             + " left join fetch m.individualGoals ig"
-            + " left join fetch m.groupMembers gm"
-            + " left join fetch gm.chargingTodos ct"
+//            + " left join fetch m.groupMembers gm"
+//            + " left join fetch gm.chargingTodos ct"
             + " where m.id in :ids", Member.class)
         .setParameter("ids", ids)
         .getResultList();
+
+    members.forEach(member -> {
+      member.updateGroupMembers(em.createQuery("select gm from GroupMember  gm"
+              + " left join fetch gm.chargingTodos"
+              + " where gm.member in :member", GroupMember.class)
+          .setParameter("member", member)
+          .getResultList());
+    } );
+
+    return members;
   }
-
-
 }

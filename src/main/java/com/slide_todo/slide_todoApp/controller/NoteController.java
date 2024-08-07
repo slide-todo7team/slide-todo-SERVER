@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "노트 API")
 @RequestMapping("/note")
 @RequiredArgsConstructor
 public class NoteController {
@@ -106,8 +108,8 @@ public class NoteController {
   })
   public ResponseDTO<?> getNotesByGoal(
       HttpServletRequest request,
-      @RequestParam Long page,
-      @RequestParam Long limit,
+      @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
+      @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
       @Parameter(description = "노트를 조회할 목표의 ID") @PathVariable(name = "goal_id") Long goalId
   ) {
     Long memberId = jwtProvider.getMemberId(request);

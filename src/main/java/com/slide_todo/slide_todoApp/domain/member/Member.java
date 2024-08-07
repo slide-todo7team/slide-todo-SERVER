@@ -18,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -35,9 +36,11 @@ public class Member {
   private Long id;
 
   @OneToMany(mappedBy = "member")
+  @BatchSize(size = 10)
   private List<IndividualGoal> individualGoals = new ArrayList<>();
 
   @OneToMany(mappedBy = "member")
+  @BatchSize(size = 10)
   private List<GroupMember> groupMembers = new ArrayList<>();
 
   private String email;
@@ -76,5 +79,9 @@ public class Member {
     this.getGroupMembers().forEach(GroupMember::deleteGroupMember);
     this.updatedAt = LocalDateTime.now();
     this.isDeleted = true;
+  }
+
+  public void updateGroupMembers(List<GroupMember> groupMembers) {
+    this.groupMembers = groupMembers;
   }
 }
