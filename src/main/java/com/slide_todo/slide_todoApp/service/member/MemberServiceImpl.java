@@ -141,10 +141,13 @@ public class MemberServiceImpl implements MemberService {
     }
   }
 
-  /*닉네임 중복 검사*/
+  /*닉네임 유효성 검사*/
   private void validateNickname(String nickname) {
     if (memberRepository.existsByNickname(nickname)) {
       throw new CustomException(Exceptions.EXIST_NICKNAME);
+    }
+    if (nickname.length() > 8) {
+      throw new CustomException(Exceptions.NICKNAME_TOO_LONG);
     }
   }
 }
