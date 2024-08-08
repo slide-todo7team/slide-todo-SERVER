@@ -128,7 +128,7 @@ public class GroupServiceImpl implements GroupService {
             groupMemberDTOS.add(GroupInfoDTO.GroupMemberDTO.builder()
                     .id(member.getId()) // Member ID
                     .isLeader(groupMember.getIsLeader()) // 리더 여부
-                    .name(member.getNickname()) // 멤버 이름
+                    .nickname(member.getNickname()) // 멤버 이름
                     .color(groupMember.getColor().getHexCode()) // 색상
                     .contributionRank(i + 1) // 순위 매기기 (1부터 시작)
                     .build());

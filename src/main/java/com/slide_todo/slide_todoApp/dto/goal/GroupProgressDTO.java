@@ -20,7 +20,7 @@ public class GroupProgressDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GroupGoalMemDTO {
-        private String name;
+        private String nickname;
         private String color;
         private Integer contributionPercent;
     }

@@ -94,7 +94,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
                         Integer contributionPercent = calContributionPercent(groupTodos, member.getId());
 
                         return GroupProgressDTO.GroupGoalMemDTO.builder()
-                                .name(member.getMember().getNickname())
+                                .nickname(member.getMember().getNickname())
                                 .contributionPercent(contributionPercent)
                                 .color(member.getColor().getHexCode())
                                 .build();
