@@ -165,16 +165,6 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
 
   @Override
   public Member findMemberWithGoalAndGroupMember(Long memberId) {
-//    try {
-//      return em.createQuery("select m from Member m"
-//          + " left join fetch m.individualGoals ig"
-//          + " left join fetch m.groupMembers gm"
-//          + " where m.id =:memberId", Member.class)
-//          .setParameter("memberId", memberId)
-//          .getSingleResult();
-//    } catch (NoResultException e) {
-//      throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
-//    }
     try {
       Member member = em.createQuery("select m from Member m"
               + " left join fetch m.individualGoals ig"
@@ -198,8 +188,6 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   public List<Member> findMembersToDelete(List<Long> ids) {
     List<Member> members = em.createQuery("select m from Member m"
             + " left join fetch m.individualGoals ig"
-//            + " left join fetch m.groupMembers gm"
-//            + " left join fetch gm.chargingTodos ct"
             + " where m.id in :ids", Member.class)
         .setParameter("ids", ids)
         .getResultList();
