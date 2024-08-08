@@ -89,21 +89,13 @@ public class IndividualGoalServiceImpl implements IndividualGoalService {
                     .title(individualGoal.getTitle())
                     .id(individualGoal.getId())
                     .memberId(memberId)
+                    .progress(individualGoal.getProgressRate())
                     .updatedAt(individualGoal.getUpdatedAt())
                     .createdAt(individualGoal.getCreatedAt())
                     .build();
 
             // 할 일 리스트
             List<IndividualTodo> individualTodos = todoRepository.findAllByGoal(individualGoal);
-
-            // 진행률 계산
-            long totalTodos = individualTodos.size();
-            long completedTodos = individualTodos.stream().filter(IndividualTodo::getIsDone).count();
-            double progress = totalTodos > 0 ? (double) completedTodos / totalTodos * 100 : 0.0;
-            progress = Math.round(progress * 10.0) / 10.0; // 소수점 한 자리까지 반올림
-
-            // 진행률 설정
-            individualGoalTodoDTO.setProgress(progress);
 
             List<IndividualGoalTodoDTO.IndividualTodoDto> todoDtos = individualTodos.stream()
                     .map(todo -> IndividualGoalTodoDTO.IndividualTodoDto.builder()
