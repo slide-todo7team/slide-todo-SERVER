@@ -26,4 +26,9 @@ public class GroupGoal extends Goal {
     public GroupGoal() {
         super();
     }
+
+    public void deleteGroupGoal() {
+        this.deleteGoal();
+        this.getGroup().getGroupGoals().remove(this);
+    }
 }

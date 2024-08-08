@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.domain.goal;
 
-import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -10,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.el.parser.BooleanNode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -82,5 +80,9 @@ public abstract class Goal {
         long done = todos.stream().filter(Todo::getIsDone)
             .filter(todo -> !todo.getIsDeleted()).count();
         this.progressRate = BigDecimal.valueOf(total > 0 ? (double) done / total * 100 : 0);
+    }
+
+    public void updateTodos(List<Todo> todos) {
+        this.todos = todos;
     }
 }

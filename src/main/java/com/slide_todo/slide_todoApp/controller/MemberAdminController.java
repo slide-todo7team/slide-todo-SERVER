@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "어드민 유저 관리 API")
 @RequestMapping("/admin/member")
 @RequiredArgsConstructor
-public class AdminMemberController {
+public class MemberAdminController {
 
   private final JwtProvider jwtProvider;
   private final AdminMemberService adminMemberService;
@@ -41,8 +41,8 @@ public class AdminMemberController {
       @Parameter(description = "검색할 이름 조건") @RequestParam(required = false) String name,
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 이메일 조건") @RequestParam(required = false) String email,
-      @Parameter(description = "검색할 계정 생성일 조건(~이후)") @RequestParam(required = false) String createdAfter,
-      @Parameter(description = "검색할 계정 생성일 조건(~이전)")@RequestParam(required = false) String createdBefore
+      @Parameter(description = "검색할 계정 생성일 조건(~이후)") @RequestParam(name = "created_after", required = false) String createdAfter,
+      @Parameter(description = "검색할 계정 생성일 조건(~이전)")@RequestParam(name = "created_before", required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminMemberService.getAllMembers(page, limit, name, nickname, email, createdAfter, createdBefore);
@@ -71,8 +71,8 @@ public class AdminMemberController {
       @Parameter(description = "검색할 이름 조건") @RequestParam(required = false) String name,
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 이메일 조건") @RequestParam(required = false) String email,
-      @Parameter(description = "검색할 계정 생성일 조건(~이후)") @RequestParam(required = false) String createdAfter,
-      @Parameter(description = "검색할 계정 생성일 조건(~이전)")@RequestParam(required = false) String createdBefore,
+      @Parameter(description = "검색할 계정 생성일 조건(~이후)") @RequestParam(name = "created_after", required = false) String createdAfter,
+      @Parameter(description = "검색할 계정 생성일 조건(~이전)")@RequestParam(name = "created_before", required = false) String createdBefore,
       @RequestBody MemberIdsDTO memberIdsDTO
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);

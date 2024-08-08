@@ -29,4 +29,9 @@ public class IndividualGoal extends Goal {
     protected IndividualGoal() {
         super();
     }
+
+    public void deleteIndividualGoal() {
+        this.member.getIndividualGoals().remove(this);
+        this.deleteGoal();
+    }
 }
