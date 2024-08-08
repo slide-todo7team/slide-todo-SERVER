@@ -112,6 +112,8 @@ public class GroupGoalServiceImpl implements GroupGoalService {
                             .done(todo.getIsDone())
                             .title(todo.getTitle())
                             .id(todo.getId())
+                            .assignee(todo.getMemberInCharge() != null ?
+                                    todo.getMemberInCharge().getMember().getNickname() : null)
                             .build())
                     .toList();
 
@@ -152,7 +154,6 @@ public class GroupGoalServiceImpl implements GroupGoalService {
         Group group = groupRepository.findById(groupId).get();
         GroupGoal groupGoal = groupGoalRepository.findByGroupAndId(group,goalId);
 
-//        groupGoal.setIsDeleted(true);
         groupGoal.deleteGoal();
         groupGoalRepository.save(groupGoal);
 

@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.dto.goal;
 
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import lombok.*;
 import com.slide_todo.slide_todoApp.dto.goal.GroupProgressDTO;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ public class GroupGoalTodoDTO {
         private Long id; //할일 id
         private String title;
         private Boolean done;
+        private String assignee;
     }
 
 

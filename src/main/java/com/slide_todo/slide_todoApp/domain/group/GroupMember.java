@@ -38,7 +38,7 @@ public class GroupMember {
     private List<GroupTodo> chargingTodos = new ArrayList<>();
 
     private Boolean isLeader;
-    private Boolean isDeleted;
+    private Boolean isDeleted=false;
 
     private Integer todoCount;
 

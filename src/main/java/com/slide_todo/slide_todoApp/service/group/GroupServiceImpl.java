@@ -120,9 +120,18 @@ public class GroupServiceImpl implements GroupService {
                 .toList();
 
         List<GroupInfoDTO.GroupMemberDTO> groupMemberDTOS = new ArrayList<>();
+        int currentRank = 1; // 현재 순위
+        int previousDoneCount = -1; // 이전 멤버의 완료한 할 일 개수
+
         for (int i = 0; i < sortedMembers.size(); i++) {
             GroupMember groupMember = sortedMembers.get(i);
             Member member = groupMember.getMember(); // Member 정보 가져오기
+            int doneCount = groupMember.getTodoCount(); // 완료한 할 일 개수 가져오기
+
+            // 동일한 개수인 경우 순위를 동일하게 부여
+            if (doneCount != previousDoneCount) {
+                currentRank = i + 1; // 새로운 순위 설정
+            }
 
             // GroupMemberDTO 생성
             groupMemberDTOS.add(GroupInfoDTO.GroupMemberDTO.builder()
@@ -130,8 +139,10 @@ public class GroupServiceImpl implements GroupService {
                     .isLeader(groupMember.getIsLeader()) // 리더 여부
                     .nickname(member.getNickname()) // 멤버 이름
                     .color(groupMember.getColor().getHexCode()) // 색상
-                    .contributionRank(i + 1) // 순위 매기기 (1부터 시작)
+                    .contributionRank(currentRank) // 순위 매기기
                     .build());
+
+            previousDoneCount = doneCount; // 현재 완료한 할 일 개수를 이전 완료한 할 일 개수로 업데이트
         }
 
         groupInfoDTO.setMembers(groupMemberDTOS);
