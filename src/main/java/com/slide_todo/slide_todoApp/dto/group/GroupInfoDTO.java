@@ -25,7 +25,7 @@ public class GroupInfoDTO {
     public static class GroupMemberDTO {
         private Long id;
         private Boolean isLeader;
-        private String name;
+        private String nickname;
         private String color;
         private Integer contributionRank;
     }
