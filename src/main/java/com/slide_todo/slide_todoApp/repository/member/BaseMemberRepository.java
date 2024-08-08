@@ -2,6 +2,8 @@ package com.slide_todo.slide_todoApp.repository.member;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.member.MemberRole;
+import com.slide_todo.slide_todoApp.dto.member.MemberSearchResultDTO;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BaseMemberRepository {
@@ -23,4 +25,13 @@ public interface BaseMemberRepository {
   Long countAll();
 
   List<Member> findAll(int page, int limit);
+
+  MemberSearchResultDTO findByNameAndNicknameAndEmailAndCreatedAt(
+      String name, String nickname, String email, LocalDateTime createdAfter,
+      LocalDateTime createdBefore, long start, long limit
+  );
+
+  Member findMemberWithGoalAndGroupMember(Long memberId);
+
+  List<Member> findMembersToDelete(List<Long> ids);
 }

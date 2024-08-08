@@ -4,7 +4,6 @@ import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
-import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
@@ -19,7 +18,6 @@ import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
-import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.note.NoteRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
@@ -28,7 +26,6 @@ import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,11 +44,8 @@ public class NoteServiceImpl implements NoteService {
   @Override
   @Transactional
   public ResponseDTO<?> createNote(Long memberId, NoteCreateDTO request) {
+    validateNote(request.getTitle(), request.getContent(), request.getLinkUrl());
     Todo todo = todoRepository.findByTodoId(request.getTodoId());
-
-    if (request.getTitle().length() > 30) {
-      throw new CustomException(Exceptions.TITLE_TOO_LONG);
-    }
 
     if (todo.getDtype().equals("G")) {
       GroupTodo groupTodo = (GroupTodo) todo;
@@ -70,13 +64,10 @@ public class NoteServiceImpl implements NoteService {
   @Override
   @Transactional
   public ResponseDTO<?> updateNote(Long memberId, Long noteId, NoteUpdateDTO request) {
+    validateNote(request.getTitle(), request.getContent(), request.getLinkUrl());
     Note note = noteRepository.findByNoteId(noteId);
     Long todoId = note.getTodo().getId();
     Todo todo = todoRepository.findByTodoId(todoId);
-
-    if (request.getTitle().length() > 30) {
-      throw new CustomException(Exceptions.TITLE_TOO_LONG);
-    }
 
     if (todo.getDtype().equals("G")) {
       GroupTodo groupTodo = (GroupTodo) todo;
@@ -227,5 +218,17 @@ public class NoteServiceImpl implements NoteService {
         .build();
     noteRepository.save(note);
     return new GroupNoteDTO(note);
+  }
+
+  private void validateNote(String title, String content, String url) {
+    if (title.length() > 30) {
+      throw new CustomException(Exceptions.TITLE_TOO_LONG);
+    }
+    if (content.length() > 10000) {
+      throw new CustomException(Exceptions.NOTE_TOO_LONG);
+    }
+    if (url.length() > 255) {
+      throw new CustomException(Exceptions.URL_TOO_LONG);
+    }
   }
 }

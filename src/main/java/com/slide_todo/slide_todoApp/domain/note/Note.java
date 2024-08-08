@@ -39,10 +39,14 @@ public class Note {
   @JoinColumn(name = "todo_id")
   private Todo todo;
 
+  @Length(max = 30)
+  @Size(max = 30)
   private String title;
   @Length(max = 10000)
   @Size(max = 10000)
   private String content;
+  @Length(max = 255)
+  @Size(max = 255)
   private String linkUrl;
   private Boolean isDeleted;
 

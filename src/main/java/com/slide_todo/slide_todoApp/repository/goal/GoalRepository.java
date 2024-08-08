@@ -8,4 +8,7 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
 
   @Query("SELECT g FROM Goal g WHERE g.id = :goalId")
   Goal findByGoalId(Long goalId);
+
+  @Query("SELECT g FROM Goal g LEFT JOIN FETCH g.todos WHERE g.id = :goalId")
+  Goal findWithTodos(Long goalId);
 }

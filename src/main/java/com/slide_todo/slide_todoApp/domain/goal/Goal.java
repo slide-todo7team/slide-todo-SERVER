@@ -3,6 +3,7 @@ package com.slide_todo.slide_todoApp.domain.goal;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -34,7 +35,8 @@ public abstract class Goal {
 
     private String title;
 
-    private Integer progressRate;
+    @Column(precision = 4, scale = 1)
+    private BigDecimal progressRate;
 
     private Boolean isDeleted;
 
@@ -46,9 +48,10 @@ public abstract class Goal {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
     public Goal(String title) {
         this.title = title;
-        this.progressRate = 0;
+        this.progressRate = BigDecimal.valueOf(0);
         this.isDeleted = false;
     }
 
@@ -74,4 +77,10 @@ public abstract class Goal {
     /**
      * 목표 진행률 계산 메소드 필요
      */
+    public void updateProgressRate() {
+        long total = todos.stream().filter(todo -> !todo.getIsDeleted()).count();
+        long done = todos.stream().filter(Todo::getIsDone)
+            .filter(todo -> !todo.getIsDeleted()).count();
+        this.progressRate = BigDecimal.valueOf(total > 0 ? (double) done / total * 100 : 0);
+    }
 }

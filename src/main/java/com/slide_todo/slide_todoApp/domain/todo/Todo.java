@@ -19,11 +19,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -41,7 +43,11 @@ public abstract class Todo {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Length(max = 30)
+  @Size(max = 30)
   private String title;
+  @Length(max = 255)
+  @Size(max = 255)
   private String content;
   private Boolean isDeleted;
   private Boolean isDone;

@@ -35,8 +35,10 @@ public class GroupTodo extends Todo {
   public void updateMemberInCharge(GroupMember memberInCharge) {
     if (this.getMemberInCharge() == null) {
       this.memberInCharge = memberInCharge;
+      memberInCharge.getChargingTodos().add(this);
     } else {
       this.memberInCharge = null;
+      memberInCharge.getChargingTodos().remove(this);
     }
   }
 

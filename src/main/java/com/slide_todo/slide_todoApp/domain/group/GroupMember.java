@@ -1,18 +1,24 @@
 package com.slide_todo.slide_todoApp.domain.group;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
+import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 //@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLRestriction("is_deleted = false")
 public class GroupMember {
 
     @Id
@@ -28,12 +34,20 @@ public class GroupMember {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @OneToMany(mappedBy = "memberInCharge", fetch = FetchType.LAZY)
+    private List<GroupTodo> chargingTodos = new ArrayList<>();
+
     private Boolean isLeader;
+    private Boolean isDeleted;
 
     private Integer todoCount;
 
     @Enumerated(EnumType.STRING)
     private ColorEnum color;
+
+    @CreationTimestamp
+    @Column(name = "registered_at", updatable = false)
+    private LocalDateTime registeredAt;
 
     @Builder
     public GroupMember(Member member, Group group, Boolean isLeader, ColorEnum color) {
@@ -42,6 +56,7 @@ public class GroupMember {
         this.isLeader = isLeader;
         this.todoCount = 0;
         this.color = color;
+        this.isDeleted = false;
     }
 
     public void increaseTodoCount() {
@@ -82,5 +97,13 @@ public class GroupMember {
 
     public void setColor(ColorEnum randomColor) {
         this.color = randomColor;
+    }
+
+    public void deleteGroupMember() {
+        this.getGroup().getGroupMembers().remove(this);
+        this.getChargingTodos().forEach(o -> {
+            o.updateMemberInCharge(null);
+        });
+        this.isDeleted = true;
     }
 }

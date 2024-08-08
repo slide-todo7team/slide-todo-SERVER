@@ -1,6 +1,7 @@
 package com.slide_todo.slide_todoApp.util.jwt;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
+import com.slide_todo.slide_todoApp.domain.member.MemberRole;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
@@ -144,6 +145,30 @@ public class JwtProvider {
       throw new CustomException(Exceptions.PREMATURE_TOKEN);
     } else if (!claims.get("type").equals(TokenType.ACCESS.name())) {
       throw new CustomException(Exceptions.NOT_ACCESS_TOKEN);
+    }
+    return Long.parseLong(claims.getSubject());
+  }
+
+
+  /*어드민 유저를 확인하며 ID추출*/
+  public Long getAdminMemberId(HttpServletRequest request) {
+    String token = this.resolveToken(request);
+    Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token)
+        .getPayload();
+    Date now = new Date();
+
+    if (blacklist.containsToken(token)) {
+      throw new CustomException(Exceptions.BLACKLISTED_TOKEN);
+    } else if (claims.getExpiration().before(now)) {
+      throw new CustomException(Exceptions.EXPIRED_TOKEN);
+    } else if (claims.getIssuedAt().after(new Date())) {
+      throw new CustomException(Exceptions.PREMATURE_TOKEN);
+    } else if (!claims.get("type").equals(TokenType.ACCESS.name())) {
+      throw new CustomException(Exceptions.NOT_ACCESS_TOKEN);
+    }
+    Member member = memberRepository.findByMemberId(Long.parseLong(claims.getSubject()));
+    if (member.getRole() != MemberRole.ADMIN) {
+      throw new CustomException(Exceptions.ADMIN_ONLY);
     }
     return Long.parseLong(claims.getSubject());
   }

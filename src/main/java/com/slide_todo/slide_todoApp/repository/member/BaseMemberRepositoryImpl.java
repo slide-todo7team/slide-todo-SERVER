@@ -1,15 +1,19 @@
 package com.slide_todo.slide_todoApp.repository.member;
 
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.member.MemberRole;
+import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
+import com.slide_todo.slide_todoApp.dto.member.MemberSearchResultDTO;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import javax.swing.text.html.Option;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -101,5 +105,113 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
         .setFirstResult(first)
         .setMaxResults(first + limit)
         .getResultList();
+  }
+
+  @Override
+  public MemberSearchResultDTO findByNameAndNicknameAndEmailAndCreatedAt(String name, String nickname,
+      String email, LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
+    StringBuilder queryString = new StringBuilder("select m from Member m where 1=1");
+    StringBuilder countQueryString = new StringBuilder("select count(m) from Member m where 1=1");
+
+    if (name !=null) {
+      queryString.append(" and replace(m.name, ' ', '') like :name");
+      countQueryString.append(" and replace(m.name, ' ', '') like :name");
+    }
+    if (nickname != null) {
+      queryString.append(" and replace(m.nickname, ' ', '') like :nickname");
+      countQueryString.append(" and replace(m.nickname, ' ', '') like :nickname");
+    }
+    if (email != null) {
+      queryString.append(" and replace(m.email, ' ', '') like :email");
+      countQueryString.append(" and replace(m.email, ' ', '') like :email");
+    }
+    if (createdAfter != null) {
+      queryString.append(" and m.createdAt > :createdAfter");
+      countQueryString.append(" and m.createdAt > :createdAfter");
+    }
+    if (createdBefore != null) {
+      queryString.append(" and m.createdAt < :createdBefore");
+      countQueryString.append(" and m.createdAt < :createdBefore");
+    }
+
+    TypedQuery<Member> query = em.createQuery(queryString.toString(), Member.class);
+    TypedQuery<Long> countQuery = em.createQuery(countQueryString.toString(), Long.class);
+    if (name != null) {
+      query.setParameter("name", "%" + name + "%");
+      countQuery.setParameter("name", "%" + name + "%");
+    }
+    if (nickname != null) {
+      query.setParameter("nickname", "%" + nickname + "%");
+      countQuery.setParameter("nickname", "%" + nickname + "%");
+    }
+    if (email != null) {
+      query.setParameter("email", "%" + email + "%");
+      countQuery.setParameter("email", "%" + email + "%");
+    }
+    if (createdAfter != null) {
+      query.setParameter("createdAfter", createdAfter);
+      countQuery.setParameter("createdAfter", createdAfter);
+    }
+    if (createdBefore != null) {
+      query.setParameter("createdBefore", createdBefore);
+      countQuery.setParameter("createdBefore", createdBefore);
+    }
+
+    query.setFirstResult((int) start);
+    query.setMaxResults((int) limit);
+
+    return new MemberSearchResultDTO(query.getResultList(), countQuery.getSingleResult());
+  }
+
+  @Override
+  public Member findMemberWithGoalAndGroupMember(Long memberId) {
+//    try {
+//      return em.createQuery("select m from Member m"
+//          + " left join fetch m.individualGoals ig"
+//          + " left join fetch m.groupMembers gm"
+//          + " where m.id =:memberId", Member.class)
+//          .setParameter("memberId", memberId)
+//          .getSingleResult();
+//    } catch (NoResultException e) {
+//      throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
+//    }
+    try {
+      Member member = em.createQuery("select m from Member m"
+              + " left join fetch m.individualGoals ig"
+              + " where m.id =:memberId", Member.class)
+          .setParameter("memberId", memberId)
+          .getSingleResult();
+
+      member.updateGroupMembers(em.createQuery("select gm from GroupMember  gm"
+          + " where gm.member in :member", GroupMember.class)
+          .setParameter("member", member)
+          .getResultList());
+
+      return member;
+
+    } catch (NoResultException e) {
+      throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
+    }
+  }
+
+  @Override
+  public List<Member> findMembersToDelete(List<Long> ids) {
+    List<Member> members = em.createQuery("select m from Member m"
+            + " left join fetch m.individualGoals ig"
+//            + " left join fetch m.groupMembers gm"
+//            + " left join fetch gm.chargingTodos ct"
+            + " where m.id in :ids", Member.class)
+        .setParameter("ids", ids)
+        .getResultList();
+
+    members.forEach(member -> {
+      member.updateGroupMembers(em.createQuery("select gm from GroupMember  gm"
+              + " left join fetch gm.chargingTodos"
+              + " where gm.member in :member", GroupMember.class)
+          .setParameter("member", member)
+          .getResultList());
+    } );
+
+    return members;
   }
 }
