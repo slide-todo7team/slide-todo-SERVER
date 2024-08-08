@@ -26,8 +26,8 @@ public interface BaseMemberRepository {
 
   List<Member> findAll(int page, int limit);
 
-  MemberSearchResultDTO findByNameAndNicknameAndEmailAndCreatedAt(
-      String name, String nickname, String email, LocalDateTime createdAfter,
+  MemberSearchResultDTO findByNicknameAndEmailAndCreatedAt(
+      String nickname, String email, LocalDateTime createdAfter,
       LocalDateTime createdBefore, long start, long limit
   );
 

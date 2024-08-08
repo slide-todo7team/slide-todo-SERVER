@@ -58,7 +58,6 @@ public class MemberTest {
     SignupDTO request = new SignupDTO(
         generator.generateRandomEmail(),
         password,
-        generator.generateRandomString(10),
         generator.generateRandomString(10)
     );
 
@@ -71,7 +70,6 @@ public class MemberTest {
 
     /*then*/
     assertEquals(request.getEmail(), result.getEmail());
-    assertEquals(request.getName(), result.getName());
     assertEquals(request.getNickname(), result.getNickname());
     assertNotEquals(request.getPassword(), result.getPassword());
   }

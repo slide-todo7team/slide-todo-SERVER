@@ -47,7 +47,6 @@ public class MemberServiceImpl implements MemberService {
     Member member = Member.builder()
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
-        .name(request.getName())
         .nickname(request.getNickname())
         .build();
     memberRepository.save(member);
@@ -104,9 +103,9 @@ public class MemberServiceImpl implements MemberService {
       }
     }
 
-    member.updateMember(request.getEmail(), request.getName(), request.getNickname());
+    member.updateMember(request.getEmail(), request.getNickname());
     return new ResponseDTO<>(new MemberUpdateDTO(
-        member.getEmail(), member.getName(), member.getNickname()
+        member.getEmail(),member.getNickname()
     ), Responses.OK);
   }
 

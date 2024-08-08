@@ -74,10 +74,6 @@ public class GroupMember {
     public void updateIsLeader(Boolean isLeader) {
         this.isLeader = isLeader;
     }
-    ////
-    public String getName() {
-        return member.getName();
-    }
 
     public void setGroup(Group group) {
         this.group = group;

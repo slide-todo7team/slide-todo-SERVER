@@ -45,7 +45,6 @@ public class Member {
 
   private String email;
   private String password;
-  private String name;
   private String nickname;
   private Boolean isDeleted;
 
@@ -57,19 +56,17 @@ public class Member {
   private LocalDateTime updatedAt;
 
   @Builder
-  public Member(String email, String password, String name, String nickname) {
+  public Member(String email, String password, String nickname) {
     this.email = email;
     this.password = password;
-    this.name = name;
     this.nickname = nickname;
     this.role = MemberRole.USER;
     this.updatedAt = LocalDateTime.now();
     this.isDeleted = false;
   }
 
-  public void updateMember(String email, String name, String nickname) {
+  public void updateMember(String email, String nickname) {
     if (email != null) {this.email = email;}
-    if (name != null) {this.name = name;}
     if (nickname != null) {this.nickname = nickname;} // 서비스 로직에서 닉네임 중복 여부 확인 필요
     this.updatedAt = LocalDateTime.now();
   }

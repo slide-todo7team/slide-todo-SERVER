@@ -29,10 +29,11 @@ public class AdminMemberServiceImpl implements AdminMemberService {
   private final Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
 
   @Override
-  public ResponseDTO<MemberListDTO> getAllMembers(long page, long limit, String name,
+  public ResponseDTO<MemberListDTO> getAllMembers(long page, long limit,
       String nickname, String email, String createdAfter, String createdBefore) {
 
-    MemberListDTO searchResult = searchMembers(page, limit, name, nickname, email, createdAfter, createdBefore);
+    MemberListDTO searchResult = searchMembers(page, limit, nickname, email, createdAfter,
+        createdBefore);
 
     return new ResponseDTO<>(searchResult, Responses.OK);
   }
@@ -46,7 +47,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 
   @Override
   @Transactional
-  public ResponseDTO<MemberListDTO> deleteMembers(MemberIdsDTO request, long page, long limit, String name,
+  public ResponseDTO<MemberListDTO> deleteMembers(MemberIdsDTO request, long page, long limit,
       String nickname, String email, String createdAfter, String createdBefore) {
     List<Long> ids = request.getMemberIds();
 
@@ -55,7 +56,8 @@ public class AdminMemberServiceImpl implements AdminMemberService {
       m.deleteMember();
     }
 
-    MemberListDTO searchResult = searchMembers(page, limit, name, nickname, email, createdAfter, createdBefore);
+    MemberListDTO searchResult = searchMembers(page, limit, nickname, email, createdAfter,
+        createdBefore);
 
     return new ResponseDTO<>(searchResult, Responses.OK);
   }
@@ -74,11 +76,11 @@ public class AdminMemberServiceImpl implements AdminMemberService {
       }
     }
 
-    member.updateMember(request.getEmail(), request.getName(), request.getNickname());
+    member.updateMember(request.getEmail(), request.getNickname());
     return new ResponseDTO<>(new MemberDetailDTO(member), Responses.OK);
   }
 
-  private MemberListDTO searchMembers(long page, long limit, String name,
+  private MemberListDTO searchMembers(long page, long limit,
       String nickname, String email, String createdAfter, String createdBefore) {
     long start;
     if (limit != 0) {
@@ -90,22 +92,21 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     LocalDateTime parsedCreatedAfter;
     LocalDateTime parsedCreatedBefore;
     if (createdAfter != null) {
-     parsedCreatedAfter= LocalDate.parse(createdAfter.replace(" ", ""))
-         .atStartOfDay();
+      parsedCreatedAfter = LocalDate.parse(createdAfter.replace(" ", ""))
+          .atStartOfDay();
     } else {
       parsedCreatedAfter = null;
     }
 
     if (createdBefore != null) {
-     parsedCreatedBefore = LocalDate.parse(createdBefore.replace(" ", ""))
-         .atStartOfDay().plusDays(1);
+      parsedCreatedBefore = LocalDate.parse(createdBefore.replace(" ", ""))
+          .atStartOfDay().plusDays(1);
     } else {
       parsedCreatedBefore = null;
     }
 
-
-    MemberSearchResultDTO searchResult = memberRepository.findByNameAndNicknameAndEmailAndCreatedAt(
-        name, nickname, email,
+    MemberSearchResultDTO searchResult = memberRepository.findByNicknameAndEmailAndCreatedAt(
+        nickname, email,
         parsedCreatedAfter, parsedCreatedBefore, start, limit);
 
     return new MemberListDTO(searchResult.getTotalCount(), page, searchResult.getMembers());

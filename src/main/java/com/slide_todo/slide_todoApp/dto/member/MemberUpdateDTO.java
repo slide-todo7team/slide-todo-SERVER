@@ -7,13 +7,10 @@ import lombok.Data;
 public class MemberUpdateDTO {
 
   private String email;
-  private String name;
   private String nickname;
 
-  public MemberUpdateDTO(@Nullable String email, @Nullable String name,
-      @Nullable String nickname) {
+  public MemberUpdateDTO(@Nullable String email, @Nullable String nickname) {
     this.email = email;
-    this.name = name;
     this.nickname = nickname;
   }
 }

@@ -27,7 +27,6 @@ public class MemberListDTO {
 
     private Long id;
     private String email;
-    private String name;
     private String nickname;
     private MemberRole role;
     @JsonProperty("created_at")
@@ -38,7 +37,6 @@ public class MemberListDTO {
     public MemberInListDTO(Member member) {
       this.id = member.getId();
       this.email = member.getEmail();
-      this.name = member.getName();
       this.nickname = member.getNickname();
       this.role = member.getRole();
       this.createdAt = member.getCreatedAt();
