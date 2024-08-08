@@ -108,15 +108,11 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   }
 
   @Override
-  public MemberSearchResultDTO findByNameAndNicknameAndEmailAndCreatedAt(String name, String nickname,
+  public MemberSearchResultDTO findByNicknameAndEmailAndCreatedAt(String nickname,
       String email, LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
     StringBuilder queryString = new StringBuilder("select m from Member m where 1=1");
     StringBuilder countQueryString = new StringBuilder("select count(m) from Member m where 1=1");
 
-    if (name !=null) {
-      queryString.append(" and replace(m.name, ' ', '') like :name");
-      countQueryString.append(" and replace(m.name, ' ', '') like :name");
-    }
     if (nickname != null) {
       queryString.append(" and replace(m.nickname, ' ', '') like :nickname");
       countQueryString.append(" and replace(m.nickname, ' ', '') like :nickname");
@@ -136,10 +132,6 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
 
     TypedQuery<Member> query = em.createQuery(queryString.toString(), Member.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryString.toString(), Long.class);
-    if (name != null) {
-      query.setParameter("name", "%" + name + "%");
-      countQuery.setParameter("name", "%" + name + "%");
-    }
     if (nickname != null) {
       query.setParameter("nickname", "%" + nickname + "%");
       countQuery.setParameter("nickname", "%" + nickname + "%");

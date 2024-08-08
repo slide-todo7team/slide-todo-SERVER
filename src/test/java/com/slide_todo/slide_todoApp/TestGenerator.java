@@ -107,7 +107,6 @@ public class TestGenerator {
     return Member.builder()
         .email(generateRandomEmail())
         .password(passwordEncoder.encode(generateRandomString(10)))
-        .name(generateRandomString(10))
         .nickname(generateRandomString(10))
         .build();
   }
@@ -116,7 +115,6 @@ public class TestGenerator {
     return Member.builder()
         .email(generateRandomEmail())
         .password(passwordEncoder.encode(password))
-        .name(generateRandomString(10))
         .nickname(generateRandomString(10))
         .build();
   }
