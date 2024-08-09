@@ -15,6 +15,7 @@ public enum Exceptions {
   TITLE_TOO_LONG(400, "The title can be up to 30 characters."),
   TODO_CONTENT_TOO_LONG(400, "The todo content can be up to 255 characters"),
   NOTE_TOO_LONG(400, "The note content can be up to 10,000 characters"),
+  NICKNAME_TOO_LONG(400, "The nickname can be up to 8 characters"),
   URL_TOO_LONG(400, "The URL can be up to 255 characters"),
   REGISTERED_EMAIL(400, "Email already exists"),
   EXIST_NICKNAME(400, "Nickname already exists"),
