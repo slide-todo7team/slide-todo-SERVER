@@ -3,7 +3,7 @@ package com.slide_todo.slide_todoApp.service.member;
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
-import com.slide_todo.slide_todoApp.dto.member.NicknameCheckDTO;
+import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
 import com.slide_todo.slide_todoApp.dto.member.SignupDTO;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
@@ -14,7 +14,9 @@ public interface MemberService {
 
   ResponseDTO<TokenPairDTO> signin(SigninDTO request);
 
-  ResponseDTO<NicknameCheckDTO> checkNickname(String nickname);
+  ResponseDTO<DuplicationCheckDTO> checkNickname(String nickname);
+
+  ResponseDTO<DuplicationCheckDTO> checkEmail(String email);
 
   ResponseDTO<TokenPairDTO> refreshToken(RefreshTokenDTO request);
 
@@ -23,4 +25,6 @@ public interface MemberService {
   ResponseDTO<?> logout(TokenPairDTO request);
 
   ResponseDTO<?> deleteMember(Long memberId);
+
+
 }

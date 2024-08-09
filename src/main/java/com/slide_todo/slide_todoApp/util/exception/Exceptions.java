@@ -21,6 +21,7 @@ public enum Exceptions {
   INVALID_EMAIL(400, "Invalid email format"),
   INVALID_PASSWORD(400, "Invalid password. Password must be at least 8 characters"
       + " long and include a mix of letters, numbers, and symbols."),
+  WRONG_PASSWORD(400, "Wrong password"),
   ALREADY_CHARGED_TODO(400, "Already charged todo"),
 
 

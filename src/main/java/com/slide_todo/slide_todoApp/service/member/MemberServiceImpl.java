@@ -4,7 +4,7 @@ import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
-import com.slide_todo.slide_todoApp.dto.member.NicknameCheckDTO;
+import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
 import com.slide_todo.slide_todoApp.dto.member.SignupDTO;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
@@ -64,7 +64,7 @@ public class MemberServiceImpl implements MemberService {
     Member member = memberRepository.findByEmail(request.getEmail());
 
     if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-      throw new CustomException(Exceptions.INVALID_PASSWORD);
+      throw new CustomException(Exceptions.WRONG_PASSWORD);
     }
 
     TokenPairDTO tokenPair = new TokenPairDTO(
@@ -76,9 +76,15 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public ResponseDTO<NicknameCheckDTO> checkNickname(String nickname) {
+  public ResponseDTO<DuplicationCheckDTO> checkNickname(String nickname) {
     Boolean isExist = memberRepository.existsByNickname(nickname);
-    return new ResponseDTO<>(new NicknameCheckDTO(isExist), Responses.OK);
+    return new ResponseDTO<>(new DuplicationCheckDTO(isExist), Responses.OK);
+  }
+
+  @Override
+  public ResponseDTO<DuplicationCheckDTO> checkEmail(String email) {
+    Boolean isExist = memberRepository.existsByEmail(email);
+    return new ResponseDTO<>(new DuplicationCheckDTO(isExist), Responses.OK);
   }
 
   @Override
