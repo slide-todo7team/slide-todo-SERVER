@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "어드민 유저 관리 API")
 @RequestMapping("/admin/member")
 @RequiredArgsConstructor
-public class MemberAdminController {
+public class AdminMemberController {
 
   private final JwtProvider jwtProvider;
   private final AdminMemberService adminMemberService;

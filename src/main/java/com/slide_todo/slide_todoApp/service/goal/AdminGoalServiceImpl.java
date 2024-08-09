@@ -38,7 +38,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
    * @return
    */
   @Override
-  public ResponseDTO<IndividualGoalAdminDTO> findIndividualAdminGoalsByAdmin(long page, long limit,
+  public ResponseDTO<IndividualGoalAdminDTO> getIndividualGoalsByAdmin(long page, long limit,
       String nickname, String title, String createdAfter, String createdBefore) {
 
     IndividualGoalAdminDTO result = searchIndividualGoals(page, limit, nickname, title,
@@ -58,7 +58,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
    * @return
    */
   @Override
-  public ResponseDTO<GroupGoalAdminDTO> findGroupAdminGoalsByAdmin(long page, long limit,
+  public ResponseDTO<GroupGoalAdminDTO> getGroupGoalsByAdmin(long page, long limit,
       String groupName, String title, String createdAfter, String createdBefore) {
 
     GroupGoalAdminDTO result = searchGroupGoals(page, limit, groupName, title,
