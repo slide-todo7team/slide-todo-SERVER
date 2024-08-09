@@ -32,7 +32,6 @@ public class IndividualTodoListDTO {
     private MemberInTodoDTO memberInTodoDTO;
     private Long id;
     private String title;
-    private String content;
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
     @JsonProperty("updated_at")
@@ -43,7 +42,6 @@ public class IndividualTodoListDTO {
       this.memberInTodoDTO = new MemberInTodoDTO(goal.getMember());
       this.id = individualTodo.getId();
       this.title = individualTodo.getTitle();
-      this.content = individualTodo.getContent();
       this.createdAt = individualTodo.getCreatedAt();
       this.updatedAt = individualTodo.getUpdatedAt();
     }

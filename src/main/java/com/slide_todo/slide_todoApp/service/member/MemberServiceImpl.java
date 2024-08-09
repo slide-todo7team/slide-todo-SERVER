@@ -126,7 +126,7 @@ public class MemberServiceImpl implements MemberService {
   @Transactional
   public ResponseDTO<?> deleteMember(Long memberId) {
     Member member = memberRepository.findByMemberId(memberId);
-    memberRepository.delete(member);
+    member.deleteMember();
     return new ResponseDTO<>(null, Responses.OK);
   }
 

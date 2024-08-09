@@ -60,7 +60,7 @@ public class TodoServiceTest {
     Member member = memberRepository.save(generator.createMember());
     Long goalId = individualGoalService.createIndividualGoal("title", member.getId()).getData()
         .getId();
-    TodoCreateDTO request = new TodoCreateDTO(goalId, "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goalId, "title");
 
     /*when*/
     IndividualTodoDTO expected = (IndividualTodoDTO) todoService.createTodo(member.getId(), request)
@@ -80,7 +80,7 @@ public class TodoServiceTest {
     Member member = memberRepository.save(generator.createMember());
     Group group = groupRepository.save(generator.createGroup(member));
     GroupGoal goal = groupGoalRepository.save(generator.createGroupGoal(group));
-    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title");
 
     /*when*/
     GroupTodoDTO expected = (GroupTodoDTO) todoService
@@ -99,14 +99,14 @@ public class TodoServiceTest {
     Member member = memberRepository.save(generator.createMember());
     Long goalId = individualGoalService.createIndividualGoal("title", member.getId()).getData()
         .getId();
-    TodoCreateDTO request = new TodoCreateDTO(goalId, "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goalId, "title");
     IndividualTodoDTO dto = (IndividualTodoDTO) todoService.createTodo(member.getId(), request)
         .getData();
     Long todoId = dto.getId();
 
     /*when*/
     IndividualTodoDTO result = (IndividualTodoDTO) todoService.updateTodo(
-        member.getId(), todoId, new TodoUpdateDTO("title2", "content2")
+        member.getId(), todoId, new TodoUpdateDTO("title2")
     ).getData();
 
     IndividualTodoDTO expected = new IndividualTodoDTO(
@@ -125,13 +125,13 @@ public class TodoServiceTest {
     Member member = memberRepository.save(generator.createMember());
     Group group = groupRepository.save(generator.createGroup(member));
     GroupGoal goal = groupGoalRepository.save(generator.createGroupGoal(group));
-    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title");
     GroupTodoDTO dto = (GroupTodoDTO) todoService.createTodo(member.getId(), request).getData();
     Long todoId = dto.getId();
 
     /*when*/
     GroupTodoDTO result = (GroupTodoDTO) todoService.updateTodo(
-        member.getId(), todoId, new TodoUpdateDTO("title2", "content2")
+        member.getId(), todoId, new TodoUpdateDTO("title2")
     ).getData();
 
     GroupTodoDTO expected = new GroupTodoDTO(
@@ -150,7 +150,7 @@ public class TodoServiceTest {
     Member member = memberRepository.save(generator.createMember());
     Long goalId = individualGoalService.createIndividualGoal("title", member.getId()).getData()
         .getId();
-    TodoCreateDTO request = new TodoCreateDTO(goalId, "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goalId, "title");
     IndividualTodoDTO dto = (IndividualTodoDTO) todoService.createTodo(member.getId(), request)
         .getData();
     Long todoId = dto.getId();
@@ -170,11 +170,12 @@ public class TodoServiceTest {
     Member member = memberRepository.save(generator.createMember());
     Group group = groupRepository.save(generator.createGroup(member));
     GroupGoal goal = groupGoalRepository.save(generator.createGroupGoal(group));
-    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title");
     GroupTodoDTO dto = (GroupTodoDTO) todoService.createTodo(member.getId(), request).getData();
     Long todoId = dto.getId();
 
     /*when*/
+    todoService.updateChargingGroupMember(member.getId(), todoId);
     todoService.changeTodoDone(member.getId(), todoId);
     GroupTodo todo = (GroupTodo) todoRepository.findByTodoId(todoId);
 
@@ -189,7 +190,7 @@ public class TodoServiceTest {
     Member member = memberRepository.save(generator.createMember());
     Long goalId = individualGoalService.createIndividualGoal("title", member.getId()).getData()
         .getId();
-    TodoCreateDTO request = new TodoCreateDTO(goalId, "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goalId, "title");
     IndividualTodoDTO dto = (IndividualTodoDTO) todoService.createTodo(member.getId(), request)
         .getData();
     Long todoId = dto.getId();
@@ -211,7 +212,7 @@ public class TodoServiceTest {
     Member member = memberRepository.save(generator.createMember());
     Group group = groupRepository.save(generator.createGroup(member));
     GroupGoal goal = groupGoalRepository.save(generator.createGroupGoal(group));
-    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title");
     GroupTodoDTO dto = (GroupTodoDTO) todoService.createTodo(member.getId(), request).getData();
     Long todoId = dto.getId();
 
@@ -235,7 +236,7 @@ public class TodoServiceTest {
 
     int todos = generator.generateRandomInt(50, 10);
     for (int i = 0; i < todos; i++) {
-      TodoCreateDTO request = new TodoCreateDTO(goalId, "title", "content");
+      TodoCreateDTO request = new TodoCreateDTO(goalId, "title");
       todoService.createTodo(member.getId(), request);
     }
 
@@ -261,7 +262,7 @@ public class TodoServiceTest {
     int expected1 = 0;
     for (int i = 0; i < 100; i++) {
       if (generator.generateRandomBoolean()) {
-        TodoCreateDTO request = new TodoCreateDTO(goalId1, "title", "content");
+        TodoCreateDTO request = new TodoCreateDTO(goalId1, "title");
         IndividualTodoDTO dto = (IndividualTodoDTO) todoService.createTodo(member.getId(), request)
             .getData();
         expected1++;
@@ -271,7 +272,7 @@ public class TodoServiceTest {
           expected1--;
         }
       } else {
-        TodoCreateDTO request = new TodoCreateDTO(goalId2, "title", "content");
+        TodoCreateDTO request = new TodoCreateDTO(goalId2, "title");
         todoService.createTodo(member.getId(), request);
       }
     }

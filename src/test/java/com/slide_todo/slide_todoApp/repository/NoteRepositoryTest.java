@@ -58,7 +58,7 @@ public class NoteRepositoryTest {
     Member member = memberRepository.save(generator.createMember());
     Group group = groupRepository.save(generator.createGroup(member));
     GroupGoal goal = groupGoalRepository.save(generator.createGroupGoal(group));
-    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title", "content");
+    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title");
     GroupTodoDTO expected = (GroupTodoDTO) todoService
         .createTodo(member.getId(), request).getData();
     GroupTodo todo = (GroupTodo) todoRepository.findByTodoId(expected.getId());

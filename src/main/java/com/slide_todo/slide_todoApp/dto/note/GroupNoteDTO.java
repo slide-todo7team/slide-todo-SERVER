@@ -39,7 +39,6 @@ public class GroupNoteDTO {
     @JsonProperty("charged_group_member_id")
     private GroupMemberDTO chargedGroupMember;
     private String title;
-    private String content;
     @JsonProperty("is_done")
     private Boolean isDone;
 
@@ -51,7 +50,6 @@ public class GroupNoteDTO {
         this.chargedGroupMember = new GroupMemberDTO(todo.getMemberInCharge());
       }
       this.title = todo.getTitle();
-      this.content = todo.getContent();
       this.isDone = todo.getIsDone();
     }
   }

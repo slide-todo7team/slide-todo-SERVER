@@ -13,8 +13,6 @@ public class GroupTodoDTO {
   private String title;
   @JsonProperty("is_done")
   private Boolean isDone;
-  @JsonProperty("content")
-  private String content;
   @JsonProperty("created_at")
   private String createdAt;
   @JsonProperty("updated_at")
@@ -34,7 +32,6 @@ public class GroupTodoDTO {
     } else {
       this.memberInCharge = null;
     }
-    this.content = todo.getContent();
     this.createdAt = todo.getCreatedAt().toString();
     this.updatedAt = todo.getUpdatedAt().toString();
     if (todo.getNote() != null) {

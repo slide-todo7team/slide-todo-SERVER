@@ -55,7 +55,6 @@ public class IndividualGoalDetailDTO {
 
     private Long id;
     private String title;
-    private String content;
     @JsonProperty("is_done")
     private Boolean isDone;
     @JsonProperty("created_at")
@@ -66,7 +65,6 @@ public class IndividualGoalDetailDTO {
     public IndividualTodoInGoalDTO(IndividualTodo individualTodo) {
       this.id = individualTodo.getId();
       this.title = individualTodo.getTitle();
-      this.content = individualTodo.getContent();
       this.isDone = individualTodo.getIsDone();
       this.createdAt = individualTodo.getCreatedAt();
       this.updatedAt = individualTodo.getUpdatedAt();

@@ -107,7 +107,7 @@ public class TestGenerator {
     return Member.builder()
         .email(generateRandomEmail())
         .password(passwordEncoder.encode(generateRandomString(10)))
-        .nickname(generateRandomString(10))
+        .nickname(generateRandomString(5))
         .build();
   }
 
@@ -115,7 +115,7 @@ public class TestGenerator {
     return Member.builder()
         .email(generateRandomEmail())
         .password(passwordEncoder.encode(password))
-        .nickname(generateRandomString(10))
+        .nickname(generateRandomString(5))
         .build();
   }
 
@@ -123,7 +123,6 @@ public class TestGenerator {
     return IndividualTodo.builder()
         .individualGoal(goal)
         .title(generateRandomString(10))
-        .content(generateRandomString(10))
         .build();
   }
 
@@ -131,7 +130,6 @@ public class TestGenerator {
     return GroupTodo.builder()
         .groupGoal(goal)
         .title(generateRandomString(10))
-        .content(generateRandomString(10))
         .build();
   }
 

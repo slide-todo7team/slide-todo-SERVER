@@ -44,7 +44,7 @@ public class TodoServiceImpl implements TodoService {
   @Override
   @Transactional
   public ResponseDTO<?> createTodo(Long memberId, TodoCreateDTO request) {
-    validateTodo(request.getTitle(), request.getContent());
+    validateTodo(request.getTitle());
     Goal goal = goalRepository.findByGoalId(request.getGoalId());
     if (goal.getDtype().equals("G")) {
       GroupTodo todo = createGroupTodo(memberId, request);
@@ -57,7 +57,7 @@ public class TodoServiceImpl implements TodoService {
   @Override
   @Transactional
   public ResponseDTO<?> updateTodo(Long memberId, Long todoId, TodoUpdateDTO request) {
-    validateTodo(request.getTitle(), request.getContent());
+    validateTodo(request.getTitle());
     Todo todo = todoRepository.findByTodoId(todoId);
     if (todo.getDtype().equals("G")) {
       GroupTodo newTodo = updateGroupTodo(memberId, (GroupTodo) todo, request);
@@ -188,7 +188,6 @@ public class TodoServiceImpl implements TodoService {
 
     GroupTodo groupTodo = GroupTodo.builder()
         .title(request.getTitle())
-        .content(request.getContent())
         .groupGoal(goal)
         .build();
     GroupTodo todo = todoRepository.save(groupTodo);
@@ -209,7 +208,6 @@ public class TodoServiceImpl implements TodoService {
 
     IndividualTodo individualTodo = IndividualTodo.builder()
         .title(request.getTitle())
-        .content(request.getContent())
         .individualGoal(goal)
         .build();
     IndividualTodo todo = todoRepository.save(individualTodo);
@@ -230,10 +228,7 @@ public class TodoServiceImpl implements TodoService {
         .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
     checkGroupPermission(memberId, goal.getGroup().getId());
 
-    todo.updateTodo(
-        request.getTitle(),
-        request.getContent()
-    );
+    todo.updateTodo(request.getTitle());
     return todo;
   }
 
@@ -247,10 +242,7 @@ public class TodoServiceImpl implements TodoService {
    */
   private IndividualTodo updateIndividualTodo(Long memberId, IndividualTodo todo,
       TodoUpdateDTO request) {
-    todo.updateTodo(
-        request.getTitle(),
-        request.getContent()
-    );
+    todo.updateTodo(request.getTitle());
     return todo;
   }
 
@@ -286,12 +278,9 @@ public class TodoServiceImpl implements TodoService {
     return todo;
   }
 
-  private void validateTodo(String title, String content) {
+  private void validateTodo(String title) {
     if (title.length() > 30) {
       throw new CustomException(Exceptions.TITLE_TOO_LONG);
-    }
-    if (content.length() > 255) {
-      throw new CustomException(Exceptions.TODO_CONTENT_TOO_LONG);
     }
   }
 }
