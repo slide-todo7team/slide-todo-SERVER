@@ -6,6 +6,7 @@ import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
 import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalDTO;
 import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalTodoDTO;
+import com.slide_todo.slide_todoApp.dto.goal.IndividualProgressDTO;
 import com.slide_todo.slide_todoApp.repository.goal.IndividualGoalRepository;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
@@ -141,11 +142,36 @@ public class IndividualGoalServiceImpl implements IndividualGoalService {
         IndividualGoal individualGoal = individualGoalRepository.findById(goalId)
                 .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
 
-//        individualGoal.setIsDeleted(true);
         individualGoal.deleteGoal();
         individualGoalRepository.save(individualGoal);
 
         return new ResponseDTO<>(null, Responses.NO_CONTENT);
+    }
+
+    //개인 진행률 계산
+    @Override
+    public ResponseDTO<IndividualProgressDTO> getIndividualProgress(Long memberId){
+        Member member = memberRepository.findByMemberId(memberId);
+        List<IndividualGoal> individualGoals = individualGoalRepository.findAllByMember(member);
+
+        int totalTodos = 0;
+        int completedTodos = 0;
+
+        for (IndividualGoal goal : individualGoals) {
+            List<IndividualTodo> todos = todoRepository.findAllByGoal(goal);
+            totalTodos += todos.size();
+            completedTodos += (int) todos.stream().filter(todo -> todo.getIsDone() && !todo.getIsDeleted()).count();
+        }
+
+        double progressPercentage = totalTodos > 0 ? (double) completedTodos / totalTodos * 100 : 0;
+        progressPercentage = Math.round(progressPercentage * 10.0) / 10.0; // 소수점 한 자리 반올림
+
+        IndividualProgressDTO progressDTO = IndividualProgressDTO.builder()
+                .progress(progressPercentage)
+                .build();
+
+        return new ResponseDTO<>(progressDTO, Responses.OK);
+
     }
 
 
