@@ -1,11 +1,11 @@
 package com.slide_todo.slide_todoApp.service.member;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
-import com.slide_todo.slide_todoApp.dto.member.MemberDetailDTO;
+import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberIdsDTO;
-import com.slide_todo.slide_todoApp.dto.member.MemberListDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberSearchResultDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
+import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberListDTO;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
@@ -29,25 +29,25 @@ public class AdminMemberServiceImpl implements AdminMemberService {
   private final Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
 
   @Override
-  public ResponseDTO<MemberListDTO> getAllMembers(long page, long limit,
+  public ResponseDTO<AdminMemberListDTO> getAllMembers(long page, long limit,
       String nickname, String email, String createdAfter, String createdBefore) {
 
-    MemberListDTO searchResult = searchMembers(page, limit, nickname, email, createdAfter,
+    AdminMemberListDTO searchResult = searchMembers(page, limit, nickname, email, createdAfter,
         createdBefore);
 
     return new ResponseDTO<>(searchResult, Responses.OK);
   }
 
   @Override
-  public ResponseDTO<MemberDetailDTO> getMemberDetail(Long memberId) {
+  public ResponseDTO<AdminMemberDetailDTO> getMemberDetail(Long memberId) {
     Member member = memberRepository.findMemberWithGoalAndGroupMember(memberId);
-    return new ResponseDTO<>(new MemberDetailDTO(member), Responses.OK);
+    return new ResponseDTO<>(new AdminMemberDetailDTO(member), Responses.OK);
 
   }
 
   @Override
   @Transactional
-  public ResponseDTO<MemberListDTO> deleteMembers(MemberIdsDTO request, long page, long limit,
+  public ResponseDTO<AdminMemberListDTO> deleteMembers(MemberIdsDTO request, long page, long limit,
       String nickname, String email, String createdAfter, String createdBefore) {
     List<Long> ids = request.getMemberIds();
 
@@ -56,7 +56,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
       m.deleteMember();
     }
 
-    MemberListDTO searchResult = searchMembers(page, limit, nickname, email, createdAfter,
+    AdminMemberListDTO searchResult = searchMembers(page, limit, nickname, email, createdAfter,
         createdBefore);
 
     return new ResponseDTO<>(searchResult, Responses.OK);
@@ -64,7 +64,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 
   @Override
   @Transactional
-  public ResponseDTO<MemberDetailDTO> updateMember(Long memberId, MemberUpdateDTO request) {
+  public ResponseDTO<AdminMemberDetailDTO> updateMember(Long memberId, MemberUpdateDTO request) {
     Member member = memberRepository.findByMemberId(memberId);
 
     if (request.getEmail() != null) {
@@ -77,10 +77,10 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     }
 
     member.updateMember(request.getEmail(), request.getNickname());
-    return new ResponseDTO<>(new MemberDetailDTO(member), Responses.OK);
+    return new ResponseDTO<>(new AdminMemberDetailDTO(member), Responses.OK);
   }
 
-  private MemberListDTO searchMembers(long page, long limit,
+  private AdminMemberListDTO searchMembers(long page, long limit,
       String nickname, String email, String createdAfter, String createdBefore) {
     long start;
     if (limit != 0) {
@@ -109,7 +109,9 @@ public class AdminMemberServiceImpl implements AdminMemberService {
         nickname, email,
         parsedCreatedAfter, parsedCreatedBefore, start, limit);
 
-    return new MemberListDTO(searchResult.getTotalCount(), page, searchResult.getMembers());
+    return new AdminMemberListDTO(searchResult.getTotalCount(), page, searchResult.getMembers());
+
+//    return new MemberListDTO(searchResult.getTotalCount(), page, searchResult.getMembers());
   }
 
   /*이메일 유효성 및 중복 검사*/

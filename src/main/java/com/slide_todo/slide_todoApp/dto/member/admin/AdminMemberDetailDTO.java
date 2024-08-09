@@ -1,7 +1,6 @@
-package com.slide_todo.slide_todoApp.dto.member;
+package com.slide_todo.slide_todoApp.dto.member.admin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
@@ -11,7 +10,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class MemberDetailDTO {
+public class AdminMemberDetailDTO {
 
   private Long id;
   private String email;
@@ -26,7 +25,7 @@ public class MemberDetailDTO {
   @JsonProperty("individual_goals")
   private List<GoalInMemberDetailDTO> goals;
 
-  public MemberDetailDTO(Member member) {
+  public AdminMemberDetailDTO(Member member) {
     this.id = member.getId();
     this.email = member.getEmail();
     this.nickname = member.getNickname();

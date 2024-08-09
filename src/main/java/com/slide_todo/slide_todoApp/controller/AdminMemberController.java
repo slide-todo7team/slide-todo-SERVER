@@ -1,9 +1,9 @@
 package com.slide_todo.slide_todoApp.controller;
 
-import com.slide_todo.slide_todoApp.dto.member.MemberDetailDTO;
+import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberIdsDTO;
-import com.slide_todo.slide_todoApp.dto.member.MemberListDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
+import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberListDTO;
 import com.slide_todo.slide_todoApp.service.member.AdminMemberService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
@@ -34,7 +34,7 @@ public class AdminMemberController {
   @GetMapping("")
   @Operation(summary = "어드민 페이지에서 유저 리스트 조회", description = "유저 리스트를 조회합니다.")
   @ApiResponse(responseCode = "200", description = "유저 리스트 조회 성공")
-  public ResponseDTO<MemberListDTO> getAllMembers(
+  public ResponseDTO<AdminMemberListDTO> getAllMembers(
       HttpServletRequest request,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
@@ -51,7 +51,7 @@ public class AdminMemberController {
   @GetMapping("/detail/{member_id}")
   @Operation(summary = "어드민 페이지에서 유저 상세정보 조회", description = "유저 상세정보를 조회합니다.")
   @ApiResponse(responseCode = "200", description = "유저 상세정보 조회 성공")
-  public ResponseDTO<MemberDetailDTO> getMemberDetailInformation(
+  public ResponseDTO<AdminMemberDetailDTO> getMemberDetailInformation(
       HttpServletRequest request,
       @PathVariable(name = "member_id") Long memberId
   ) {
@@ -63,7 +63,7 @@ public class AdminMemberController {
   @DeleteMapping("/delete")
   @Operation(summary = "복수 유저 삭제", description = "복수 유저를 삭제합니다.")
   @ApiResponse(responseCode = "200", description = "복수 유저 삭제 성공")
-  public ResponseDTO<MemberListDTO> deleteMembers(
+  public ResponseDTO<AdminMemberListDTO> deleteMembers(
       HttpServletRequest request,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
@@ -81,7 +81,7 @@ public class AdminMemberController {
   @PatchMapping("/update/{member_id}")
   @Operation(summary = "유저 데이터 수정", description = "유저 데이터를 수정합니다.")
   @ApiResponse(responseCode = "200", description = "유저 데이터 수정 성공")
-  public ResponseDTO<MemberDetailDTO> updateMemberInformation(
+  public ResponseDTO<AdminMemberDetailDTO> updateMemberInformation(
       HttpServletRequest request,
       @PathVariable(name = "member_id") Long memberId,
       @RequestBody MemberUpdateDTO memberUpdateDTO
