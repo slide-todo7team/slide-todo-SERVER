@@ -27,4 +27,10 @@ public interface BaseGoalRepository {
 
   /*삭제할 그룹 목표 리스트 조회*/
   List<GroupGoal> findGroupGoalsToDelete(List<Long> ids);
+
+  /*개인 목표 상세정보 조회*/
+  IndividualGoal findIndividualGoalDetail(Long goalId);
+
+  /*그룹 목표 상세정보 조회*/
+  GroupGoal findGroupGoalDetail(Long goalId);
 }

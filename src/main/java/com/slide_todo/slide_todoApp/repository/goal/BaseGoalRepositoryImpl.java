@@ -2,10 +2,15 @@ package com.slide_todo.slide_todoApp.repository.goal;
 
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import com.slide_todo.slide_todoApp.dto.goal.GroupGoalSearchResultDTO;
 import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalSearchResultDTO;
+import com.slide_todo.slide_todoApp.util.exception.CustomException;
+import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalDateTime;
@@ -161,5 +166,47 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
     });
 
     return goals;
+  }
+
+  @Override
+  public IndividualGoal findIndividualGoalDetail(Long goalId) {
+    try {
+      return em.createQuery("select ig from IndividualGoal ig"
+              + " left join fetch ig.member"
+              + " left join fetch ig.todos t"
+              + " where ig.id = :goalId", IndividualGoal.class)
+          .setParameter("goalId", goalId)
+          .getSingleResult();
+    } catch (NoResultException e) {
+      throw new CustomException(Exceptions.GOAL_NOT_FOUND);
+    }
+  }
+
+  @Override
+  public GroupGoal findGroupGoalDetail(Long goalId) {
+    try {
+      GroupGoal goal = em.createQuery("select gg from GroupGoal gg"
+          + " left join fetch gg.group"
+          + " left join fetch gg.todos t"
+          + " where gg.id = :goalId", GroupGoal.class)
+          .setParameter("goalId", goalId)
+          .getSingleResult();
+
+      List<GroupTodo> todos = goal.getTodos().stream()
+          .map(o -> (GroupTodo) o)
+          .toList();
+
+      todos.forEach(todo -> {
+        todo.updateMemberInCharge(em.createQuery("select gt.memberInCharge from GroupTodo gt"
+            + " left join fetch gt.memberInCharge"
+            + " where gt.id = :todoId", GroupMember.class)
+            .setParameter("todoId", todo.getId())
+            .getSingleResult());
+      });
+      goal.updateTodos(todos.stream().map(o -> (Todo) o).toList());
+      return goal;
+    } catch (NoResultException e) {
+      throw new CustomException(Exceptions.GOAL_NOT_FOUND);
+    }
   }
 }
