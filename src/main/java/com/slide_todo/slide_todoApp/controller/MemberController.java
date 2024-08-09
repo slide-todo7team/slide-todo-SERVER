@@ -3,7 +3,7 @@ package com.slide_todo.slide_todoApp.controller;
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
-import com.slide_todo.slide_todoApp.dto.member.NicknameCheckDTO;
+import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
 import com.slide_todo.slide_todoApp.dto.member.SignupDTO;
 import com.slide_todo.slide_todoApp.service.member.MemberService;
@@ -13,10 +13,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,9 +44,18 @@ public class MemberController {
   @GetMapping("/nickname/duplicate")
   @Operation(summary = "닉네임 중복 확인", description = "닉네임 중복 확인 API입니다.")
   @ApiResponse(responseCode = "200", description = "닉네임 중복 확인 성공")
-  public ResponseDTO<NicknameCheckDTO> checkNickname(
+  public ResponseDTO<DuplicationCheckDTO> checkNickname(
       @RequestParam String nickname) {
     return memberService.checkNickname(nickname);
+  }
+
+
+  @GetMapping("/email/duplicate")
+  @Operation(summary = "이메일 중복 확인", description = "이메일 중복 확인 API입니다.")
+  @ApiResponse(responseCode = "200", description = "이메일 중복 확인 성공")
+  public ResponseDTO<DuplicationCheckDTO> checkEmail(
+      @RequestParam String email) {
+    return memberService.checkEmail(email);
   }
 
 

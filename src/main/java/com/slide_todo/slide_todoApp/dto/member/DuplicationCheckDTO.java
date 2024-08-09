@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class NicknameCheckDTO {
+public class DuplicationCheckDTO {
 
   @JsonProperty("is_duplicated")
   private boolean isDuplicated;
 
-  public NicknameCheckDTO(boolean isDuplicated) {
+  public DuplicationCheckDTO(boolean isDuplicated) {
     this.isDuplicated = isDuplicated;
   }
 }
