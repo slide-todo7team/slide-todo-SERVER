@@ -103,15 +103,37 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
   }
 
   @Override
+  public List<IndividualTodo> findIndividualTodosToDelete(List<Long> ids) {
+    return em.createQuery("select it from IndividualTodo it"
+            + " left join fetch it.goal g"
+            + " left join fetch it.note n"
+            + " where it.id in :ids", IndividualTodo.class)
+        .setParameter("ids", ids)
+        .getResultList();
+  }
+
+  @Override
+  public List<GroupTodo> findGroupTodosToDelete(List<Long> ids) {
+    return em.createQuery("select gt from GroupTodo gt"
+            + " left join fetch gt.goal g"
+            + " left join fetch gt.note n"
+            + " where gt.id in :ids", GroupTodo.class)
+        .setParameter("ids", ids)
+        .getResultList();
+  }
+
+  @Override
   public IndividualTodoSearchResultDTO findIndividualTodoByAdmin(String nickname, String title,
       LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
 
     StringBuilder queryBuilder = new StringBuilder("select it from IndividualTodo it"
         + " left join fetch it.goal g"
+        + " left join fetch g.member m"
         + " where 1=1");
     StringBuilder countQueryBuilder = new StringBuilder(
         "select count(it) from IndividualTodo it"
-            + " left join fetch it.goal g"
+            + " left join it.goal g"
+            + " left join g.member m"
             + " where 1=1");
 
     if (nickname != null) {
@@ -134,6 +156,7 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
     TypedQuery<IndividualTodo> query = em.createQuery(queryBuilder.toString(),
         IndividualTodo.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryBuilder.toString(), Long.class);
+
     if (nickname != null) {
       query.setParameter("nickname", "%" + nickname + "%");
       countQuery.setParameter("nickname", "%" + nickname + "%");
@@ -166,8 +189,8 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
         + " where 1=1");
     StringBuilder countQueryBuilder = new StringBuilder(
         "select count(gg) from GroupTodo gt"
-            + " left join fetch gt.goal g"
-            + " left join fetch g.group gg"
+            + " left join gt.goal g"
+            + " left join g.group gg"
             + " where 1=1");
 
     if (groupName != null) {

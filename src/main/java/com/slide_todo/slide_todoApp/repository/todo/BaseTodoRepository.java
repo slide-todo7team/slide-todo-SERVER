@@ -36,6 +36,12 @@ public interface BaseTodoRepository {
   /*삭제할 할 일 리스트 조회*/
   List<Todo> findTodosToDelete(List<Long> ids);
 
+  /*삭제할 개인 할 일 리스트 조회*/
+  List<IndividualTodo> findIndividualTodosToDelete(List<Long> ids);
+
+  /*삭제할 그룹 할 일 리스트 조회*/
+  List<GroupTodo> findGroupTodosToDelete(List<Long> ids);
+
   /*어드민 페이지 개인 할 일 리스트 조회*/
   IndividualTodoSearchResultDTO findIndividualTodoByAdmin(
       String nickname, String title, LocalDateTime createdAfter, LocalDateTime createdBefore,

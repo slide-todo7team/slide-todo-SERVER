@@ -144,7 +144,6 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
           .setParameter("goalId", goal.getId())
           .getResultList());
     });
-
     return goals;
   }
 
@@ -164,7 +163,6 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
           .setParameter("goalId", goal.getId())
           .getResultList());
     });
-
     return goals;
   }
 
@@ -185,13 +183,12 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
   @Override
   public GroupGoal findGroupGoalDetail(Long goalId) {
     try {
-      GroupGoal goal = em.createQuery("select gg from GroupGoal gg"
+      return em.createQuery("select gg from GroupGoal gg"
           + " left join fetch gg.group"
           + " left join fetch gg.todos t"
           + " where gg.id = :goalId", GroupGoal.class)
           .setParameter("goalId", goalId)
           .getSingleResult();
-      return goal;
     } catch (NoResultException e) {
       throw new CustomException(Exceptions.GOAL_NOT_FOUND);
     }

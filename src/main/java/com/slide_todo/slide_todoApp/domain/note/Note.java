@@ -69,6 +69,11 @@ public class Note {
     this.todo.writeNote(this);
   }
 
+  /**
+   * 할 일의 노트를 수정
+   * @param title
+   * @param content
+   */
   public void updateNote(String title, String content) {
     if (title != null) {
       this.title = title;
@@ -79,7 +84,11 @@ public class Note {
     this.updatedAt = LocalDateTime.now();
   }
 
+  /**
+   * 할 일의 노트를 삭제
+   */
   public void deleteNote() {
+    this.getTodo().deleteNote();
     this.isDeleted = true;
     this.updatedAt = LocalDateTime.now();
   }
