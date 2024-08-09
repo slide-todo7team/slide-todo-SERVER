@@ -57,7 +57,6 @@ public class GroupGoalDetailDTO {
 
     private Long id;
     private String title;
-    private String content;
     @JsonProperty("is_done")
     private Boolean isDone;
     @JsonProperty("created_at")
@@ -70,7 +69,6 @@ public class GroupGoalDetailDTO {
     public GroupTodoInGoalDTO(GroupTodo groupTodo) {
       this.id = groupTodo.getId();
       this.title = groupTodo.getTitle();
-      this.content = groupTodo.getContent();
       this.isDone = groupTodo.getIsDone();
       this.createdAt = groupTodo.getCreatedAt();
       this.updatedAt = groupTodo.getUpdatedAt();

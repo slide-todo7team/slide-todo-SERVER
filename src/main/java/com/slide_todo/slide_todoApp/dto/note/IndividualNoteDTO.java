@@ -35,14 +35,12 @@ public class IndividualNoteDTO {
 
     private Long id;
     private String title;
-    private String content;
     @JsonProperty("is_done")
     private Boolean isDone;
 
     public IndividualTodoInNoteDTO(Todo todo) {
       this.id = todo.getId();
       this.title = todo.getTitle();
-      this.content = todo.getContent();
       this.isDone = todo.getIsDone();
     }
   }

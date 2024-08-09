@@ -27,8 +27,8 @@ public class GroupTodo extends Todo {
   private GroupMember memberInCharge;
 
   @Builder
-  public GroupTodo(String title, String content, Goal groupGoal) {
-    super(title, content, groupGoal);
+  public GroupTodo(String title, Goal groupGoal) {
+    super(title, groupGoal);
   }
 
   /**

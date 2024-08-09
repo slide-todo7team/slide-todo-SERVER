@@ -25,7 +25,10 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   @Override
   public Member findByMemberId(Long memberId) {
     try {
-      return em.find(Member.class, memberId);
+      return em.createQuery("select m from Member m"
+              + " where m.id =:memberId", Member.class)
+          .setParameter("memberId", memberId)
+          .getSingleResult();
     } catch (NoResultException e) {
       throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
     }

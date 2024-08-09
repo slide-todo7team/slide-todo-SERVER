@@ -57,8 +57,8 @@ public class MemberTest {
     String password = generator.generateRandomString(10);
     SignupDTO request = new SignupDTO(
         generator.generateRandomEmail(),
-        password,
-        generator.generateRandomString(10)
+        "1q2w3e4r!",
+        generator.generateRandomString(5)
     );
 
     Long savedId = jwtProvider.getMemberIdFromToken(
@@ -144,12 +144,13 @@ public class MemberTest {
   public void 회원탈퇴() throws Exception {
     /*given*/
     Member member = memberRepository.save(generator.createMember());
+    Long memberId = member.getId();
 
     /*when*/
     memberService.deleteMember(member.getId());
 
     Exception exception = assertThrows(
-        CustomException.class, () -> memberRepository.findByMemberId(member.getId())
+        CustomException.class, () -> memberRepository.findByMemberId(memberId)
     );
 
     /*then*/

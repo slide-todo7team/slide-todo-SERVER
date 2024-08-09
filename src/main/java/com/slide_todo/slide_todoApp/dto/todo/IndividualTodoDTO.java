@@ -12,8 +12,6 @@ public class IndividualTodoDTO {
   private String title;
   @JsonProperty("is_done")
   private Boolean isDone;
-  @JsonProperty("content")
-  private String content;
   @JsonProperty("created_at")
   private String createdAt;
   @JsonProperty("updated_at")
@@ -26,7 +24,6 @@ public class IndividualTodoDTO {
     this.id = todo.getId();
     this.title = todo.getTitle();
     this.isDone = todo.getIsDone();
-    this.content = todo.getContent();
     this.createdAt = todo.getCreatedAt().toString();
     this.updatedAt = todo.getUpdatedAt().toString();
     if (todo.getNote() != null) {

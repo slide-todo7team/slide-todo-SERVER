@@ -33,7 +33,6 @@ public class GroupTodoAdminDTO {
     private GroupInTodoDTO groupInTodoDTO;
     private Long id;
     private String title;
-    private String content;
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
     @JsonProperty("updated_at")
@@ -44,7 +43,6 @@ public class GroupTodoAdminDTO {
       this.groupInTodoDTO = new GroupInTodoDTO(goal.getGroup());
       this.id = groupTodo.getId();
       this.title = groupTodo.getTitle();
-      this.content = groupTodo.getContent();
       this.createdAt = groupTodo.getCreatedAt();
       this.updatedAt = groupTodo.getUpdatedAt();
     }
