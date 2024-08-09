@@ -1,9 +1,6 @@
 package com.slide_todo.slide_todoApp.controller;
 
-import com.slide_todo.slide_todoApp.dto.goal.GoalTitleDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
-import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalDTO;
-import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalTodoDTO;
+import com.slide_todo.slide_todoApp.dto.goal.*;
 import com.slide_todo.slide_todoApp.service.goal.IndividualGoalService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
@@ -56,4 +53,12 @@ public class IndividualGoalController {
     public ResponseDTO<?> deleteIndividualGoal(@PathVariable Long goalId) {
         return individualGoalService.deleteIndividualGoal(goalId);
     }
+
+    @GetMapping("/progress")
+    @Operation(summary = "개인 할 일 진행률 조회")
+    public ResponseDTO<IndividualProgressDTO> getIndividualProgress(HttpServletRequest request) {
+        Long memberId = jwtProvider.getMemberId(request);
+        return individualGoalService.getIndividualProgress(memberId);
+    }
+
 }
