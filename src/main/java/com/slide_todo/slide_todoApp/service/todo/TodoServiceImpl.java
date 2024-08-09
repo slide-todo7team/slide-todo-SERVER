@@ -142,7 +142,7 @@ public class TodoServiceImpl implements TodoService {
     }
     if (groupTodo.getMemberInCharge() != null) {
       if (groupTodo.getMemberInCharge().equals(groupMember)) {
-        groupTodo.updateMemberInCharge(null);
+        groupTodo.updateMemberInCharge(groupMember);
       } else {
         throw new CustomException(Exceptions.ALREADY_CHARGED_TODO);
       }

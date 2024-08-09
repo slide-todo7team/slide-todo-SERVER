@@ -14,6 +14,7 @@ import com.slide_todo.slide_todoApp.dto.goal.admin.IndividualGoalDetailDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +80,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
    * @return
    */
   @Override
+  @Transactional
   public ResponseDTO<IndividualGoalAdminDTO> deleteIndividualGoalsByAdmin(long page, long limit,
       String nickname, String title, String createdAfter, String createdBefore,
       GoalIdsDTO goalIds) {
@@ -108,6 +110,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
    * @return
    */
   @Override
+  @Transactional
   public ResponseDTO<GroupGoalAdminDTO> deleteGroupGoalsByAdmin(long page, long limit,
       String groupName, String title, String createdAfter, String createdBefore,
       GoalIdsDTO goalIds) {
@@ -153,6 +156,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
    * @return
    */
   @Override
+  @Transactional
   public ResponseDTO<?> updateGoalTitle(Long goalId, GoalTitleDTO request) {
     Goal goal = goalRepository.findByGoalId(goalId);
     goal.updateTitle(request.getTitle());
@@ -182,13 +186,15 @@ public class AdminGoalServiceImpl implements AdminGoalService {
     LocalDateTime parsedCreatedAfter;
     LocalDateTime parsedCreatedBefore;
     if (createdAfter != null) {
-      parsedCreatedAfter = LocalDateTime.parse(createdAfter);
+      parsedCreatedAfter = LocalDate.parse(createdAfter.replace(" ", ""))
+          .atStartOfDay().plusDays(1);;
     } else {
       parsedCreatedAfter = null;
     }
 
     if (createdBefore != null) {
-      parsedCreatedBefore = LocalDateTime.parse(createdBefore);
+      parsedCreatedBefore = LocalDate.parse(createdBefore.replace(" ", ""))
+          .atStartOfDay();
     } else {
       parsedCreatedBefore = null;
     }
@@ -213,13 +219,15 @@ public class AdminGoalServiceImpl implements AdminGoalService {
     LocalDateTime parsedCreatedAfter;
     LocalDateTime parsedCreatedBefore;
     if (createdAfter != null) {
-      parsedCreatedAfter = LocalDateTime.parse(createdAfter);
+      parsedCreatedAfter = LocalDate.parse(createdAfter.replace(" ", ""))
+          .atStartOfDay().plusDays(1);;
     } else {
       parsedCreatedAfter = null;
     }
 
     if (createdBefore != null) {
-      parsedCreatedBefore = LocalDateTime.parse(createdBefore);
+      parsedCreatedBefore = LocalDate.parse(createdBefore.replace(" ", ""))
+          .atStartOfDay();
     } else {
       parsedCreatedBefore = null;
     }

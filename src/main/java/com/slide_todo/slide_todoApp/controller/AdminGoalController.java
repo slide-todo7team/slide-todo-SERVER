@@ -66,7 +66,7 @@ public class AdminGoalController {
       HttpServletRequest request,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
-      @Parameter(description = "검색할 그룹 이름 조건") @RequestParam(required = false) String groupName,
+      @Parameter(description = "검색할 그룹 이름 조건") @RequestParam(name = "group_name", required = false) String groupName,
       @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
       @Parameter(description = "검색할 목표 생성일 조건(~이후)")
       @RequestParam(name = "created_after", required = false) String createdAfter,
@@ -115,7 +115,7 @@ public class AdminGoalController {
       HttpServletRequest request,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
-      @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
+      @Parameter(description = "검색할 닉네임 조건") @RequestParam(name = "group_name", required = false) String groupName,
       @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
       @Parameter(description = "검색할 목표 생성일 조건(~이후)")
       @RequestParam(name = "created_after", required = false) String createdAfter,
@@ -124,7 +124,7 @@ public class AdminGoalController {
       @RequestBody GoalIdsDTO goalIds
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
-    return adminGoalService.deleteGroupGoalsByAdmin(page, limit, nickname, title, createdAfter,
+    return adminGoalService.deleteGroupGoalsByAdmin(page, limit, groupName, title, createdAfter,
         createdBefore, goalIds);
   }
 

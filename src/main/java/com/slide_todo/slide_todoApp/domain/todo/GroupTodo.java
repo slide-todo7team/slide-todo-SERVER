@@ -2,6 +2,8 @@ package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import com.slide_todo.slide_todoApp.util.exception.CustomException;
+import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -33,12 +35,16 @@ public class GroupTodo extends Todo {
    * 그룹 할 일의 담당자 변경
    */
   public void updateMemberInCharge(GroupMember memberInCharge) {
-    if (this.getMemberInCharge() == null) {
+    if (this.memberInCharge == null) {
       this.memberInCharge = memberInCharge;
       memberInCharge.getChargingTodos().add(this);
     } else {
-      this.memberInCharge = null;
-      memberInCharge.getChargingTodos().remove(this);
+      if (this.memberInCharge.getId().equals(memberInCharge.getId())) {
+        this.memberInCharge = null;
+        memberInCharge.getChargingTodos().remove(this);
+      } else {
+        throw new CustomException(Exceptions.ALREADY_CHARGED_TODO);
+      }
     }
   }
 

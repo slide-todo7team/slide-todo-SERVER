@@ -98,7 +98,7 @@ public class GroupMember {
     public void deleteGroupMember() {
         this.getGroup().getGroupMembers().remove(this);
         this.getChargingTodos().forEach(o -> {
-            o.updateMemberInCharge(null);
+            o.updateMemberInCharge(this);
         });
         this.isDeleted = true;
     }

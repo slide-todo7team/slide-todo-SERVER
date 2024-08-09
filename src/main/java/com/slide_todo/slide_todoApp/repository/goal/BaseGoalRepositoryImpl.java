@@ -82,7 +82,7 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
         + " where 1=1");
     StringBuilder countQueryBuilder = new StringBuilder(
         "select count(gg) from GroupGoal gg"
-            + " left join fetch gg.group g"
+            + " left join gg.group g"
             + " where 1=1");
 
     if (groupName != null) {
@@ -191,19 +191,6 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
           + " where gg.id = :goalId", GroupGoal.class)
           .setParameter("goalId", goalId)
           .getSingleResult();
-
-      List<GroupTodo> todos = goal.getTodos().stream()
-          .map(o -> (GroupTodo) o)
-          .toList();
-
-      todos.forEach(todo -> {
-        todo.updateMemberInCharge(em.createQuery("select gt.memberInCharge from GroupTodo gt"
-            + " left join fetch gt.memberInCharge"
-            + " where gt.id = :todoId", GroupMember.class)
-            .setParameter("todoId", todo.getId())
-            .getSingleResult());
-      });
-      goal.updateTodos(todos.stream().map(o -> (Todo) o).toList());
       return goal;
     } catch (NoResultException e) {
       throw new CustomException(Exceptions.GOAL_NOT_FOUND);
