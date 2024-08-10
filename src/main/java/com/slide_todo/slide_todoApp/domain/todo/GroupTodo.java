@@ -2,6 +2,7 @@ package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.annotation.Nullable;
@@ -21,19 +22,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupTodo extends Todo {
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "writer")
-  private GroupMember writer;
-
   @Nullable
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "charged_group_member_id")
   private GroupMember memberInCharge;
 
   @Builder
-  public GroupTodo(String title, Goal groupGoal, GroupMember writer) {
-    super(title, groupGoal);
-    this.writer = writer;
+  public GroupTodo(String title, Goal groupGoal, Member writer) {
+    super(title, groupGoal, writer);
   }
 
   /**

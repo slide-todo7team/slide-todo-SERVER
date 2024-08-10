@@ -2,6 +2,7 @@ package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
+import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -50,6 +51,10 @@ public abstract class Todo {
   private Boolean isDone;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "writer")
+  private Member writer;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "goal_id")
   private Goal goal;
 
@@ -64,10 +69,11 @@ public abstract class Todo {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime updatedAt;
 
-  public Todo(String title, Goal goal) {
+  public Todo(String title, Goal goal, Member writer) {
     this.title = title;
     this.isDeleted = false;
     this.isDone = false;
+    this.writer = writer;
     this.goal = goal;
     this.goal.getTodos().add(this);
     this.updatedAt = LocalDateTime.now();

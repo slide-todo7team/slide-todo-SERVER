@@ -48,7 +48,7 @@ public class AdminGroupTodoListDTO {
       this.title = groupTodo.getTitle();
       this.isDone = groupTodo.getIsDone();
       if (groupTodo.getWriter() != null) {
-        this.writer = new MemberInGroupTodoDTO(groupTodo.getWriter().getMember());
+        this.writer = new MemberInGroupTodoDTO(groupTodo.getWriter());
       } else {
         this.writer = null;
       }
@@ -59,6 +59,11 @@ public class AdminGroupTodoListDTO {
       }
       this.createdAt = groupTodo.getCreatedAt();
       this.updatedAt = groupTodo.getUpdatedAt();
+      if (groupTodo.getNote() != null) {
+        this.noteId = groupTodo.getNote().getId();
+      } else {
+        this.noteId = null;
+      }
     }
   }
 

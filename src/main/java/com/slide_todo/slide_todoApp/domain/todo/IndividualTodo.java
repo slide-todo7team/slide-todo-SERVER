@@ -1,12 +1,9 @@
 package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
-import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
+import com.slide_todo.slide_todoApp.domain.member.Member;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +16,8 @@ import lombok.NoArgsConstructor;
 public class IndividualTodo extends Todo {
 
   @Builder
-  public IndividualTodo(String title, Goal individualGoal) {
-    super(title, individualGoal);
+  public IndividualTodo(String title, Goal individualGoal, Member writer) {
+    super(title, individualGoal, writer);
   }
 
   @Override
