@@ -1,6 +1,7 @@
 package com.slide_todo.slide_todoApp.domain.goal;
 
 import com.slide_todo.slide_todoApp.domain.group.Group;
+import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -17,10 +18,15 @@ public class GroupGoal extends Goal {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_member_id")
+    private GroupMember groupMember;
+
     @Builder
-    public GroupGoal(String title, Group group) {
+    public GroupGoal(String title, Group group, GroupMember groupMember) {
         super(title);
         this.group = group;
+        this.groupMember = groupMember;
     }
 
     public GroupGoal() {

@@ -22,7 +22,7 @@ public class IndividualGoalDetailDTO {
   private LocalDateTime updatedAt;
   @JsonProperty("member")
   private MemberInGoalDTO member;
-  @JsonProperty("individual_todos")
+  @JsonProperty("todos")
   private List<IndividualTodoInGoalDTO> individualTodos;
 
   public IndividualGoalDetailDTO(IndividualGoal goal) {

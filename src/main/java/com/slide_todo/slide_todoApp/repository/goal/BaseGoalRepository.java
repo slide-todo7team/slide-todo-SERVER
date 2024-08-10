@@ -18,8 +18,8 @@ public interface BaseGoalRepository {
 
   /*어드민 페이지에서 그룹 목표 리스트 조회*/
   GroupGoalSearchResultDTO findGroupGoalByAdmin(
-      String groupName, String title, LocalDateTime createdAfter, LocalDateTime createdBefore,
-      long start, long limit
+      String nickname, String groupName, String title, LocalDateTime createdAfter,
+      LocalDateTime createdBefore, long start, long limit
   );
 
   /*삭제할 개인 목표 리스트 조회*/

@@ -74,17 +74,25 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
   }
 
   @Override
-  public GroupGoalSearchResultDTO findGroupGoalByAdmin(String groupName, String title,
-      LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
+  public GroupGoalSearchResultDTO findGroupGoalByAdmin(String nickname, String groupName,
+      String title, LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
 
     StringBuilder queryBuilder = new StringBuilder("select gg from GroupGoal gg"
+        + " left join fetch gg.groupMember gm"
+        + " left join fetch gm.member"
         + " left join fetch gg.group g"
         + " where 1=1");
     StringBuilder countQueryBuilder = new StringBuilder(
         "select count(gg) from GroupGoal gg"
+            + " left join gg.groupMember gm"
+            + " left join gm.member"
             + " left join gg.group g"
             + " where 1=1");
 
+    if (nickname != null) {
+      queryBuilder.append(" and gm.member.nickname like :nickname");
+      countQueryBuilder.append(" and gm.member.nickname like :nickname");
+    }
     if (groupName != null) {
       queryBuilder.append(" and g.title like :groupName");
       countQueryBuilder.append(" and g.title like :groupName");
@@ -105,6 +113,10 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
     TypedQuery<GroupGoal> query = em.createQuery(queryBuilder.toString(), GroupGoal.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryBuilder.toString(), Long.class);
 
+    if (nickname != null) {
+      query.setParameter("nickname", "%" + nickname + "%");
+      countQuery.setParameter("nickname", "%" + nickname + "%");
+    }
     if (groupName != null) {
       query.setParameter("groupName", "%" + groupName + "%");
       countQuery.setParameter("groupName", "%" + groupName + "%");

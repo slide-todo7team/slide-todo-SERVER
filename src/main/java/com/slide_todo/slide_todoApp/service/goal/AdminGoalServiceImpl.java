@@ -60,9 +60,9 @@ public class AdminGoalServiceImpl implements AdminGoalService {
    */
   @Override
   public ResponseDTO<GroupGoalAdminDTO> getGroupGoalsByAdmin(long page, long limit,
-      String groupName, String title, String createdAfter, String createdBefore) {
+      String nickname, String groupName, String title, String createdAfter, String createdBefore) {
 
-    GroupGoalAdminDTO result = searchGroupGoals(page, limit, groupName, title,
+    GroupGoalAdminDTO result = searchGroupGoals(page, limit, nickname, groupName, title,
         createdAfter, createdBefore);
 
     return new ResponseDTO<>(result, Responses.OK);
@@ -112,7 +112,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
   @Override
   @Transactional
   public ResponseDTO<GroupGoalAdminDTO> deleteGroupGoalsByAdmin(long page, long limit,
-      String groupName, String title, String createdAfter, String createdBefore,
+      String nickname, String groupName, String title, String createdAfter, String createdBefore,
       GoalIdsDTO goalIds) {
 
     List<Long> ids = goalIds.getGoalIds();
@@ -122,7 +122,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
       g.deleteGoal();
     }
 
-    GroupGoalAdminDTO result = searchGroupGoals(page, limit, groupName, title,
+    GroupGoalAdminDTO result = searchGroupGoals(page, limit, nickname, groupName, title,
         createdAfter, createdBefore);
 
     return new ResponseDTO<>(result, Responses.OK);
@@ -208,7 +208,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
 
   /*그룹 목표 리스트 조회*/
   private GroupGoalAdminDTO searchGroupGoals(long page, long limit,
-      String groupName, String title, String createdAfter, String createdBefore) {
+      String nickname, String groupName, String title, String createdAfter, String createdBefore) {
     long start;
     if (limit != 0) {
       start = (page - 1) * limit;
@@ -233,7 +233,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
     }
 
     GroupGoalSearchResultDTO searchResult = goalRepository.findGroupGoalByAdmin(
-        groupName, title, parsedCreatedAfter, parsedCreatedBefore, start, limit
+        nickname, groupName, title, parsedCreatedAfter, parsedCreatedBefore, start, limit
     );
 
     return new GroupGoalAdminDTO(searchResult.getTotalCount(), page, searchResult.getGoals());
