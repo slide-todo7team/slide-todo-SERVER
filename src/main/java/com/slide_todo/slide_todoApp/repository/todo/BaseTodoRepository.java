@@ -43,14 +43,8 @@ public interface BaseTodoRepository {
   List<GroupTodo> findGroupTodosToDelete(List<Long> ids);
 
   /*어드민 페이지 개인 할 일 리스트 조회*/
-  IndividualTodoSearchResultDTO findIndividualTodoByAdmin(
-      String nickname, String title, LocalDateTime createdAfter, LocalDateTime createdBefore,
-      long start, long limit
-  );
+  IndividualTodoSearchResultDTO findIndividualTodoByAdmin(Long goalId, long start, long limit);
 
   /*어드민 페이지 그룹 할 일 리스트 조회*/
-  GroupTodoSearchResultDTO findGroupTodoByAdmin(
-      String groupName, String title, LocalDateTime createdAfter, LocalDateTime createdBefore,
-      long start, long limit
-  );
+  GroupTodoSearchResultDTO findGroupTodoByAdmin(Long goalId, long start, long limit);
 }

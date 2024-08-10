@@ -21,14 +21,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupTodo extends Todo {
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "writer")
+  private GroupMember writer;
+
   @Nullable
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "charged_group_member_id")
   private GroupMember memberInCharge;
 
   @Builder
-  public GroupTodo(String title, Goal groupGoal) {
+  public GroupTodo(String title, Goal groupGoal, GroupMember writer) {
     super(title, groupGoal);
+    this.writer = writer;
   }
 
   /**
