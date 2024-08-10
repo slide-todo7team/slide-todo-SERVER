@@ -46,6 +46,7 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
       queryBuilder.append(" and ig.created < :createdBefore");
       countQueryBuilder.append(" and ig.created < :createdBefore");
     }
+    queryBuilder.append(" order by ig.created desc");
 
     TypedQuery<IndividualGoal> query = em.createQuery(queryBuilder.toString(),
         IndividualGoal.class);
@@ -109,6 +110,7 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
       queryBuilder.append(" and gg.createdAt < :createdBefore");
       countQueryBuilder.append(" and gg.createdAt < :createdBefore");
     }
+    queryBuilder.append(" order by gg.createdAt desc");
 
     TypedQuery<GroupGoal> query = em.createQuery(queryBuilder.toString(), GroupGoal.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryBuilder.toString(), Long.class);

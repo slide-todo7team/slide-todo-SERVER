@@ -37,7 +37,8 @@ public class BaseNoteRepositoryImpl implements BaseNoteRepository {
   public List<Note> findAllByGoalId(Long goalId, Long start, Long limit) {
     return em.createQuery("select n from Note n"
             + " left join fetch n.todo t"
-            + " where t.goal.id = :goalId", Note.class)
+            + " where t.goal.id = :goalId"
+            + " order by n.createdAt desc", Note.class)
         .setParameter("goalId", goalId)
         .setFirstResult(start.intValue())
         .setMaxResults(limit.intValue())
@@ -83,6 +84,7 @@ public class BaseNoteRepositoryImpl implements BaseNoteRepository {
       queryBuilder.append(" and n.created < :createdBefore");
       countQueryBuilder.append(" and n.created < :createdBefore");
     }
+    queryBuilder.append((" order by n.createdAt desc"));
 
     TypedQuery<Note> query = em.createQuery(queryBuilder.toString(), Note.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryBuilder.toString(), Long.class);
@@ -154,6 +156,7 @@ public class BaseNoteRepositoryImpl implements BaseNoteRepository {
       noteQueryBuilder.append(" and n.createdAt < :createdBefore");
       countQueryBuilder.append(" and n.createdAt < :createdBefore");
     }
+    noteQueryBuilder.append((" order by n.createdAt desc"));
 
     TypedQuery<Note> noteQuery = em.createQuery(noteQueryBuilder.toString(), Note.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryBuilder.toString(), Long.class);

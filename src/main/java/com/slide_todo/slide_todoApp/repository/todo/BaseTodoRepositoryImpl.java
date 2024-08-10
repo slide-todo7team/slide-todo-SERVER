@@ -23,7 +23,8 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
   public List<Todo> findAllByGoalId(Long goalId) {
     return em.createQuery("select t from Todo t"
             + " left join fetch t.note"
-            + " where t.goal.id = :goalId", Todo.class)
+            + " where t.goal.id = :goalId"
+            + " order by t.createdAt desc ", Todo.class)
         .setParameter("goalId", goalId)
         .getResultList();
   }
@@ -51,7 +52,8 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
                 + " left join fetch t.note n"
                 + " where t.isDeleted = false"
                 + " and t.goal.id in :goalIds"
-                + " and (:isDone is null or t.isDone = :isDone)",
+                + " and (:isDone is null or t.isDone = :isDone)"
+                + " order by t.createdAt desc",
             IndividualTodo.class)
         .setParameter("goalIds", goalIds)
         .setParameter("isDone", isDone)
@@ -97,7 +99,7 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
     return em.createQuery("select t from Todo t"
             + " left join fetch t.goal"
             + " left join fetch t.note"
-            + " where t.id in :ids", Todo.class)
+            + " where t.id in :ids" , Todo.class)
         .setParameter("ids", ids)
         .getResultList();
   }
@@ -152,6 +154,7 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
       queryBuilder.append(" and it.created < :createdBefore");
       countQueryBuilder.append(" and it.created < :createdBefore");
     }
+    queryBuilder.append((" order by it.createdAt desc"));
 
     TypedQuery<IndividualTodo> query = em.createQuery(queryBuilder.toString(),
         IndividualTodo.class);
@@ -209,6 +212,7 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
       queryBuilder.append(" and gt.created < :createdBefore");
       countQueryBuilder.append(" and gt.created < :createdBefore");
     }
+    queryBuilder.append(" order by gt.createdAt desc");
 
     TypedQuery<GroupTodo> query = em.createQuery(queryBuilder.toString(),
         GroupTodo.class);
