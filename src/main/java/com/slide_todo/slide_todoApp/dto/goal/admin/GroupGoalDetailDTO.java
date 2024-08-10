@@ -23,7 +23,7 @@ public class GroupGoalDetailDTO {
   private LocalDateTime updatedAt;
   @JsonProperty("group")
   private GroupInGoalDTO group;
-  @JsonProperty("group_todos")
+  @JsonProperty("todos")
   private List<GroupTodoInGoalDTO> groupTodos;
 
   public GroupGoalDetailDTO(GroupGoal goal) {
@@ -42,12 +42,12 @@ public class GroupGoalDetailDTO {
   public static class GroupInGoalDTO {
 
     private Long id;
-    @JsonProperty("group_name")
-    private String groupName;
+    @JsonProperty("title")
+    private String title;
 
     public GroupInGoalDTO(Group group) {
       this.id = group.getId();
-      this.groupName = group.getTitle();
+      this.title = group.getTitle();
     }
   }
 
@@ -89,7 +89,7 @@ public class GroupGoalDetailDTO {
     private String color;
 
     public GroupMemberInTodoDTO(GroupMember groupMember) {
-      this.id = groupMember.getId();
+      this.id = groupMember.getMember().getId();
       this.nickname = groupMember.getMember().getNickname();
       this.color = groupMember.getColor().getHexCode();
     }

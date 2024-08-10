@@ -113,7 +113,8 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   @Override
   public MemberSearchResultDTO findByNicknameAndEmailAndCreatedAt(String nickname,
       String email, LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
-    StringBuilder queryString = new StringBuilder("select m from Member m where 1=1");
+    StringBuilder queryString = new StringBuilder("select m from Member m"
+        + " left join fetch m.groupMembers gm where 1=1");
     StringBuilder countQueryString = new StringBuilder("select count(m) from Member m where 1=1");
 
     if (nickname != null) {

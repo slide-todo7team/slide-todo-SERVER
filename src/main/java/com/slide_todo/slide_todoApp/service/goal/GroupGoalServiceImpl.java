@@ -3,6 +3,7 @@ package com.slide_todo.slide_todoApp.service.goal;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
 import com.slide_todo.slide_todoApp.dto.goal.GroupGoalDTO;
@@ -11,6 +12,7 @@ import com.slide_todo.slide_todoApp.dto.goal.GroupProgressDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
+import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
@@ -35,7 +37,8 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     //그룹 목표 생성
     @Override
     @Transactional
-    public ResponseDTO<GroupGoalDTO> createGroupGoal(Long groupId,String title){
+    public ResponseDTO<GroupGoalDTO> createGroupGoal(Long memberId, Long groupId,String title){
+        GroupMember groupMember = groupMemberRepository.findByMemberIdAndGroupId(memberId, groupId);
         individualGoalServiceImpl.checkTitleLength(title);
 
         Group group = groupRepository.findById(groupId).get();
@@ -43,6 +46,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
         GroupGoal groupGoal = GroupGoal.builder()
                 .title(title)
                 .group(group)
+                .groupMember(groupMember)
                 .build();
 
         groupGoalRepository.save(groupGoal);

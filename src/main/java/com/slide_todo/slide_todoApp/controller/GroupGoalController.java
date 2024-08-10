@@ -6,9 +6,12 @@ import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
 import com.slide_todo.slide_todoApp.dto.goal.GroupGoalDTO;
 import com.slide_todo.slide_todoApp.dto.goal.GroupGoalTodoDTO;
 import com.slide_todo.slide_todoApp.service.goal.GroupGoalService;
+import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,16 +19,23 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "그룹 목표 API")
 public class GroupGoalController {
     private final GroupGoalService groupGoalService;
+    private final JwtProvider jwtProvider;
 
-    public GroupGoalController(GroupGoalService groupGoalService) {
+    public GroupGoalController(GroupGoalService groupGoalService,
+        JwtProvider jwtProvider) {
         this.groupGoalService = groupGoalService;
+        this.jwtProvider = jwtProvider;
     }
 
     @PostMapping("/{groupId}")
     @Operation(summary = "그룹 목표 생성")
-    public ResponseDTO<GroupGoalDTO> createGroupGoal(@PathVariable Long groupId, @RequestBody GoalTitleDTO goalTitleDTO){
+    public ResponseDTO<GroupGoalDTO> createGroupGoal(
+        HttpServletRequest request,
+        @PathVariable Long groupId,
+        @RequestBody GoalTitleDTO goalTitleDTO){
+        Long memberId = jwtProvider.getMemberId(request);
         String title = goalTitleDTO.getTitle();
-        return groupGoalService.createGroupGoal(groupId, title);
+        return groupGoalService.createGroupGoal(memberId, groupId, title);
     }
 
     @GetMapping("/{groupId}")

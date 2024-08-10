@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface GroupGoalService {
-    ResponseDTO<GroupGoalDTO> createGroupGoal(Long groupId,String title);
+    ResponseDTO<GroupGoalDTO> createGroupGoal(Long memberId, Long groupId,String title);
 
     ResponseDTO<?> getGroupGoals(Long groupId);
 

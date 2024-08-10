@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "어드민 목표 관리 API")
 @RequestMapping("/admin/goals")
 @RequiredArgsConstructor
 public class AdminGoalController {
@@ -66,6 +68,7 @@ public class AdminGoalController {
       HttpServletRequest request,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
+      @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 그룹 이름 조건") @RequestParam(name = "group_name", required = false) String groupName,
       @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
       @Parameter(description = "검색할 목표 생성일 조건(~이후)")
@@ -74,7 +77,7 @@ public class AdminGoalController {
       @RequestParam(name = "created_before", required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
-    return adminGoalService.getGroupGoalsByAdmin(page, limit, groupName, title, createdAfter,
+    return adminGoalService.getGroupGoalsByAdmin(page, limit, nickname, groupName, title, createdAfter,
         createdBefore);
   }
 
@@ -115,6 +118,7 @@ public class AdminGoalController {
       HttpServletRequest request,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
+      @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(name = "group_name", required = false) String groupName,
       @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
       @Parameter(description = "검색할 목표 생성일 조건(~이후)")
@@ -124,7 +128,7 @@ public class AdminGoalController {
       @RequestBody GoalIdsDTO goalIds
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
-    return adminGoalService.deleteGroupGoalsByAdmin(page, limit, groupName, title, createdAfter,
+    return adminGoalService.deleteGroupGoalsByAdmin(page, limit, nickname, groupName, title, createdAfter,
         createdBefore, goalIds);
   }
 

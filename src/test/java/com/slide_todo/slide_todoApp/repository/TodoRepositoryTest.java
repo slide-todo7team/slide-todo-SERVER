@@ -2,25 +2,28 @@ package com.slide_todo.slide_todoApp.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.slide_todo.slide_todoApp.TestGenerator;
-import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.member.Member;
-import com.slide_todo.slide_todoApp.domain.member.MemberRole;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 //import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
+import com.slide_todo.slide_todoApp.dto.todo.GroupTodoSearchResultDTO;
+import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoSearchResultDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.note.NoteRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
+import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -128,7 +131,7 @@ public class TodoRepositoryTest {
         .findAllIndividualTodoByMemberId(testMember.getId(), 0L, 100L, goalIds, true);
 
     List<IndividualTodo> notDoneList = todoRepository
-        .findAllIndividualTodoByMemberId(testMember.getId(), 0L, 100L, goalIds,  false);
+        .findAllIndividualTodoByMemberId(testMember.getId(), 0L, 100L, goalIds, false);
 
     /*then*/
     assertEquals(created, createdList.size());
@@ -180,13 +183,93 @@ public class TodoRepositoryTest {
     Note note = generator.createNote(individualTodo, title, content);
     noteRepository.save(note);
 
+    Long noteId = note.getId();
+
     note.deleteNote();
 
     /*when*/
-    List<IndividualTodo> individualTodos = todoRepository.findAllIndividualTodoByMemberId(
-        testMember.getId(), 0L, 100L, null, null);
+    Exception e = assertThrows(CustomException.class, () ->
+        noteRepository.findByNoteId(noteId));
 
     /*then*/
-    assertEquals(note, individualTodos.get(0).getNote());
+    assertEquals(Exceptions.NOTE_NOT_FOUND.getMsg(), e.getMessage());
+  }
+
+  @Test
+  @Transactional
+  public void 어드민_개인_할일_조회() throws Exception {
+    /*given*/
+    Member member = memberRepository.save(generator.createMember());
+    IndividualGoal goal = goalRepository.save(generator.createIndividualGoal(member));
+    IndividualTodo expected = todoRepository.save(generator.createIndividualTodo(goal));
+
+    /*when*/
+    IndividualTodoSearchResultDTO result = todoRepository.findIndividualTodoByAdmin(
+        null, null, null, null, 0, 100);
+    IndividualTodo actual = result.getIndividualTodos().get(0);
+    IndividualGoal actualGoal = (IndividualGoal) actual.getGoal();
+    Member actualMember = actualGoal.getMember();
+
+    /*then*/
+    assertEquals(expected, actual);
+    assertEquals(goal, actual.getGoal());
+    assertEquals(member, actualMember);
+  }
+
+  @Test
+  @Transactional
+  public void 어드민_그룹_할일_조회() throws Exception {
+    /*given*/
+    Member member = memberRepository.save(generator.createMember());
+    Group group = groupRepository.save(generator.createGroup(member));
+    GroupGoal goal = goalRepository.save(generator.createGroupGoal(group));
+    GroupTodo expected = todoRepository.save(generator.createGroupTodo(goal));
+
+    /*when*/
+    GroupTodoSearchResultDTO result = todoRepository.findGroupTodoByAdmin(
+        null, null, null, null, 0, 100);
+    GroupTodo actual = result.getGroupTodos().get(0);
+    GroupGoal actualGoal = (GroupGoal) actual.getGoal();
+    Group actualGroup = actualGoal.getGroup();
+
+    /*then*/
+    assertEquals(expected, actual);
+    assertEquals(goal, actualGoal);
+    assertEquals(group, actualGroup);
+    assertSame(expected, actual);
+  }
+
+  @Test
+  @Transactional
+  public void 삭제할_개인_할일_조회() throws Exception {
+    /*given*/
+    Member member = memberRepository.save(generator.createMember());
+    IndividualGoal goal = goalRepository.save(generator.createIndividualGoal(member));
+    IndividualTodo expected = todoRepository.save(generator.createIndividualTodo(goal));
+
+    /*when*/
+    IndividualTodo actual = todoRepository.findIndividualTodosToDelete(List.of(expected.getId()))
+        .get(0);
+
+    /*then*/
+    assertEquals(expected, actual);
+    assertEquals(goal, actual.getGoal());
+  }
+
+  @Test
+  @Transactional
+  public void 삭제할_그룹_할일_조회() throws Exception {
+    /*given*/
+    Member member = memberRepository.save(generator.createMember());
+    Group group = groupRepository.save(generator.createGroup(member));
+    GroupGoal goal = goalRepository.save(generator.createGroupGoal(group));
+    GroupTodo expected = todoRepository.save(generator.createGroupTodo(goal));
+
+    /*when*/
+    GroupTodo actual = todoRepository.findGroupTodosToDelete(List.of(expected.getId())).get(0);
+
+    /*then*/
+    assertEquals(expected, actual);
+    assertEquals(goal, actual.getGoal());
   }
 }

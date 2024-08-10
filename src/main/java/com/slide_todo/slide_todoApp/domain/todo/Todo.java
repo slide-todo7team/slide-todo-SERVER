@@ -96,6 +96,7 @@ public abstract class Todo {
     if (this.note != null) {
       this.note.deleteNote();
     }
+    this.getGoal().getTodos().remove(this);
     this.updatedAt = LocalDateTime.now();
   }
 
@@ -121,9 +122,17 @@ public abstract class Todo {
 
   /**
    * 할 일의 완료 여부를 확인
+   *
    * @return
    */
   public Boolean checkDone() {
     return this.isDone;
-  };
+  }
+
+  /**
+   * 할 일의 노트를 삭제
+   */
+  public void deleteNote() {
+    this.note = null;
+  }
 }
