@@ -162,4 +162,19 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
 
     return new GroupTodoSearchResultDTO(todos, totalCount);
   }
+
+  @Override
+  public GroupTodo findGroupTodoByNoteId(Long noteId) {
+    try {
+      return em.createQuery("select gt from GroupTodo  gt"
+          + " left join fetch gt.memberInCharge mc"
+          + " left join fetch mc.member m"
+          + " left join gt.note n"
+          + "  where n.id = :noteId", GroupTodo.class)
+          .setParameter("noteId", noteId)
+          .getSingleResult();
+    } catch (NoResultException e) {
+      throw new CustomException(Exceptions.TODO_NOT_FOUND);
+    }
+  }
 }

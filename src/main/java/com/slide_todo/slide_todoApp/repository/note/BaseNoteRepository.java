@@ -20,12 +20,4 @@ public interface BaseNoteRepository {
   NoteSearchResultDTO findIndividualNoteByAdmin(String nickname, String title,
       LocalDateTime createdAfter, LocalDateTime createdBefore,
       long start, long limit);
-
-  /*어드민 페이지에서 그룹 노트 리스트 조회*/
-  NoteSearchResultDTO findGroupNoteByAdmin(String groupName, String title,
-      LocalDateTime createdAfter, LocalDateTime createdBefore,
-      long start, long limit);
-
-  /*삭제할 노트 리스트 조회*/
-  List<Note> findNotesToDelete(List<Long> ids);
 }
