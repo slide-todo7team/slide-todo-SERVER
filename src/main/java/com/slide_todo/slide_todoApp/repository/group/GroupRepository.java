@@ -36,4 +36,6 @@ public interface GroupRepository extends JpaRepository<Group, Long>, JpaSpecific
 
     List<Group> findAll(Specification<Group> spec);
 
+    @Query("select g from Group g left join fetch g.groupGoals where g.id in :groupIds")
+    List<Group> findAllByGroupIds(List<Long> groupIds);
 }

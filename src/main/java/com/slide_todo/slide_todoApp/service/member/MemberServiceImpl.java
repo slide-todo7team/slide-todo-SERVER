@@ -1,13 +1,16 @@
 package com.slide_todo.slide_todoApp.service.member;
 
+import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
+import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
+import com.slide_todo.slide_todoApp.dto.member.MemberDashboardDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberInfoDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
-import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
 import com.slide_todo.slide_todoApp.dto.member.SignupDTO;
+import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
@@ -15,6 +18,7 @@ import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.jwt.TokenType;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
+import java.util.List;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
   private final MemberRepository memberRepository;
+  private final GroupRepository groupRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtProvider jwtProvider;
 
@@ -42,6 +47,19 @@ public class MemberServiceImpl implements MemberService {
   public ResponseDTO<MemberInfoDTO> getMemberInfo(Long memberId) {
     Member member = memberRepository.findByMemberId(memberId);
     return new ResponseDTO<>(new MemberInfoDTO(member), Responses.OK);
+  }
+
+  @Override
+  public ResponseDTO<MemberDashboardDTO> getMemberDashboard(Long memberId) {
+    Member member = memberRepository.findMemberWithGoalAndGroupMember(memberId);
+
+    List<Long> groupIds = member.getGroupMembers().stream()
+        .map(groupMember -> groupMember.getGroup().getId())
+        .toList();
+
+    List<Group> groups = groupRepository.findAllByGroupIds(groupIds);
+
+    return new ResponseDTO<>(new MemberDashboardDTO(member, groups), Responses.OK);
   }
 
   @Override

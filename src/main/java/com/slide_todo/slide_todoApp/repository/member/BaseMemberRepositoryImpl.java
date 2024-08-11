@@ -75,7 +75,8 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
 
   @Override
   public MemberSearchResultDTO findByNicknameAndEmailAndCreatedAt(String nickname,
-      String email, LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
+      String email, LocalDateTime createdAfter, LocalDateTime createdBefore, long start,
+      long limit) {
     StringBuilder queryString = new StringBuilder("select m from Member m"
         + " left join fetch m.groupMembers gm where 1=1");
     StringBuilder countQueryString = new StringBuilder("select count(m) from Member m where 1=1");
@@ -134,7 +135,8 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
           .getSingleResult();
 
       member.updateGroupMembers(em.createQuery("select gm from GroupMember  gm"
-          + " where gm.member in :member", GroupMember.class)
+              + " left join fetch gm.group"
+              + " where gm.member in :member", GroupMember.class)
           .setParameter("member", member)
           .getResultList());
 
@@ -159,7 +161,7 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
               + " where gm.member in :member", GroupMember.class)
           .setParameter("member", member)
           .getResultList());
-    } );
+    });
 
     return members;
   }
