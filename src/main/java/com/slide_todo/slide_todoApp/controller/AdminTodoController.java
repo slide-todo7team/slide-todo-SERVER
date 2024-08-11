@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Tag(name = "어드민 유저 관리 API")
+@Tag(name = "어드민 할 일 관리 API")
 @RequestMapping("/admin/todo")
 @RequiredArgsConstructor
 public class AdminTodoController {
