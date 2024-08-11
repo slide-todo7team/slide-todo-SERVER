@@ -3,6 +3,7 @@ package com.slide_todo.slide_todoApp.service.member;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
+import com.slide_todo.slide_todoApp.dto.member.MemberInfoDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
@@ -36,6 +37,12 @@ public class MemberServiceImpl implements MemberService {
       "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=!.])(?=\\S+$).{8,}$";
   private final Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
 
+
+  @Override
+  public ResponseDTO<MemberInfoDTO> getMemberInfo(Long memberId) {
+    Member member = memberRepository.findByMemberId(memberId);
+    return new ResponseDTO<>(new MemberInfoDTO(member), Responses.OK);
+  }
 
   @Override
   @Transactional
