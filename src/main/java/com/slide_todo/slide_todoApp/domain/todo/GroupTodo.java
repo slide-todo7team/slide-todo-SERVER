@@ -2,6 +2,7 @@ package com.slide_todo.slide_todoApp.domain.todo;
 
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.annotation.Nullable;
@@ -27,8 +28,8 @@ public class GroupTodo extends Todo {
   private GroupMember memberInCharge;
 
   @Builder
-  public GroupTodo(String title, Goal groupGoal) {
-    super(title, groupGoal);
+  public GroupTodo(String title, Goal groupGoal, Member writer) {
+    super(title, groupGoal, writer);
   }
 
   /**

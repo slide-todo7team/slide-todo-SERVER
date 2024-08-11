@@ -5,6 +5,7 @@ import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
+import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
@@ -19,6 +20,7 @@ import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.goal.IndividualGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
+import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
@@ -40,6 +42,7 @@ public class TodoServiceImpl implements TodoService {
   private final GroupGoalRepository groupGoalRepository;
   private final IndividualGoalRepository individualGoalRepository;
   private final GroupRepository groupRepository;
+  private final MemberRepository memberRepository;
 
   @Override
   @Transactional
@@ -110,7 +113,6 @@ public class TodoServiceImpl implements TodoService {
       start = 0L;
       limit = todoRepository.count();
     }
-
 
     List<IndividualTodo> individualTodos = todoRepository
         .findAllIndividualTodoByMemberId(memberId, start, limit, request.getGoalIds(),
@@ -186,9 +188,12 @@ public class TodoServiceImpl implements TodoService {
         .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
     checkGroupPermission(memberId, goal.getGroup().getId());
 
+    Member writer = memberRepository.findByMemberId(memberId);
+
     GroupTodo groupTodo = GroupTodo.builder()
         .title(request.getTitle())
         .groupGoal(goal)
+        .writer(writer)
         .build();
     GroupTodo todo = todoRepository.save(groupTodo);
     goal.updateProgressRate();
@@ -206,9 +211,12 @@ public class TodoServiceImpl implements TodoService {
     IndividualGoal goal = individualGoalRepository.findById(request.getGoalId())
         .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
 
+    Member writer = memberRepository.findByMemberId(memberId);
+
     IndividualTodo individualTodo = IndividualTodo.builder()
         .title(request.getTitle())
         .individualGoal(goal)
+        .writer(writer)
         .build();
     IndividualTodo todo = todoRepository.save(individualTodo);
     goal.updateProgressRate();
@@ -273,7 +281,8 @@ public class TodoServiceImpl implements TodoService {
 
   private IndividualTodo doneIndividualTodo(Long memberId, IndividualTodo todo) {
     todo.updateIndividualTodoDone();
-    IndividualGoal goal = individualGoalRepository.findIndividualGoalWithTodos(todo.getGoal().getId());
+    IndividualGoal goal = individualGoalRepository.findIndividualGoalWithTodos(
+        todo.getGoal().getId());
     goal.updateProgressRate();
     return todo;
   }

@@ -88,7 +88,8 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   public List<Member> findByRoll(MemberRole role, int page, int limit) {
     int first = (page - 1) * limit;
     return em.createQuery("select m from Member m"
-            + " where m.role =:role", Member.class)
+            + " where m.role =:role"
+            + " order by m.createdAt desc", Member.class)
         .setParameter("role", role)
         .setFirstResult(first)
         .setMaxResults(first + limit)
@@ -104,7 +105,8 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   @Override
   public List<Member> findAll(int page, int limit) {
     int first = (page - 1) * limit;
-    return em.createQuery("select m from Member m", Member.class)
+    return em.createQuery("select m from Member m"
+            + " order by m.createdAt desc", Member.class)
         .setFirstResult(first)
         .setMaxResults(first + limit)
         .getResultList();
@@ -133,6 +135,7 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
       queryString.append(" and m.createdAt < :createdBefore");
       countQueryString.append(" and m.createdAt < :createdBefore");
     }
+    queryString.append(" order by m.createdAt desc");
 
     TypedQuery<Member> query = em.createQuery(queryString.toString(), Member.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryString.toString(), Long.class);
@@ -164,7 +167,8 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
     try {
       Member member = em.createQuery("select m from Member m"
               + " left join fetch m.individualGoals ig"
-              + " where m.id =:memberId", Member.class)
+              + " where m.id =:memberId"
+              + " order by m.createdAt desc", Member.class)
           .setParameter("memberId", memberId)
           .getSingleResult();
 

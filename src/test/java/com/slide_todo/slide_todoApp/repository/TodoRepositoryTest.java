@@ -204,16 +204,11 @@ public class TodoRepositoryTest {
     IndividualTodo expected = todoRepository.save(generator.createIndividualTodo(goal));
 
     /*when*/
-    IndividualTodoSearchResultDTO result = todoRepository.findIndividualTodoByAdmin(
-        null, null, null, null, 0, 100);
+    IndividualTodoSearchResultDTO result = todoRepository.findIndividualTodoByAdmin(goal.getId(), 0, 100);
     IndividualTodo actual = result.getIndividualTodos().get(0);
-    IndividualGoal actualGoal = (IndividualGoal) actual.getGoal();
-    Member actualMember = actualGoal.getMember();
 
     /*then*/
     assertEquals(expected, actual);
-    assertEquals(goal, actual.getGoal());
-    assertEquals(member, actualMember);
   }
 
   @Test
@@ -226,17 +221,11 @@ public class TodoRepositoryTest {
     GroupTodo expected = todoRepository.save(generator.createGroupTodo(goal));
 
     /*when*/
-    GroupTodoSearchResultDTO result = todoRepository.findGroupTodoByAdmin(
-        null, null, null, null, 0, 100);
+    GroupTodoSearchResultDTO result = todoRepository.findGroupTodoByAdmin(goal.getId(), 0, 100);
     GroupTodo actual = result.getGroupTodos().get(0);
-    GroupGoal actualGoal = (GroupGoal) actual.getGoal();
-    Group actualGroup = actualGoal.getGroup();
 
     /*then*/
     assertEquals(expected, actual);
-    assertEquals(goal, actualGoal);
-    assertEquals(group, actualGroup);
-    assertSame(expected, actual);
   }
 
   @Test

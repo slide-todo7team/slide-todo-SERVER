@@ -1,7 +1,6 @@
 package com.slide_todo.slide_todoApp.domain.note;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;

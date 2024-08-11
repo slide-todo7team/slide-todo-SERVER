@@ -2,7 +2,6 @@ package com.slide_todo.slide_todoApp.controller;
 
 import com.slide_todo.slide_todoApp.dto.goal.GoalTitleDTO;
 import com.slide_todo.slide_todoApp.dto.goal.admin.GoalIdsDTO;
-import com.slide_todo.slide_todoApp.dto.goal.admin.GroupGoalAdminDTO;
 import com.slide_todo.slide_todoApp.dto.goal.admin.IndividualGoalAdminDTO;
 import com.slide_todo.slide_todoApp.service.goal.AdminGoalService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
@@ -46,9 +45,9 @@ public class AdminGoalController {
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
-      @Parameter(description = "검색할 목표 생성일 조건(~이후)")
+      @Parameter(description = "검색할 목표 생성일 조건(~이후) YYYY-MM-DD")
       @RequestParam(name = "created_after", required = false) String createdAfter,
-      @Parameter(description = "검색할 목표 생성일 조건(~이전)")
+      @Parameter(description = "검색할 목표 생성일 조건(~이전) YYYY-MM-DD")
       @RequestParam(name = "created_before", required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
@@ -69,16 +68,17 @@ public class AdminGoalController {
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
-      @Parameter(description = "검색할 그룹 이름 조건") @RequestParam(name = "group_name", required = false) String groupName,
+      @Parameter(description = "검색할 그룹 이름 조건")
+      @RequestParam(name = "group_name", required = false) String groupName,
       @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
-      @Parameter(description = "검색할 목표 생성일 조건(~이후)")
+      @Parameter(description = "검색할 목표 생성일 조건(~이후) YYYY-MM-DD")
       @RequestParam(name = "created_after", required = false) String createdAfter,
-      @Parameter(description = "검색할 목표 생성일 조건(~이전)")
+      @Parameter(description = "검색할 목표 생성일 조건(~이전) YYYY-MM-DD")
       @RequestParam(name = "created_before", required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
-    return adminGoalService.getGroupGoalsByAdmin(page, limit, nickname, groupName, title, createdAfter,
-        createdBefore);
+    return adminGoalService.getGroupGoalsByAdmin(page, limit, nickname, groupName, title,
+        createdAfter, createdBefore);
   }
 
 
@@ -86,24 +86,14 @@ public class AdminGoalController {
   @Operation(summary = "어드민 페이지에서 개인 목표 복수 삭제",
       description = "어드민 페이지에서 개인 목표를 복수 삭제합니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "개인 목표 복수 삭제 성공"),
+      @ApiResponse(responseCode = "204", description = "개인 목표 복수 삭제 성공"),
       @ApiResponse(responseCode = "403", description = "어드민만 가능한 요청")
   })
-  public ResponseDTO<IndividualGoalAdminDTO> deleteIndividualGoals(
-      HttpServletRequest request,
-      @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
-      @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
-      @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
-      @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
-      @Parameter(description = "검색할 목표 생성일 조건(~이후)")
-      @RequestParam(name = "created_after", required = false) String createdAfter,
-      @Parameter(description = "검색할 목표 생성일 조건(~이전)")
-      @RequestParam(name = "created_before", required = false) String createdBefore,
-      @RequestBody GoalIdsDTO goalIds
+  public ResponseDTO<?> deleteIndividualGoals(
+      HttpServletRequest request, @RequestBody GoalIdsDTO goalIds
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
-    return adminGoalService.deleteIndividualGoalsByAdmin(page, limit, nickname, title, createdAfter,
-        createdBefore, goalIds);
+    return adminGoalService.deleteIndividualGoalsByAdmin(goalIds);
   }
 
 
@@ -111,25 +101,14 @@ public class AdminGoalController {
   @Operation(summary = "어드민 페이지에서 그룹 목표 복수 삭제",
       description = "어드민 페이지에서 그룹 목표를 복수 삭제합니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "그룹 목표 복수 삭제 성공"),
+      @ApiResponse(responseCode = "204", description = "그룹 목표 복수 삭제 성공"),
       @ApiResponse(responseCode = "403", description = "어드민만 가능한 요청")
   })
-  public ResponseDTO<GroupGoalAdminDTO> deleteGroupGoals(
-      HttpServletRequest request,
-      @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
-      @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
-      @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
-      @Parameter(description = "검색할 닉네임 조건") @RequestParam(name = "group_name", required = false) String groupName,
-      @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
-      @Parameter(description = "검색할 목표 생성일 조건(~이후)")
-      @RequestParam(name = "created_after", required = false) String createdAfter,
-      @Parameter(description = "검색할 목표 생성일 조건(~이전)")
-      @RequestParam(name = "created_before", required = false) String createdBefore,
-      @RequestBody GoalIdsDTO goalIds
+  public ResponseDTO<?> deleteGroupGoals(
+      HttpServletRequest request, @RequestBody GoalIdsDTO goalIds
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
-    return adminGoalService.deleteGroupGoalsByAdmin(page, limit, nickname, groupName, title, createdAfter,
-        createdBefore, goalIds);
+    return adminGoalService.deleteGroupGoalsByAdmin(goalIds);
   }
 
 

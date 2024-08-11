@@ -47,8 +47,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 
   @Override
   @Transactional
-  public ResponseDTO<AdminMemberListDTO> deleteMembers(MemberIdsDTO request, long page, long limit,
-      String nickname, String email, String createdAfter, String createdBefore) {
+  public ResponseDTO<AdminMemberListDTO> deleteMembers(MemberIdsDTO request) {
     List<Long> ids = request.getMemberIds();
 
     List<Member> membersToDelete = memberRepository.findMembersToDelete(ids);
@@ -56,10 +55,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
       m.deleteMember();
     }
 
-    AdminMemberListDTO searchResult = searchMembers(page, limit, nickname, email, createdAfter,
-        createdBefore);
-
-    return new ResponseDTO<>(searchResult, Responses.OK);
+    return new ResponseDTO<>(null, Responses.NO_CONTENT);
   }
 
   @Override
