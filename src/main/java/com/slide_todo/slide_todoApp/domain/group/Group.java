@@ -94,11 +94,4 @@ public class Group {
         this.secretCode = secretCode;
     }
 
-
-//    @Builder
-//    public Group(Member createdMember, String title, String secretCode) {
-//        this.member = createdMember;
-//        this.title = title;
-//        this.secretCode = secretCode;
-//    }
 }
