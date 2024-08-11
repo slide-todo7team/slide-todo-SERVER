@@ -1,4 +1,4 @@
-package com.slide_todo.slide_todoApp.domain.note.admin;
+package com.slide_todo.slide_todoApp.dto.note.admin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.member.Member;

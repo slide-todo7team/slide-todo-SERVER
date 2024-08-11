@@ -1,6 +1,6 @@
 package com.slide_todo.slide_todoApp.controller;
 
-import com.slide_todo.slide_todoApp.domain.note.admin.AdminNoteDetailDTO;
+import com.slide_todo.slide_todoApp.dto.note.admin.AdminNoteDetailDTO;
 import com.slide_todo.slide_todoApp.service.note.AdminNoteService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;

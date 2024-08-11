@@ -2,7 +2,7 @@ package com.slide_todo.slide_todoApp.service.note;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.note.Note;
-import com.slide_todo.slide_todoApp.domain.note.admin.AdminNoteDetailDTO;
+import com.slide_todo.slide_todoApp.dto.note.admin.AdminNoteDetailDTO;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import com.slide_todo.slide_todoApp.repository.note.NoteRepository;
