@@ -2,7 +2,7 @@ package com.slide_todo.slide_todoApp.controller;
 
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
-import com.slide_todo.slide_todoApp.dto.member.MemberDashboardDTO;
+import com.slide_todo.slide_todoApp.dto.member.MemberSidebarDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberInfoDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
@@ -115,11 +115,11 @@ public class MemberController {
   }
 
 
-  @GetMapping("/dashboard")
+  @GetMapping("/sidebar")
   @Operation(summary = "회원 대시보드 조회", description = "회원 대시보드 조회 API입니다.")
   @ApiResponse(responseCode = "200", description = "회원 대시보드 조회 성공")
-  public ResponseDTO<MemberDashboardDTO> getMemberDashboard(HttpServletRequest request) {
+  public ResponseDTO<MemberSidebarDTO> getMemberSidebar(HttpServletRequest request) {
     Long memberId = jwtProvider.getMemberId(request);
-    return memberService.getMemberDashboard(memberId);
+    return memberService.getMemberSidebar(memberId);
   }
 }

@@ -5,7 +5,7 @@ import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
-import com.slide_todo.slide_todoApp.dto.member.MemberDashboardDTO;
+import com.slide_todo.slide_todoApp.dto.member.MemberSidebarDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberInfoDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
@@ -50,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public ResponseDTO<MemberDashboardDTO> getMemberDashboard(Long memberId) {
+  public ResponseDTO<MemberSidebarDTO> getMemberSidebar(Long memberId) {
     Member member = memberRepository.findMemberWithGoalAndGroupMember(memberId);
 
     List<Long> groupIds = member.getGroupMembers().stream()
@@ -59,7 +59,7 @@ public class MemberServiceImpl implements MemberService {
 
     List<Group> groups = groupRepository.findAllByGroupIds(groupIds);
 
-    return new ResponseDTO<>(new MemberDashboardDTO(member, groups), Responses.OK);
+    return new ResponseDTO<>(new MemberSidebarDTO(member, groups), Responses.OK);
   }
 
   @Override
