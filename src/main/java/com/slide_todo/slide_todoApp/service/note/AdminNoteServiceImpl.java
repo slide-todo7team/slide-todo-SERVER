@@ -40,6 +40,7 @@ public class AdminNoteServiceImpl implements AdminNoteService {
   }
 
   @Override
+  @Transactional
   public ResponseDTO<?> deleteNoteByAdmin(Long noteId) {
     Note note = noteRepository.findByNoteId(noteId);
     note.deleteNote();

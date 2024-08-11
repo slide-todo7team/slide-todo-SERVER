@@ -51,5 +51,6 @@ public class AdminNoteDetailDTO {
           this.id = null;
           this.nickname = null;
       }
+    }
   }
 }
