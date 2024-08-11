@@ -19,6 +19,7 @@ public class GroupGoal extends Goal {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    // 해당 목표를 생성한 그룹 멤버
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_member_id")
     private GroupMember groupMember;
