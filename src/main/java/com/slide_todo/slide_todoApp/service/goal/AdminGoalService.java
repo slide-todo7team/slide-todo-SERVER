@@ -17,12 +17,10 @@ public interface AdminGoalService {
       String nickname, String title, String createdAfter, String createdBefore);
 
   /*개인 목표 복수 삭제*/
-  ResponseDTO<IndividualGoalAdminDTO> deleteIndividualGoalsByAdmin(long page, long limit,
-      String nickname, String title, String createdAfter, String createdBefore, GoalIdsDTO goalIds);
+  ResponseDTO<?> deleteIndividualGoalsByAdmin(GoalIdsDTO goalIds);
 
   /*그룹 목표 복수 삭제*/
-  ResponseDTO<GroupGoalAdminDTO> deleteGroupGoalsByAdmin(long page, long limit, String groupName,
-      String nickname, String title, String createdAfter, String createdBefore, GoalIdsDTO goalIds);
+  ResponseDTO<?> deleteGroupGoalsByAdmin(GoalIdsDTO goalIds);
 
   /*목표 상세정보 조회*/
   ResponseDTO<?> getGoalDetail(Long goalId);

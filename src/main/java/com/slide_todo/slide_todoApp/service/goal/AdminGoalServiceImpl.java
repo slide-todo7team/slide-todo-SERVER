@@ -70,20 +70,12 @@ public class AdminGoalServiceImpl implements AdminGoalService {
 
   /**
    * 복수 개인 목표 삭제
-   * @param page
-   * @param limit
-   * @param nickname
-   * @param title
-   * @param createdAfter
-   * @param createdBefore
    * @param goalIds
    * @return
    */
   @Override
   @Transactional
-  public ResponseDTO<IndividualGoalAdminDTO> deleteIndividualGoalsByAdmin(long page, long limit,
-      String nickname, String title, String createdAfter, String createdBefore,
-      GoalIdsDTO goalIds) {
+  public ResponseDTO<?> deleteIndividualGoalsByAdmin(GoalIdsDTO goalIds) {
 
     List<Long> ids = goalIds.getGoalIds();
 
@@ -92,28 +84,17 @@ public class AdminGoalServiceImpl implements AdminGoalService {
       g.deleteGoal();
     }
 
-    IndividualGoalAdminDTO result = searchIndividualGoals(page, limit, nickname, title,
-        createdAfter, createdBefore);
-
-    return new ResponseDTO<>(result, Responses.OK);
+    return new ResponseDTO<>(null, Responses.NO_CONTENT);
   }
 
   /**
    * 복수 그룹 목표 삭제
-   * @param page
-   * @param limit
-   * @param groupName
-   * @param title
-   * @param createdAfter
-   * @param createdBefore
    * @param goalIds
    * @return
    */
   @Override
   @Transactional
-  public ResponseDTO<GroupGoalAdminDTO> deleteGroupGoalsByAdmin(long page, long limit,
-      String nickname, String groupName, String title, String createdAfter, String createdBefore,
-      GoalIdsDTO goalIds) {
+  public ResponseDTO<?> deleteGroupGoalsByAdmin(GoalIdsDTO goalIds) {
 
     List<Long> ids = goalIds.getGoalIds();
 
@@ -122,10 +103,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
       g.deleteGoal();
     }
 
-    GroupGoalAdminDTO result = searchGroupGoals(page, limit, nickname, groupName, title,
-        createdAfter, createdBefore);
-
-    return new ResponseDTO<>(result, Responses.OK);
+    return new ResponseDTO<>(null, Responses.NO_CONTENT);
   }
 
   /**

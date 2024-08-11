@@ -38,7 +38,7 @@ public class AdminTodoController {
       @Parameter(description = "검색할 개인 목표 ID") @PathVariable(name = "goal_id") Long goalId,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit) {
-    jwtProvider.getAdminMemberId(request);
+    Long adminId = jwtProvider.getAdminMemberId(request);
     return adminTodoService.getIndividualTodoList(goalId, page, limit);
   }
 
@@ -52,7 +52,7 @@ public class AdminTodoController {
       @Parameter(description = "검색할 그룹 목표 ID") @PathVariable(name = "goal_id") Long goalId,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit) {
-    jwtProvider.getAdminMemberId(request);
+    Long adminId = jwtProvider.getAdminMemberId(request);
     return adminTodoService.getGroupTodoList(goalId, page, limit);
   }
 
@@ -63,7 +63,7 @@ public class AdminTodoController {
   public ResponseDTO<?> deleteIndividualTodos(
       HttpServletRequest request,
       @Parameter(description = "삭제할 개인 목표 ID 리스트") @RequestBody TodoIdsDTO todoIds) {
-    jwtProvider.getAdminMemberId(request);
+    Long adminId = jwtProvider.getAdminMemberId(request);
     return adminTodoService.deleteIndividualTodos(todoIds);
   }
 
@@ -74,7 +74,7 @@ public class AdminTodoController {
   public ResponseDTO<?> deleteGroupTodos(
       HttpServletRequest request,
       @Parameter(description = "삭제할 그룹 목표 ID 리스트") @RequestBody TodoIdsDTO todoIds) {
-    jwtProvider.getAdminMemberId(request);
+    Long adminId = jwtProvider.getAdminMemberId(request);
     return adminTodoService.deleteGroupTodos(todoIds);
   }
 }

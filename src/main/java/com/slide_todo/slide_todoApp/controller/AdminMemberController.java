@@ -40,8 +40,10 @@ public class AdminMemberController {
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 이메일 조건") @RequestParam(required = false) String email,
-      @Parameter(description = "검색할 계정 생성일 조건(~이후)") @RequestParam(name = "created_after", required = false) String createdAfter,
-      @Parameter(description = "검색할 계정 생성일 조건(~이전)")@RequestParam(name = "created_before", required = false) String createdBefore
+      @Parameter(description = "검색할 계정 생성일 조건(~이후) YYYY-MM-DD")
+      @RequestParam(name = "created_after", required = false) String createdAfter,
+      @Parameter(description = "검색할 계정 생성일 조건(~이전) YYYY-MM-DD")
+      @RequestParam(name = "created_before", required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminMemberService.getAllMembers(page, limit, nickname, email, createdAfter, createdBefore);
@@ -63,18 +65,11 @@ public class AdminMemberController {
   @DeleteMapping("/delete")
   @Operation(summary = "복수 유저 삭제", description = "복수 유저를 삭제합니다.")
   @ApiResponse(responseCode = "200", description = "복수 유저 삭제 성공")
-  public ResponseDTO<AdminMemberListDTO> deleteMembers(
-      HttpServletRequest request,
-      @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
-      @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
-      @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
-      @Parameter(description = "검색할 이메일 조건") @RequestParam(required = false) String email,
-      @Parameter(description = "검색할 계정 생성일 조건(~이후)") @RequestParam(name = "created_after", required = false) String createdAfter,
-      @Parameter(description = "검색할 계정 생성일 조건(~이전)")@RequestParam(name = "created_before", required = false) String createdBefore,
-      @RequestBody MemberIdsDTO memberIdsDTO
+  public ResponseDTO<?> deleteMembers(
+      HttpServletRequest request, @RequestBody MemberIdsDTO memberIdsDTO
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
-    return adminMemberService.deleteMembers(memberIdsDTO, page, limit, nickname, email, createdAfter, createdBefore);
+    return adminMemberService.deleteMembers(memberIdsDTO);
   }
 
 

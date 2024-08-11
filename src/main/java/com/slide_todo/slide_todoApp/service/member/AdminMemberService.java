@@ -17,8 +17,7 @@ public interface AdminMemberService {
   ResponseDTO<AdminMemberDetailDTO> getMemberDetail(Long memberId);
 
   /*복수 유저 삭제*/
-  ResponseDTO<AdminMemberListDTO> deleteMembers(MemberIdsDTO request, long page, long limit,
-      String nickname, String email, String createdAfter, String createdBefore);
+  ResponseDTO<?> deleteMembers(MemberIdsDTO request);
 
   /*유저 데이터 수정*/
   ResponseDTO<AdminMemberDetailDTO> updateMember(Long memberId, MemberUpdateDTO request);

@@ -127,7 +127,8 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
       long limit) {
 
     List<IndividualTodo> todos = em.createQuery("select it from IndividualTodo it"
-            + " where it.goal.id = :goalId", IndividualTodo.class)
+            + " where it.goal.id = :goalId"
+            + " order by it.createdAt desc", IndividualTodo.class)
         .setParameter("goalId", goalId)
         .setFirstResult((int) start)
         .setMaxResults((int) limit)
@@ -147,7 +148,8 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
     List<GroupTodo> todos = em.createQuery("select gt from GroupTodo gt"
             + " left join fetch gt.writer"
             + " left join fetch gt.memberInCharge"
-            + " where gt.goal.id = :goalId", GroupTodo.class)
+            + " where gt.goal.id = :goalId"
+            + " order by gt.createdAt desc", GroupTodo.class)
         .setParameter("goalId", goalId)
         .setFirstResult((int) start)
         .setMaxResults((int) limit)
