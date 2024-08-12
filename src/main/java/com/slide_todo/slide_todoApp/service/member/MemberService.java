@@ -2,6 +2,8 @@ package com.slide_todo.slide_todoApp.service.member;
 
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
+import com.slide_todo.slide_todoApp.dto.member.MemberSidebarDTO;
+import com.slide_todo.slide_todoApp.dto.member.MemberInfoDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
@@ -9,6 +11,10 @@ import com.slide_todo.slide_todoApp.dto.member.SignupDTO;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 
 public interface MemberService {
+
+  ResponseDTO<MemberInfoDTO> getMemberInfo(Long memberId);
+
+  ResponseDTO<MemberSidebarDTO> getMemberSidebar(Long memberId);
 
   ResponseDTO<TokenPairDTO> signup(SignupDTO request);
 

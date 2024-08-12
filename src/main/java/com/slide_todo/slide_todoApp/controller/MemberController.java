@@ -2,6 +2,8 @@ package com.slide_todo.slide_todoApp.controller;
 
 import com.slide_todo.slide_todoApp.dto.jwt.RefreshTokenDTO;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
+import com.slide_todo.slide_todoApp.dto.member.MemberSidebarDTO;
+import com.slide_todo.slide_todoApp.dto.member.MemberInfoDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.dto.member.DuplicationCheckDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
@@ -101,5 +103,23 @@ public class MemberController {
   public ResponseDTO<?> deleteMember(HttpServletRequest request) {
     Long memberId = jwtProvider.getMemberId(request);
     return memberService.deleteMember(memberId);
+  }
+
+
+  @GetMapping("/info")
+  @Operation(summary = "회원 정보 조회", description = "회원 정보 조회 API입니다.")
+  @ApiResponse(responseCode = "200", description = "회원 정보 조회 성공")
+  public ResponseDTO<MemberInfoDTO> getMemberInfo(HttpServletRequest request) {
+    Long memberId = jwtProvider.getMemberId(request);
+    return memberService.getMemberInfo(memberId);
+  }
+
+
+  @GetMapping("/sidebar")
+  @Operation(summary = "회원 대시보드 조회", description = "회원 대시보드 조회 API입니다.")
+  @ApiResponse(responseCode = "200", description = "회원 대시보드 조회 성공")
+  public ResponseDTO<MemberSidebarDTO> getMemberSidebar(HttpServletRequest request) {
+    Long memberId = jwtProvider.getMemberId(request);
+    return memberService.getMemberSidebar(memberId);
   }
 }

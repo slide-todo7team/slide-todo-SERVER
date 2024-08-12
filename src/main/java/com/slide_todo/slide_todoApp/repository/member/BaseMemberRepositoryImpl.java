@@ -2,8 +2,6 @@ package com.slide_todo.slide_todoApp.repository.member;
 
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
-import com.slide_todo.slide_todoApp.domain.member.MemberRole;
-import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.dto.member.MemberSearchResultDTO;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
@@ -11,7 +9,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Repository;
@@ -77,44 +74,9 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   }
 
   @Override
-  public Long countByRole(MemberRole role) {
-    return em.createQuery("select count(m) from Member m"
-            + " where m.role =:role", Long.class)
-        .setParameter("role", role)
-        .getSingleResult();
-  }
-
-  @Override
-  public List<Member> findByRoll(MemberRole role, int page, int limit) {
-    int first = (page - 1) * limit;
-    return em.createQuery("select m from Member m"
-            + " where m.role =:role"
-            + " order by m.createdAt desc", Member.class)
-        .setParameter("role", role)
-        .setFirstResult(first)
-        .setMaxResults(first + limit)
-        .getResultList();
-  }
-
-  @Override
-  public Long countAll() {
-    return em.createQuery("select count(m) from Member m", Long.class)
-        .getSingleResult();
-  }
-
-  @Override
-  public List<Member> findAll(int page, int limit) {
-    int first = (page - 1) * limit;
-    return em.createQuery("select m from Member m"
-            + " order by m.createdAt desc", Member.class)
-        .setFirstResult(first)
-        .setMaxResults(first + limit)
-        .getResultList();
-  }
-
-  @Override
   public MemberSearchResultDTO findByNicknameAndEmailAndCreatedAt(String nickname,
-      String email, LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
+      String email, LocalDateTime createdAfter, LocalDateTime createdBefore, long start,
+      long limit) {
     StringBuilder queryString = new StringBuilder("select m from Member m"
         + " left join fetch m.groupMembers gm where 1=1");
     StringBuilder countQueryString = new StringBuilder("select count(m) from Member m where 1=1");
@@ -173,7 +135,8 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
           .getSingleResult();
 
       member.updateGroupMembers(em.createQuery("select gm from GroupMember  gm"
-          + " where gm.member in :member", GroupMember.class)
+              + " left join fetch gm.group"
+              + " where gm.member in :member", GroupMember.class)
           .setParameter("member", member)
           .getResultList());
 
@@ -198,7 +161,7 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
               + " where gm.member in :member", GroupMember.class)
           .setParameter("member", member)
           .getResultList());
-    } );
+    });
 
     return members;
   }

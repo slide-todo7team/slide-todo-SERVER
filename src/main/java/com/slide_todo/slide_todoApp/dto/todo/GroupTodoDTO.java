@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.dto.group.GroupMemberDTO;
+import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
@@ -17,6 +18,8 @@ public class GroupTodoDTO {
   private String createdAt;
   @JsonProperty("updated_at")
   private String updatedAt;
+  @JsonProperty("progress_rate")
+  private BigDecimal progressRate;
   @JsonProperty("note_id")
   private Long noteId;
   private GoalInTodoDTO goal;
@@ -34,6 +37,7 @@ public class GroupTodoDTO {
     }
     this.createdAt = todo.getCreatedAt().toString();
     this.updatedAt = todo.getUpdatedAt().toString();
+    this.progressRate = goal.getProgressRate();
     if (todo.getNote() != null) {
       this.noteId = todo.getNote().getId();
     } else {
