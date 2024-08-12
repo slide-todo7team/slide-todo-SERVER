@@ -1,19 +1,12 @@
 package com.slide_todo.slide_todoApp.repository.note;
 
-import com.slide_todo.slide_todoApp.domain.goal.Goal;
-import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.note.Note;
-import com.slide_todo.slide_todoApp.domain.todo.Todo;
-import com.slide_todo.slide_todoApp.dto.note.NoteSearchResultDTO;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BaseNoteRepositoryImpl implements BaseNoteRepository {
 
