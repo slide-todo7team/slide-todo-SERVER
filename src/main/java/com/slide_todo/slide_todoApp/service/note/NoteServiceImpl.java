@@ -227,7 +227,7 @@ public class NoteServiceImpl implements NoteService {
     if (content.length() > 10000) {
       throw new CustomException(Exceptions.NOTE_TOO_LONG);
     }
-    if (url.length() > 255) {
+    if ((url != null) && (url.length() > 255)) {
       throw new CustomException(Exceptions.URL_TOO_LONG);
     }
   }

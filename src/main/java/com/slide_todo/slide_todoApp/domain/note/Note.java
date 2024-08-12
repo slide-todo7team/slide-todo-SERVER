@@ -2,6 +2,7 @@ package com.slide_todo.slide_todoApp.domain.note;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -40,12 +41,16 @@ public class Note {
   @Length(max = 30)
   @Size(max = 30)
   private String title;
+
   @Length(max = 10000)
   @Size(max = 10000)
   private String content;
+
+  @Nullable
   @Length(max = 255)
   @Size(max = 255)
   private String linkUrl;
+
   private Boolean isDeleted;
 
   @CreatedDate
@@ -55,7 +60,7 @@ public class Note {
   private LocalDateTime updatedAt;
 
   @Builder
-  public Note(Todo todo, String title, String content, String linkUrl) {
+  public Note(Todo todo, String title, String content, @Nullable String linkUrl) {
     this.title = title;
     this.content = content;
     this.linkUrl = linkUrl;
