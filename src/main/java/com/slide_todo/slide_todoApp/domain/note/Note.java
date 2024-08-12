@@ -77,13 +77,14 @@ public class Note {
    * @param title
    * @param content
    */
-  public void updateNote(String title, String content) {
+  public void updateNote(String title, String content, @Nullable String linkUrl) {
     if (title != null) {
       this.title = title;
     }
     if (content != null) {
       this.content = content;
     }
+    this.linkUrl = linkUrl;
     this.updatedAt = LocalDateTime.now();
   }
 

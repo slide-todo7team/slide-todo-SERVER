@@ -85,11 +85,11 @@ public class NoteServiceImpl implements NoteService {
         if (!groupTodo.getMemberInCharge().equals(groupMember)) {
           throw new CustomException(Exceptions.MUST_CHARGE_BEFORE_UPDATE_GROUP_NOTE);
         }
-        note.updateNote(request.getTitle(), request.getContent());
+        note.updateNote(request.getTitle(), request.getContent(), request.getLinkUrl());
         return new ResponseDTO<>(new GroupNoteDTO(note), Responses.OK);
       }
     }
-    note.updateNote(request.getTitle(), request.getContent());
+    note.updateNote(request.getTitle(), request.getContent(), request.getLinkUrl());
     return new ResponseDTO<>(new IndividualNoteDTO(note), Responses.OK);
   }
 
