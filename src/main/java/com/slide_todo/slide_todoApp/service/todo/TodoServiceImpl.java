@@ -26,6 +26,7 @@ import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
+import jakarta.persistence.NoResultException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -208,8 +209,12 @@ public class TodoServiceImpl implements TodoService {
    * @return
    */
   private IndividualTodo createIndividualTodo(Long memberId, TodoCreateDTO request) {
-    IndividualGoal goal = individualGoalRepository.findById(request.getGoalId())
-        .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
+    IndividualGoal goal;
+    try {
+      goal = individualGoalRepository.findIndividualGoalWithTodos(request.getGoalId());
+    } catch (NoResultException e) {
+      throw new CustomException(Exceptions.GOAL_NOT_FOUND);
+    }
 
     Member writer = memberRepository.findByMemberId(memberId);
 
@@ -232,11 +237,28 @@ public class TodoServiceImpl implements TodoService {
    * @return
    */
   private GroupTodo updateGroupTodo(Long memberId, GroupTodo todo, TodoUpdateDTO request) {
-    GroupGoal goal = groupGoalRepository.findById(todo.getGoal().getId())
-        .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
-    checkGroupPermission(memberId, goal.getGroup().getId());
 
-    todo.updateTodo(request.getTitle());
+    if (request.getGoalId() != null) {
+      GroupGoal newGoal;
+      try {
+        newGoal = groupGoalRepository.findGroupGoalWithTodos(request.getGoalId());
+      } catch (NoResultException e) {
+        throw new CustomException(Exceptions.GOAL_NOT_FOUND);
+      }
+
+      if (!groupRepository.checkGroupPermission(memberId, newGoal.getGroup().getId())) {
+        throw new CustomException(Exceptions.NO_PERMISSION_FOR_THE_GROUP);
+      }
+
+      GroupGoal originalGoal = groupGoalRepository.findGroupGoalWithTodos(todo.getGoal().getId());
+      todo.updateGoal(newGoal);
+      originalGoal.updateProgressRate();
+      newGoal.updateProgressRate();
+    }
+
+    if (request.getTitle() != null) {
+      todo.updateTitle(request.getTitle());
+    }
     return todo;
   }
 
@@ -250,7 +272,29 @@ public class TodoServiceImpl implements TodoService {
    */
   private IndividualTodo updateIndividualTodo(Long memberId, IndividualTodo todo,
       TodoUpdateDTO request) {
-    todo.updateTodo(request.getTitle());
+
+    if (request.getGoalId() != null) {
+      IndividualGoal newGoal;
+      try {
+        newGoal = individualGoalRepository.findIndividualGoalWithTodos(request.getGoalId());
+      } catch (NoResultException e) {
+        throw new CustomException(Exceptions.GOAL_NOT_FOUND);
+      }
+
+      if (!newGoal.getMember().getId().equals(memberId)) {
+        throw new CustomException(Exceptions.NO_PERMISSION_FOR_THE_GOAL);
+      }
+
+      IndividualGoal originalGoal = individualGoalRepository.findIndividualGoalWithTodos(todo.getGoal().getId());
+      todo.updateGoal(newGoal);
+
+      originalGoal.updateProgressRate();
+      newGoal.updateProgressRate();
+    }
+
+    if (request.getTitle() != null) {
+      todo.updateTitle(request.getTitle());
+    }
     return todo;
   }
 

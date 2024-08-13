@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface GroupRepository extends JpaRepository<Group, Long>, JpaSpecificationExecutor<Group> {
+public interface GroupRepository extends JpaRepository<Group, Long>, JpaSpecificationExecutor<Group>, BaseGroupRepository {
     Optional<Group> findByTitle(String title);
 
     @Query("SELECT g FROM Group g LEFT JOIN FETCH g.groupMembers WHERE g.secretCode = :secretCode")
