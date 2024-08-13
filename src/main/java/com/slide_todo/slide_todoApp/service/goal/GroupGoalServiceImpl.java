@@ -5,15 +5,14 @@ import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
-import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GroupGoalDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GroupGoalTodoDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GroupProgressDTO;
+import com.slide_todo.slide_todoApp.dto.goal.*;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
+import com.slide_todo.slide_todoApp.util.exception.CustomException;
+import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
 import lombok.RequiredArgsConstructor;
@@ -162,6 +161,21 @@ public class GroupGoalServiceImpl implements GroupGoalService {
         groupGoalRepository.save(groupGoal);
 
         return new ResponseDTO<>(null,Responses.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseDTO<SingleGoalDTO> getSingleGroupGoal(Long goalId) {
+        GroupGoal groupGoal = groupGoalRepository.findById(goalId).orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
+
+        SingleGoalDTO singleGoalDTO = SingleGoalDTO.builder()
+                .id(groupGoal.getId())
+                .title(groupGoal.getTitle())
+                .memberId(groupGoal.getGroupMember().getMember().getId())
+                .createdAt(groupGoal.getCreatedAt())
+                .updatedAt(groupGoal.getUpdatedAt())
+                .progress(groupGoal.getProgressRate())
+                .build();
+        return new ResponseDTO<>(singleGoalDTO,Responses.OK);
     }
 
 

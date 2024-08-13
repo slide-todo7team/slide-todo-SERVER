@@ -61,4 +61,10 @@ public class IndividualGoalController {
         return individualGoalService.getIndividualProgress(memberId);
     }
 
+    @GetMapping("/single/{goalId}")
+    @Operation(summary = "단일 개인 목표 조회")
+    public ResponseDTO<SingleGoalDTO> getSingleGoal(@PathVariable Long goalId) {
+        return individualGoalService.getSingleGoal(goalId);
+    }
+
 }
