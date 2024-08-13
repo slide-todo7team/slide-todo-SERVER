@@ -107,14 +107,25 @@ public abstract class Todo {
   }
 
   /**
-   * 할 일의 제목과 링크를 수정.
+   * 할 일의 제목을 수정
    *
    * @param title
    */
-  public void updateTodo(String title) {
+  public void updateTitle(String title) {
     if (title != null) {
       this.title = title;
     }
+    this.updatedAt = LocalDateTime.now();
+  }
+
+  public void updateGoal(Goal goal) {
+    if (this.goal.getId().equals(goal.getId())) {
+      return;
+    }
+
+    this.goal.getTodos().remove(this);
+    this.goal = goal;
+    this.goal.getTodos().add(this);
     this.updatedAt = LocalDateTime.now();
   }
 

@@ -41,6 +41,7 @@ public enum Exceptions {
   RETRIEVE_FORBIDDEN(403, "Have no permission to retrieve"),
   UPDATE_FORBIDDEN(403, "Have no permission to update"),
   NO_PERMISSION_FOR_THE_GROUP(403, "No permission for the group"),
+  NO_PERMISSION_FOR_THE_GOAL(403, "No permission for the goal"),
   NOT_CHARGED_GROUP_MEMBER(403, "Not charged group member"),
   MUST_CHARGE_BEFORE_DONE_GROUP_TODO(403, "Must charge before done group todo"),
   MUST_CHARGE_BEFORE_CREATE_GROUP_NOTE(403, "Must charge before create group note"),

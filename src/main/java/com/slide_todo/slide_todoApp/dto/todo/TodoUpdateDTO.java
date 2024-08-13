@@ -7,10 +7,13 @@ import lombok.Data;
 @Data
 public class TodoUpdateDTO {
 
+  @JsonProperty("goal_id")
+  private Long goalId;
   private String title;
 
   @JsonCreator
-  public TodoUpdateDTO(String title) {
+  public TodoUpdateDTO(Long goalId, String title) {
+    this.goalId = goalId;
     this.title = title;
   }
 }

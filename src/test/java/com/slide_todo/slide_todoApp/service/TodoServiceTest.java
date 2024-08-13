@@ -1,16 +1,18 @@
 package com.slide_todo.slide_todoApp.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.slide_todo.slide_todoApp.TestGenerator;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
+import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.dto.todo.GroupTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoDTO;
-import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoListDTO;
 import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoCreateDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoUpdateDTO;
@@ -23,6 +25,7 @@ import com.slide_todo.slide_todoApp.service.goal.IndividualGoalService;
 import com.slide_todo.slide_todoApp.service.todo.TodoService;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
+import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,25 +100,32 @@ public class TodoServiceTest {
   public void 개인_할일_수정() throws Exception {
     /*given*/
     Member member = memberRepository.save(generator.createMember());
-    Long goalId = individualGoalService.createIndividualGoal("title", member.getId()).getData()
+    Long originalGoalId = individualGoalService.createIndividualGoal("title1", member.getId()).getData()
         .getId();
-    TodoCreateDTO request = new TodoCreateDTO(goalId, "title");
+    IndividualGoal originalGoal = (IndividualGoal) goalRepository.findByGoalId(originalGoalId);
+    Long newGoalId = individualGoalService.createIndividualGoal("title2", member.getId()).getData()
+        .getId();
+    TodoCreateDTO request = new TodoCreateDTO(originalGoalId, "title");
     IndividualTodoDTO dto = (IndividualTodoDTO) todoService.createTodo(member.getId(), request)
         .getData();
+    BigDecimal originalProgressRate = originalGoal.getProgressRate();
     Long todoId = dto.getId();
 
     /*when*/
+    todoService.changeTodoDone(member.getId(), todoId);
+
     IndividualTodoDTO result = (IndividualTodoDTO) todoService.updateTodo(
-        member.getId(), todoId, new TodoUpdateDTO("title2")
+        member.getId(), todoId, new TodoUpdateDTO(newGoalId, "title2")
     ).getData();
 
     IndividualTodoDTO expected = new IndividualTodoDTO(
         (IndividualTodo) todoRepository.findByTodoId(result.getId()),
-        goalRepository.findByGoalId(goalId)
+        goalRepository.findByGoalId(result.getGoal().getId())
     );
 
     /*then*/
     assertEquals(expected, result);
+    assertEquals(originalProgressRate, originalGoal.getProgressRate());
   }
 
   @Test
@@ -124,23 +134,29 @@ public class TodoServiceTest {
     /*given*/
     Member member = memberRepository.save(generator.createMember());
     Group group = groupRepository.save(generator.createGroup(member));
-    GroupGoal goal = groupGoalRepository.save(generator.createGroupGoal(group));
-    TodoCreateDTO request = new TodoCreateDTO(goal.getId(), "title");
+    GroupGoal originalGoal = groupGoalRepository.save(generator.createGroupGoal(group));
+    GroupGoal newGoal = groupGoalRepository.save(generator.createGroupGoal(group));
+    TodoCreateDTO request = new TodoCreateDTO(originalGoal.getId(), "title");
     GroupTodoDTO dto = (GroupTodoDTO) todoService.createTodo(member.getId(), request).getData();
+    BigDecimal originalProgressRate = originalGoal.getProgressRate();
     Long todoId = dto.getId();
 
     /*when*/
+    todoService.updateChargingGroupMember(member.getId(), todoId);
+    todoService.changeTodoDone(member.getId(), todoId);
+
     GroupTodoDTO result = (GroupTodoDTO) todoService.updateTodo(
-        member.getId(), todoId, new TodoUpdateDTO("title2")
+        member.getId(), todoId, new TodoUpdateDTO(newGoal.getId(), "title2")
     ).getData();
 
     GroupTodoDTO expected = new GroupTodoDTO(
         (GroupTodo) todoRepository.findByTodoId(result.getId()),
-        goalRepository.findByGoalId(goal.getId())
+        goalRepository.findByGoalId(result.getGoal().getId())
     );
 
     /*then*/
     assertEquals(expected, result);
+    assertEquals(originalProgressRate, originalGoal.getProgressRate());
   }
 
   @Test
