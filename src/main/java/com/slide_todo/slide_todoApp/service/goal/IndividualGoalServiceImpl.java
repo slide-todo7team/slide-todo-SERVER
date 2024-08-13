@@ -3,10 +3,7 @@ import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
-import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
-import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalDTO;
-import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalTodoDTO;
-import com.slide_todo.slide_todoApp.dto.goal.IndividualProgressDTO;
+import com.slide_todo.slide_todoApp.dto.goal.*;
 import com.slide_todo.slide_todoApp.repository.goal.IndividualGoalRepository;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
@@ -179,6 +176,21 @@ public class IndividualGoalServiceImpl implements IndividualGoalService {
         if(title.length() > 30){
             throw new CustomException(Exceptions.TITLE_TOO_LONG);
         }
+    }
+
+    @Override
+    public ResponseDTO<SingleGoalDTO> getSingleGoal(Long goalId) {
+        IndividualGoal individualGoal = individualGoalRepository.findById(goalId).orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
+
+        SingleGoalDTO singleGoalDTO = SingleGoalDTO.builder()
+                .id(individualGoal.getId())
+                .title(individualGoal.getTitle())
+                .memberId(individualGoal.getMember().getId())
+                .createdAt(individualGoal.getCreatedAt())
+                .updatedAt(individualGoal.getUpdatedAt())
+                .progress(individualGoal.getProgressRate())
+                .build();
+        return new ResponseDTO<>(singleGoalDTO, Responses.OK);
     }
 
     //진행률 계산 메소드

@@ -1,10 +1,7 @@
 package com.slide_todo.slide_todoApp.controller;
 
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
-import com.slide_todo.slide_todoApp.dto.goal.GoalTitleDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GroupGoalDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GroupGoalTodoDTO;
+import com.slide_todo.slide_todoApp.dto.goal.*;
 import com.slide_todo.slide_todoApp.service.goal.GroupGoalService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
@@ -62,5 +59,11 @@ public class GroupGoalController {
     @Operation(summary = "그룹 목표 삭제")
     public ResponseDTO<?> deleteGroupGoal(@PathVariable Long groupId, @PathVariable Long goalId){
         return groupGoalService.deleteGroupGoal(groupId,goalId);
+    }
+
+    @GetMapping("/single/{goalId}")
+    @Operation(summary = "단일 그룹 목표 조회")
+    public ResponseDTO<SingleGoalDTO> getSingleGroupGoal(@PathVariable Long goalId){
+        return groupGoalService.getSingleGroupGoal(goalId);
     }
 }
