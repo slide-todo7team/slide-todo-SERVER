@@ -17,12 +17,24 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
   @PersistenceContext
   private EntityManager em;
 
+
   @Override
-  public List<Todo> findAllByGoalId(Long goalId) {
-    return em.createQuery("select t from Todo t"
-            + " left join fetch t.note"
-            + " where t.goal.id = :goalId"
-            + " order by t.createdAt desc ", Todo.class)
+  public List<IndividualTodo> findAllIndividualTodoByGoalId(Long goalId) {
+    return em.createQuery("select it from IndividualTodo it"
+            + " left join fetch it.note n"
+            + " where it.goal.id = :goalId"
+            + " order by it.createdAt desc", IndividualTodo.class)
+        .setParameter("goalId", goalId)
+        .getResultList();
+  }
+
+  @Override
+  public List<GroupTodo> findAllGroupTodoByGoalId(Long goalId) {
+    return em.createQuery("select gt from GroupTodo gt"
+            + " left join fetch gt.note n"
+            + " left join fetch gt.memberInCharge mc"
+            + " where gt.goal.id = :goalId"
+            + " order by gt.createdAt desc", GroupTodo.class)
         .setParameter("goalId", goalId)
         .getResultList();
   }
@@ -156,7 +168,7 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
         .getResultList();
 
     Long totalCount = em.createQuery("select count(gt) from GroupTodo  gt"
-        + " where gt.goal.id = :goalId", Long.class)
+            + " where gt.goal.id = :goalId", Long.class)
         .setParameter("goalId", goalId)
         .getSingleResult();
 
@@ -167,10 +179,10 @@ public class BaseTodoRepositoryImpl implements BaseTodoRepository {
   public GroupTodo findGroupTodoByNoteId(Long noteId) {
     try {
       return em.createQuery("select gt from GroupTodo  gt"
-          + " left join fetch gt.memberInCharge mc"
-          + " left join fetch mc.member m"
-          + " left join gt.note n"
-          + "  where n.id = :noteId", GroupTodo.class)
+              + " left join fetch gt.memberInCharge mc"
+              + " left join fetch mc.member m"
+              + " left join gt.note n"
+              + "  where n.id = :noteId", GroupTodo.class)
           .setParameter("noteId", noteId)
           .getSingleResult();
     } catch (NoResultException e) {

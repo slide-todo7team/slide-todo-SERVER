@@ -132,4 +132,18 @@ public class TodoController {
     Long memberId = jwtProvider.getMemberId(request);
     return todoService.updateChargingGroupMember(memberId, todoId);
   }
+
+  @GetMapping("/list")
+  @Operation(summary = "특정 목표에 따른 할 일 조회", description = "특정 목표에 따른 할 일 목록을 조회합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Todo 조회 성공"),
+      @ApiResponse(responseCode = "400", description = "Todo 조회 실패")
+  })
+  public ResponseDTO<?> getTodosByGoal(
+      HttpServletRequest request,
+      @Parameter(description = "검색할 페이지 번호") @RequestParam(name = "goal_id") Long goalId
+  ) {
+    Long memberId = jwtProvider.getMemberId(request);
+    return todoService.getTodoListByGoal(memberId, goalId);
+  }
 }
