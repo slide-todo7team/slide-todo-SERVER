@@ -9,8 +9,11 @@ import java.util.List;
 
 public interface BaseTodoRepository {
 
-  /*특정 목표의 모든 할 일 조회*/
-  List<Todo> findAllByGoalId(Long goalId);
+  /*특정 목표의 모든 개인 할 일 조회*/
+  List<IndividualTodo> findAllIndividualTodoByGoalId(Long goalId);
+
+  /*특정 목표의 모든 그룹 할 일 조회*/
+  List<GroupTodo> findAllGroupTodoByGoalId(Long goalId);
 
   /*특정 목표의 모든 할 일 개수 조회*/
   Long countAllByGoalId(Long goalId);

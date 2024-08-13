@@ -1,13 +1,11 @@
 package com.slide_todo.slide_todoApp.service.todo;
 
 import com.slide_todo.slide_todoApp.dto.todo.GroupTodoDTO;
-import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoListDTO;
 import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoCreateDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoUpdateDTO;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
-import java.util.List;
 
 public interface TodoService {
 
@@ -28,4 +26,7 @@ public interface TodoService {
 
   /*그룹 할 일의 담당 그룹 멤버 교체*/
   ResponseDTO<GroupTodoDTO> updateChargingGroupMember(Long memberId, Long todoId);
+
+  /*특정 목표의 할 일 목록 조회*/
+  ResponseDTO<?> getTodoListByGoal(Long memberId, Long goalId);
 }

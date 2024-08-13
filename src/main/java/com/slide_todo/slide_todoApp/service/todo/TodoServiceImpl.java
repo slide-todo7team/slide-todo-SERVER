@@ -9,7 +9,9 @@ import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
+import com.slide_todo.slide_todoApp.dto.todo.GroupTodoByGoalDTO;
 import com.slide_todo.slide_todoApp.dto.todo.GroupTodoDTO;
+import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoByGoalDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoListDTO;
 import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
@@ -157,6 +159,32 @@ public class TodoServiceImpl implements TodoService {
         new GroupTodoDTO(groupTodo, groupGoal),
         Responses.OK
     );
+  }
+
+  @Override
+  public ResponseDTO<?> getTodoListByGoal(Long memberId, Long goalId) {
+
+    Goal goal = goalRepository.findByGoalId(goalId);
+    if (goal.getDtype().equals("G")) {
+      GroupGoal groupGoal = groupGoalRepository.findById(goalId)
+          .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
+      if (!groupRepository.checkGroupPermission(memberId, groupGoal.getGroup().getId())) {
+        throw new CustomException(Exceptions.NO_PERMISSION_FOR_THE_GROUP);
+      }
+
+      List<GroupTodoByGoalDTO> todos = todoRepository.findAllGroupTodoByGoalId(goalId).stream()
+          .map(GroupTodoByGoalDTO::new).toList();
+      return new ResponseDTO<>(todos, Responses.OK);
+    }
+
+    IndividualGoal individualGoal = individualGoalRepository.findById(goalId)
+        .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
+    if (!individualGoal.getMember().getId().equals(memberId)) {
+      throw new CustomException(Exceptions.NO_PERMISSION_FOR_THE_GOAL);
+    }
+    List<IndividualTodoByGoalDTO> todos = todoRepository.findAllIndividualTodoByGoalId(goalId)
+        .stream().map(IndividualTodoByGoalDTO::new).toList();
+    return new ResponseDTO<>(todos, Responses.OK);
   }
 
 
@@ -320,6 +348,12 @@ public class TodoServiceImpl implements TodoService {
     return todo;
   }
 
+  /**
+   * 개인 할 일 완료 처리
+   * @param memberId
+   * @param todo
+   * @return
+   */
   private IndividualTodo doneIndividualTodo(Long memberId, IndividualTodo todo) {
     todo.updateIndividualTodoDone();
     IndividualGoal goal = individualGoalRepository.findIndividualGoalWithTodos(
@@ -333,4 +367,5 @@ public class TodoServiceImpl implements TodoService {
       throw new CustomException(Exceptions.TITLE_TOO_LONG);
     }
   }
+
 }
