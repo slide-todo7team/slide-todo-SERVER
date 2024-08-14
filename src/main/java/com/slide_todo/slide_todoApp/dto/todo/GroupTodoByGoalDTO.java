@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.todo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import java.time.LocalDateTime;
@@ -11,15 +10,10 @@ public class GroupTodoByGoalDTO {
 
   private Long id;
   private String title;
-  @JsonProperty("is_done")
   private Boolean isDone;
-  @JsonProperty("created_at")
   private LocalDateTime createdAt;
-  @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
-  @JsonProperty("note_id")
   private Long noteId;
-  @JsonProperty("member_in_charge")
   private MemberInChargeDTO memberInCharge;
 
   public GroupTodoByGoalDTO(GroupTodo todo) {

@@ -2,8 +2,6 @@ package com.slide_todo.slide_todoApp.dto.member;
 
 import static java.util.Comparator.comparing;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.member.Member;
@@ -17,7 +15,6 @@ public class MemberSidebarDTO {
   private Long id;
   private String nickname;
   private String email;
-  @JsonProperty("individual_goals")
   private List<GoalInSidebarDTO> individualGoals;
   private List<GroupInSidebarDTO> groups;
 
@@ -42,7 +39,6 @@ public class MemberSidebarDTO {
 
     private Long id;
     private String title;
-    @JsonIgnore
     private LocalDateTime createdAt;
 
     public GoalInSidebarDTO(Goal goal) {
@@ -57,9 +53,7 @@ public class MemberSidebarDTO {
 
     private Long id;
     private String title;
-    @JsonIgnore
     private LocalDateTime createdAt;
-    @JsonProperty("group_goals")
     private List<GoalInSidebarDTO> groupGoals;
 
     public GroupInSidebarDTO(Group group) {

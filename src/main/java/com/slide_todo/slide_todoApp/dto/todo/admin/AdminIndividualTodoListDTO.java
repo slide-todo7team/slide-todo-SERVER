@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.todo.admin;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,11 +11,8 @@ import lombok.Data;
 @Data
 public class AdminIndividualTodoListDTO {
 
-  @JsonProperty("total_count")
   private Long totalCount;
-  @JsonProperty("current_page")
   private Long currentPage;
-  @JsonProperty("todos")
   private List<IndividualTodoInAdminDTO> todos;
 
   public AdminIndividualTodoListDTO(Long totalCount, Long currentPage, List<IndividualTodo> todos) {
@@ -30,13 +26,9 @@ public class AdminIndividualTodoListDTO {
   public static class IndividualTodoInAdminDTO {
     private Long id;
     private String title;
-    @JsonProperty("is_done")
     private Boolean isDone;
-    @JsonProperty("created_at")
     private LocalDateTime createdAt;
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
-    @JsonProperty("note_id")
     private Long noteId;
 
     public IndividualTodoInAdminDTO(IndividualTodo individualTodo) {

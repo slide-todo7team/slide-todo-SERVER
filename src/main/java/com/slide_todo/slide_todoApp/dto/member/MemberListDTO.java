@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.member;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.member.MemberRole;
 import java.time.LocalDateTime;
@@ -10,9 +9,7 @@ import lombok.Data;
 @Data
 public class MemberListDTO {
 
-  @JsonProperty("total_count")
   private Long totalCount;
-  @JsonProperty("current_page")
   private Long currentPage;
   private List<MemberInListDTO> members;
 
@@ -29,9 +26,7 @@ public class MemberListDTO {
     private String email;
     private String nickname;
     private MemberRole role;
-    @JsonProperty("created_at")
     private LocalDateTime createdAt;
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     public MemberInListDTO(Member member) {

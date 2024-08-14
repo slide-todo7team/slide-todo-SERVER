@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.todo.admin;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import java.time.LocalDateTime;
@@ -10,11 +9,8 @@ import lombok.Data;
 @Data
 public class AdminGroupTodoListDTO {
 
-  @JsonProperty("total_count")
   private Long totalCount;
-  @JsonProperty("current_page")
   private Long currentPage;
-  @JsonProperty("todos")
   private List<GroupTodoInListDTO> todos;
 
   public AdminGroupTodoListDTO(Long totalCount, Long currentPage, List<GroupTodo> todos) {
@@ -30,17 +26,11 @@ public class AdminGroupTodoListDTO {
 
     private Long id;
     private String title;
-    @JsonProperty("is_done")
     private Boolean isDone;
-    @JsonProperty("writer")
     private MemberInGroupTodoDTO writer;
-    @JsonProperty("member_in_charge")
     private MemberInGroupTodoDTO memberInCharge;
-    @JsonProperty("created_at")
     private LocalDateTime createdAt;
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
-    @JsonProperty("note_id")
     private Long noteId;
 
     public GroupTodoInListDTO(GroupTodo groupTodo) {

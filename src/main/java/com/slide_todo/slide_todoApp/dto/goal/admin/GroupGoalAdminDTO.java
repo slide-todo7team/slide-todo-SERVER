@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.goal.admin;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
@@ -12,11 +11,8 @@ import lombok.Data;
 @Data
 public class GroupGoalAdminDTO {
 
-  @JsonProperty("total_count")
   private Long totalCount;
-  @JsonProperty("current_page")
   private Long currentPage;
-  @JsonProperty("goals")
   private List<GroupGoalInListDTO> goals;
 
   public GroupGoalAdminDTO(Long totalCount, Long currentPage, List<GroupGoal> goals) {
@@ -29,17 +25,12 @@ public class GroupGoalAdminDTO {
   @Data
   public static class GroupGoalInListDTO {
 
-    @JsonProperty("group")
     private GroupInGoalDTO groupInGoalDTO;
     private Long id;
     private String title;
-    @JsonProperty("member")
     private GroupMemberInGroupGoalDTO member;
-    @JsonProperty("progress_rate")
     private BigDecimal progressRate;
-    @JsonProperty("created_at")
     private LocalDateTime createdAt;
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     public GroupGoalInListDTO(GroupGoal goal) {

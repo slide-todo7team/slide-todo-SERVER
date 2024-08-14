@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.note;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import java.util.List;
 import lombok.Data;
@@ -8,9 +7,7 @@ import lombok.Data;
 @Data
 public class IndividualNoteListDTO {
 
-  @JsonProperty("total_count")
   private Long totalCount;
-  @JsonProperty("current_page")
   private Long currentPage;
   private List<IndividualNoteDTO> notes;
 

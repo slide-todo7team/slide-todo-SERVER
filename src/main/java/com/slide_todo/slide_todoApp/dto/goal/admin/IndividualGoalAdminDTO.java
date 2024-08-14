@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.goal.admin;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import java.math.BigDecimal;
@@ -11,11 +10,8 @@ import lombok.Data;
 @Data
 public class IndividualGoalAdminDTO {
 
-  @JsonProperty("total_count")
   private Long totalCount;
-  @JsonProperty("current_page")
   private Long currentPage;
-  @JsonProperty("goals")
   private List<IndividualGoalInListDTO> goals;
 
   public IndividualGoalAdminDTO(Long totalCount, Long currentPage, List<IndividualGoal> goals) {
@@ -29,15 +25,11 @@ public class IndividualGoalAdminDTO {
   @Data
   public static class IndividualGoalInListDTO {
 
-    @JsonProperty("member")
     private MemberInGoalDTO memberInGoalDTO;
     private Long id;
     private String title;
-    @JsonProperty("progress_rate")
     private BigDecimal progressRate;
-    @JsonProperty("created_at")
     private LocalDateTime createdAt;
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     public IndividualGoalInListDTO(IndividualGoal individualGoal) {

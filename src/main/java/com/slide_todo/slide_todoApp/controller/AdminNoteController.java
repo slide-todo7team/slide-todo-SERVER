@@ -25,7 +25,7 @@ public class AdminNoteController {
   private final AdminNoteService adminNoteService;
   private final JwtProvider jwtProvider;
 
-  @GetMapping("/{note_id}")
+  @GetMapping("/{noteId}")
   @Operation(summary = "어드민 페이지에서 노트 상세정보 조회",
       description = "노트 상세정보를 조회합니다.")
   @ApiResponses(value = {
@@ -34,14 +34,14 @@ public class AdminNoteController {
   })
   public ResponseDTO<AdminNoteDetailDTO> getNoteDetailByAdmin(
       HttpServletRequest request,
-      @PathVariable(name = "note_id") Long noteId
+      @PathVariable Long noteId
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminNoteService.getNoteDetailByAdmin(noteId);
   }
 
 
-  @DeleteMapping("/delete/{note_id}")
+  @DeleteMapping("/delete/{noteId}")
   @Operation(summary = "노트 삭제", description = "노트를 삭제합니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "204", description = "노트 삭제 성공"),
@@ -49,7 +49,7 @@ public class AdminNoteController {
   })
   public ResponseDTO<?> deleteNoteByAdmin(
       HttpServletRequest request,
-      @PathVariable(name = "note_id") Long noteId
+      @PathVariable Long noteId
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminNoteService.deleteNoteByAdmin(noteId);

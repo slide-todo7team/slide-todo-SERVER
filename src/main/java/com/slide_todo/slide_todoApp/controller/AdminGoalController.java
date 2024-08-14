@@ -46,9 +46,9 @@ public class AdminGoalController {
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
       @Parameter(description = "검색할 목표 생성일 조건(~이후) YYYY-MM-DD")
-      @RequestParam(name = "created_after", required = false) String createdAfter,
+      @RequestParam(required = false) String createdAfter,
       @Parameter(description = "검색할 목표 생성일 조건(~이전) YYYY-MM-DD")
-      @RequestParam(name = "created_before", required = false) String createdBefore
+      @RequestParam(required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminGoalService.getIndividualGoalsByAdmin(page, limit, nickname, title, createdAfter,
@@ -69,12 +69,12 @@ public class AdminGoalController {
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 그룹 이름 조건")
-      @RequestParam(name = "group_name", required = false) String groupName,
+      @RequestParam(required = false) String groupName,
       @Parameter(description = "검색할 목표 제목 조건") @RequestParam(required = false) String title,
       @Parameter(description = "검색할 목표 생성일 조건(~이후) YYYY-MM-DD")
-      @RequestParam(name = "created_after", required = false) String createdAfter,
+      @RequestParam(required = false) String createdAfter,
       @Parameter(description = "검색할 목표 생성일 조건(~이전) YYYY-MM-DD")
-      @RequestParam(name = "created_before", required = false) String createdBefore
+      @RequestParam(required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminGoalService.getGroupGoalsByAdmin(page, limit, nickname, groupName, title,
@@ -112,7 +112,7 @@ public class AdminGoalController {
   }
 
 
-  @GetMapping("/detail/{goal_id}")
+  @GetMapping("/detail/{goalId}")
   @Operation(summary = "어드민 페이지에서 목표 상세정보 조회",
       description = "어드민 페이지에서 목표 상세정보를 조회합니다.")
   @ApiResponses(value = {
@@ -121,14 +121,14 @@ public class AdminGoalController {
   })
   public ResponseDTO<?> getGoalDetail(
       HttpServletRequest request,
-      @Parameter(description = "조회할 목표 ID") @PathVariable(name = "goal_id") Long goalId
+      @Parameter(description = "조회할 목표 ID") @PathVariable Long goalId
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminGoalService.getGoalDetail(goalId);
   }
 
 
-  @PatchMapping("/update/{goal_id}")
+  @PatchMapping("/update/{goalId}")
   @Operation(summary = "어드민 페이지에서 목표 이름 수정",
       description = "어드민 페이지에서 목표 이름을 수정합니다.")
   @ApiResponses(value = {
@@ -137,7 +137,7 @@ public class AdminGoalController {
   })
   public ResponseDTO<?> updateGoalTitle(
       HttpServletRequest request,
-      @Parameter(description = "수정할 목표 ID") @PathVariable(name = "goal_id") Long goalId,
+      @Parameter(description = "수정할 목표 ID") @PathVariable Long goalId,
       @RequestBody GoalTitleDTO goalTitle
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);

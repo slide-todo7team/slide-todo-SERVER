@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.goal.admin;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
@@ -15,15 +14,10 @@ public class GroupGoalDetailDTO {
 
   private Long id;
   private String title;
-  @JsonProperty("progress_rate")
   private BigDecimal progressRate;
-  @JsonProperty("created_at")
   private LocalDateTime createdAt;
-  @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
-  @JsonProperty("group")
   private GroupInGoalDTO group;
-  @JsonProperty("todos")
   private List<GroupTodoInGoalDTO> groupTodos;
 
   public GroupGoalDetailDTO(GroupGoal goal) {
@@ -42,7 +36,6 @@ public class GroupGoalDetailDTO {
   public static class GroupInGoalDTO {
 
     private Long id;
-    @JsonProperty("title")
     private String title;
 
     public GroupInGoalDTO(Group group) {
@@ -57,13 +50,9 @@ public class GroupGoalDetailDTO {
 
     private Long id;
     private String title;
-    @JsonProperty("is_done")
     private Boolean isDone;
-    @JsonProperty("created_at")
     private LocalDateTime createdAt;
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
-    @JsonProperty("member_in_charge")
     private GroupMemberInTodoDTO memberInCharge;
 
     public GroupTodoInGoalDTO(GroupTodo groupTodo) {

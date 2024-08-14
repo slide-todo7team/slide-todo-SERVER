@@ -41,21 +41,21 @@ public class AdminMemberController {
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 이메일 조건") @RequestParam(required = false) String email,
       @Parameter(description = "검색할 계정 생성일 조건(~이후) YYYY-MM-DD")
-      @RequestParam(name = "created_after", required = false) String createdAfter,
+      @RequestParam(required = false) String createdAfter,
       @Parameter(description = "검색할 계정 생성일 조건(~이전) YYYY-MM-DD")
-      @RequestParam(name = "created_before", required = false) String createdBefore
+      @RequestParam(required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminMemberService.getAllMembers(page, limit, nickname, email, createdAfter, createdBefore);
   }
 
 
-  @GetMapping("/detail/{member_id}")
+  @GetMapping("/detail/{memberId}")
   @Operation(summary = "어드민 페이지에서 유저 상세정보 조회", description = "유저 상세정보를 조회합니다.")
   @ApiResponse(responseCode = "200", description = "유저 상세정보 조회 성공")
   public ResponseDTO<AdminMemberDetailDTO> getMemberDetailInformation(
       HttpServletRequest request,
-      @PathVariable(name = "member_id") Long memberId
+      @PathVariable Long memberId
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
     return adminMemberService.getMemberDetail(memberId);
@@ -73,12 +73,12 @@ public class AdminMemberController {
   }
 
 
-  @PatchMapping("/update/{member_id}")
+  @PatchMapping("/update/{memberId}")
   @Operation(summary = "유저 데이터 수정", description = "유저 데이터를 수정합니다.")
   @ApiResponse(responseCode = "200", description = "유저 데이터 수정 성공")
   public ResponseDTO<AdminMemberDetailDTO> updateMemberInformation(
       HttpServletRequest request,
-      @PathVariable(name = "member_id") Long memberId,
+      @PathVariable Long memberId,
       @RequestBody MemberUpdateDTO memberUpdateDTO
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
