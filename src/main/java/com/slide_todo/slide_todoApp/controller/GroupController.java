@@ -1,10 +1,7 @@
 package com.slide_todo.slide_todoApp.controller;
 
-import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
-import com.slide_todo.slide_todoApp.domain.group.Group;
-import com.slide_todo.slide_todoApp.domain.group.GroupMember;
-import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.group.*;
+import com.slide_todo.slide_todoApp.dto.group.admin.GroupUpdateDTO;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.service.group.GroupService;
@@ -16,10 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/groups")
@@ -84,5 +78,32 @@ public class GroupController {
     public ResponseDTO<GroupInfoDTO> saveNewSecretCode(@PathVariable Long groupId, @RequestBody GroupCodeDTO groupCodeDTO){
         String secretCode = groupCodeDTO.getSecretCode();
         return groupService.saveNewSecretCode(groupId,secretCode);
+    }
+
+    @PatchMapping("/{groupId}")
+    @Operation(summary = "그룹 이름 / 초대코드 변경")
+    public ResponseDTO<GroupInfoDTO> updateGroup(@PathVariable Long groupId, @RequestBody GroupUpdateDTO groupUpdateDTO){
+        String title = groupUpdateDTO.getTitle();
+        String secretCode = groupUpdateDTO.getSecretCode();
+        return groupService.updateGroup(groupId,title,secretCode);
+    }
+
+    @DeleteMapping("/members/{groupId}/{memberId}")
+    @Operation(summary = "그룹 멤버 탈퇴시키기")
+    public ResponseDTO<?> deleteMember(
+            HttpServletRequest request,
+            @PathVariable Long groupId, @PathVariable Long memberId){
+        Long leaderId = jwtProvider.getMemberId(request);
+        return groupService.deleteMember(groupId, memberId,leaderId);
+    }
+
+    @PatchMapping("/{groupId}/leader/{memberId}")
+    @Operation(summary = "그룹 방장 변경")
+    public ResponseDTO<?> changeLeader(
+            HttpServletRequest request,
+            @PathVariable Long groupId, @PathVariable Long memberId){
+
+        Long leaderId = jwtProvider.getMemberId(request);
+        return groupService.changeLeader(groupId,memberId,leaderId);
     }
 }

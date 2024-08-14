@@ -28,8 +28,8 @@ public class GroupGoalTodoDTO {
         private Long noteId; //연결된 노트 Id
         private Long id; //할일 id
         private String title;
-        private Boolean done;
-        private String assignee;
+        private Boolean isDone;
+        private String memberInCharge;
     }
 
 

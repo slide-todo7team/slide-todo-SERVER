@@ -21,4 +21,5 @@ public class IndividualGoalDTO {
         this.createdAt = goal.getCreatedAt();
         this.updatedAt = goal.getUpdatedAt();
     }
+
 }

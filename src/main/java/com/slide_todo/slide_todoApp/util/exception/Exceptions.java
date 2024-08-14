@@ -48,6 +48,8 @@ public enum Exceptions {
   MUST_CHARGE_BEFORE_UPDATE_GROUP_NOTE(403, "Must charge before update group note"),
   MUST_CHARGE_BEFORE_DELETE_GROUP_NOTE(403, "Must charge before delete group note"),
   ADMIN_ONLY(403, "Admin only"),
+  GROUP_LEADER_ONLY(403, "Group leader only"),
+  GROUP_MEMBER_ONLY(403, "Must change leader before leave group"),
 
 
   /*404 NOT_FOUND*/

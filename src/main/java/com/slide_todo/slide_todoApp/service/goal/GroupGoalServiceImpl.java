@@ -4,11 +4,8 @@ import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
-import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GroupGoalDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GroupGoalTodoDTO;
-import com.slide_todo.slide_todoApp.dto.goal.GroupProgressDTO;
-import com.slide_todo.slide_todoApp.dto.goal.SingleGoalDTO;
+import com.slide_todo.slide_todoApp.dto.goal.*;
+import com.slide_todo.slide_todoApp.dto.group.admin.GroupInfoListDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
@@ -116,10 +113,10 @@ public class GroupGoalServiceImpl implements GroupGoalService {
             List<GroupGoalTodoDTO.GroupTodoDTO> groupTodoDTOS = groupTodos.stream()
                     .map(todo -> GroupGoalTodoDTO.GroupTodoDTO.builder()
                             .noteId(todo.getNote()!= null ? todo.getNote().getId() : null)
-                            .done(todo.getIsDone())
+                            .isDone(todo.getIsDone())
                             .title(todo.getTitle())
                             .id(todo.getId())
-                            .assignee(todo.getMemberInCharge() != null ?
+                            .memberInCharge(todo.getMemberInCharge() != null ?
                                     todo.getMemberInCharge().getMember().getNickname() : null)
                             .build())
                     .toList();
@@ -181,7 +178,6 @@ public class GroupGoalServiceImpl implements GroupGoalService {
                 .build();
         return new ResponseDTO<>(singleGoalDTO,Responses.OK);
     }
-
 
     public Integer calContributionPercent(List<GroupTodo> groupTodos, Long memberId){
         Integer totalDoneCount = groupTodos.size();
