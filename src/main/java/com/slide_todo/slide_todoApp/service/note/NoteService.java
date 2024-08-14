@@ -1,9 +1,7 @@
 package com.slide_todo.slide_todoApp.service.note;
 
-import com.slide_todo.slide_todoApp.dto.note.IndividualNoteListDTO;
 import com.slide_todo.slide_todoApp.dto.note.NoteCreateDTO;
 import com.slide_todo.slide_todoApp.dto.note.NoteUpdateDTO;
-import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 
 public interface NoteService {
