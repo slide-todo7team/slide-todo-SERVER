@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.note;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.dto.group.GroupMemberDTO;
@@ -13,11 +12,8 @@ public class GroupNoteDTO {
   private Long id;
   private String title;
   private String content;
-  @JsonProperty("link_url")
   private String linkUrl;
-  @JsonProperty("created_at")
   private LocalDateTime createdAt;
-  @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
   private GroupTodoInNoteDTO todo;
 
@@ -36,10 +32,8 @@ public class GroupNoteDTO {
   public static class GroupTodoInNoteDTO {
 
     private Long id;
-    @JsonProperty("charged_group_member_id")
     private GroupMemberDTO chargedGroupMember;
     private String title;
-    @JsonProperty("is_done")
     private Boolean isDone;
 
     public GroupTodoInNoteDTO(GroupTodo todo) {

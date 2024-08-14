@@ -29,13 +29,13 @@ public class AdminTodoController {
   private final AdminTodoService adminTodoService;
   private final JwtProvider jwtProvider;
 
-  @GetMapping("/individual/{goal_id}")
+  @GetMapping("/individual/{goalId}")
   @Operation(summary = "개인 목표에 대한 할 일 리스트 조회",
       description = "개인 목표에 대한 할 일 리스트를 조회합니다.")
   @ApiResponse(responseCode = "200", description = "성공")
   public ResponseDTO<AdminIndividualTodoListDTO> getIndividualTodoList(
       HttpServletRequest request,
-      @Parameter(description = "검색할 개인 목표 ID") @PathVariable(name = "goal_id") Long goalId,
+      @Parameter(description = "검색할 개인 목표 ID") @PathVariable Long goalId,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit) {
     Long adminId = jwtProvider.getAdminMemberId(request);
@@ -43,13 +43,13 @@ public class AdminTodoController {
   }
 
 
-  @GetMapping("/group/{goal_id}")
+  @GetMapping("/group/{goalId}")
   @Operation(summary = "그룹 목표에 대한 할 일 리스트 조회",
       description = "그룹 목표에 대한 할 일 리스트를 조회합니다.")
   @ApiResponse(responseCode = "200", description = "성공")
   public ResponseDTO<AdminGroupTodoListDTO> getGroupTodoList(
       HttpServletRequest request,
-      @Parameter(description = "검색할 그룹 목표 ID") @PathVariable(name = "goal_id") Long goalId,
+      @Parameter(description = "검색할 그룹 목표 ID") @PathVariable Long goalId,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit) {
     Long adminId = jwtProvider.getAdminMemberId(request);

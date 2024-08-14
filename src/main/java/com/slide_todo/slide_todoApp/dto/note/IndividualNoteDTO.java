@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.note;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import java.time.LocalDateTime;
@@ -12,11 +11,8 @@ public class IndividualNoteDTO {
   private Long id;
   private String title;
   private String content;
-  @JsonProperty("link_url")
   private String linkUrl;
-  @JsonProperty("created_at")
   private LocalDateTime createdAt;
-  @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
   private IndividualTodoInNoteDTO todo;
 
@@ -35,7 +31,6 @@ public class IndividualNoteDTO {
 
     private Long id;
     private String title;
-    @JsonProperty("is_done")
     private Boolean isDone;
 
     public IndividualTodoInNoteDTO(Todo todo) {

@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.group;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import lombok.Data;
 
@@ -8,10 +7,8 @@ import lombok.Data;
 public class GroupMemberDTO {
 
   private Long id;
-  @JsonProperty("member_id")
   private Long memberId;
   private String nickname;
-  @JsonProperty("is_leader")
   private Boolean isLeader;
   private String color;
 

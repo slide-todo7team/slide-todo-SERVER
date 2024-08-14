@@ -1,14 +1,12 @@
 package com.slide_todo.slide_todoApp.dto.member;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Data;
 
 @Data
 public class MemberIdsDTO {
 
-  @JsonProperty("member_ids")
   private List<Long> memberIds;
 
   @JsonCreator

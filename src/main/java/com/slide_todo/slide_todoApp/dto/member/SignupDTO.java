@@ -1,6 +1,5 @@
 package com.slide_todo.slide_todoApp.dto.member;
 
-import com.slide_todo.slide_todoApp.domain.member.MemberRole;
 import lombok.Data;
 
 @Data

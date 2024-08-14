@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 public class DuplicationCheckDTO {
 
-  @JsonProperty("is_duplicated")
   private boolean isDuplicated;
 
   public DuplicationCheckDTO(boolean isDuplicated) {
