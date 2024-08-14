@@ -2,6 +2,8 @@ package com.slide_todo.slide_todoApp.controller;
 
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.dto.goal.*;
+import com.slide_todo.slide_todoApp.dto.group.admin.GroupInfoListDTO;
+import com.slide_todo.slide_todoApp.dto.group.admin.GroupUpdateDTO;
 import com.slide_todo.slide_todoApp.service.goal.GroupGoalService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;

@@ -6,7 +6,6 @@ import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.group.*;
-import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
@@ -30,12 +29,6 @@ public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
     private final GroupMemberRepository groupMemberRepository;
-
-//    public GroupServiceImpl(GroupRepository groupRepository,MemberRepository memberRepository,GroupMemberRepository groupMemberRepository) {
-//        this.groupRepository = groupRepository;
-//        this.memberRepository = memberRepository;
-//        this.groupMemberRepository = groupMemberRepository;
-//    }
 
     //그룹 생성하기
     @Override
@@ -136,6 +129,9 @@ public class GroupServiceImpl implements GroupService {
     public ResponseDTO<?> leaveGroup(Long groupId, Long memberId){
 
         GroupMember groupMember = groupMemberRepository.findByMemberIdAndGroupId(memberId,groupId);
+        if(groupMember.getIsLeader().equals(true)){
+            throw new CustomException(Exceptions.GROUP_MEMBER_ONLY);
+        }
         groupMember.deleteGroupMember();
         return new ResponseDTO<>(null, Responses.OK);
     }
@@ -165,7 +161,61 @@ public class GroupServiceImpl implements GroupService {
         return getGroupInfo(groupId);
     }
 
+    @Override
+    @Transactional
+    public ResponseDTO<GroupInfoDTO> updateGroup(Long groupId, String title, String secretCode) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
 
+        if(title!=null && !title.isEmpty()){
+            group.updateTitle(title);
+        }
+        if(secretCode!=null && !secretCode.isEmpty()){
+            group.setSecretCode(secretCode);
+        }
+
+        Group newGroup = groupRepository.save(group);
+        return getGroupInfo(newGroup.getId());
+
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO<?> deleteMember(Long groupId, Long memberId, Long leaderId) {
+        //요청한 사람이 리더인지 확인
+        GroupMember groupMember = groupMemberRepository.findByMemberIdAndGroupId(leaderId,groupId);
+        if(groupMember.getIsLeader().equals(false)){
+            throw new CustomException(Exceptions.GROUP_LEADER_ONLY);
+        }
+
+        GroupMember member = groupMemberRepository.findByMemberIdAndGroupId(memberId,groupId);
+        member.deleteGroupMember();
+
+        return new ResponseDTO<>("멤버 탈퇴 완료",Responses.OK);
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO<?> changeLeader(Long groupId, Long memberId, Long leaderId) {
+        //요청한 사람이 리더인지 확인
+        GroupMember currentLeader = groupMemberRepository.findByMemberIdAndGroupId(leaderId,groupId);
+        if(currentLeader.getIsLeader().equals(false)){
+            throw new CustomException(Exceptions.GROUP_LEADER_ONLY);
+        }
+
+        Group group = groupRepository.findGroupWithGroupMembers(groupId);
+        GroupMember newLeader = group.getGroupMembers().stream()
+                .filter(member -> member.getMember().getId().equals(memberId))
+                .findFirst()
+                .orElseThrow(()->new CustomException(Exceptions.MEMBER_NOT_FOUND));
+
+        currentLeader.setIsLeader(false);
+        newLeader.setIsLeader(true);
+
+        groupMemberRepository.save(currentLeader);
+        groupMemberRepository.save(newLeader);
+
+        return new ResponseDTO<>("리더 변경 완료",Responses.OK);
+    }
 
     //6자리 랜덤 숫자 생성
     public int generateRandomNumber() {

@@ -6,6 +6,7 @@ import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.dto.goal.*;
+import com.slide_todo.slide_todoApp.dto.group.admin.GroupInfoListDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
@@ -177,7 +178,6 @@ public class GroupGoalServiceImpl implements GroupGoalService {
                 .build();
         return new ResponseDTO<>(singleGoalDTO,Responses.OK);
     }
-
 
     public Integer calContributionPercent(List<GroupTodo> groupTodos, Long memberId){
         Integer totalDoneCount = groupTodos.size();
