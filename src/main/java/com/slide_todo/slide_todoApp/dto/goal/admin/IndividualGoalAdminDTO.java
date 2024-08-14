@@ -25,7 +25,7 @@ public class IndividualGoalAdminDTO {
   @Data
   public static class IndividualGoalInListDTO {
 
-    private MemberInGoalDTO memberInGoalDTO;
+    private MemberInGoalDTO member;
     private Long id;
     private String title;
     private BigDecimal progressRate;
@@ -33,7 +33,7 @@ public class IndividualGoalAdminDTO {
     private LocalDateTime updatedAt;
 
     public IndividualGoalInListDTO(IndividualGoal individualGoal) {
-      this.memberInGoalDTO = new MemberInGoalDTO(individualGoal.getMember());
+      this.member = new MemberInGoalDTO(individualGoal.getMember());
       this.id = individualGoal.getId();
       this.title = individualGoal.getTitle();
       this.progressRate = individualGoal.getProgressRate();
