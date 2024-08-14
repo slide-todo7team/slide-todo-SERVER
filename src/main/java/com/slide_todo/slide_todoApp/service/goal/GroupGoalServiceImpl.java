@@ -3,25 +3,25 @@ package com.slide_todo.slide_todoApp.service.goal;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
-import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.dto.goal.*;
 import com.slide_todo.slide_todoApp.dto.group.admin.GroupInfoListDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
-import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.repository.todo.TodoRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -91,7 +91,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
         List<GroupMember> groupMembers = groupMemberRepository.findAllByGroupId(groupId);
 
         for(GroupGoal groupGoal : groupGoals){
-            List<GroupTodo> groupTodos = todoRepository.findAllByGoal(groupGoal);
+            List<GroupTodo> groupTodos = todoRepository.findAllByGoal(groupGoal.getId());
 
             List<GroupProgressDTO.GroupGoalMemDTO> groupGoalMemDTOS = groupMembers.stream()
                     .map(member -> {
@@ -182,7 +182,13 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     public Integer calContributionPercent(List<GroupTodo> groupTodos, Long memberId){
         Integer totalDoneCount = groupTodos.size();
         Integer contributionCount = (int) groupTodos.stream()
-                .filter(todo -> todo.getIsDone() && Objects.equals(todo.getMemberInCharge().getMember().getId(), memberId))
+//                .filter(todo -> todo.getIsDone() && Objects.equals(todo.getMemberInCharge().getMember().getId(), memberId))
+                .filter(todo -> {
+                    if(todo.getMemberInCharge() == null){
+                        return false;
+                    }
+                    return todo.getIsDone() && todo.getMemberInCharge().getMember().getId().equals(memberId);
+                })
                 .count();
 
         if(totalDoneCount == 0){
