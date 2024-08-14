@@ -27,7 +27,7 @@ public class IndividualGoalTodoDTO {
         private Long noteId; //연결된 노트 Id
         private Long id; //할일 id
         private String title;
-        private Boolean done;
+        private Boolean isDone;
 
     }
 

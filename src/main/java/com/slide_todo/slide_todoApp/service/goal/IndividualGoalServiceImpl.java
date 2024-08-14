@@ -100,7 +100,7 @@ public class IndividualGoalServiceImpl implements IndividualGoalService {
                             .id(todo.getId())
                             .noteId(todo.getNote() != null ? todo.getNote().getId() : null)
                             .title(todo.getTitle())
-                            .done(todo.getIsDone())
+                            .isDone(todo.getIsDone())
                             .build())
                     .collect(Collectors.toList());
 

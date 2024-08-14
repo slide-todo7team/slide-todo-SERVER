@@ -113,10 +113,10 @@ public class GroupGoalServiceImpl implements GroupGoalService {
             List<GroupGoalTodoDTO.GroupTodoDTO> groupTodoDTOS = groupTodos.stream()
                     .map(todo -> GroupGoalTodoDTO.GroupTodoDTO.builder()
                             .noteId(todo.getNote()!= null ? todo.getNote().getId() : null)
-                            .done(todo.getIsDone())
+                            .isDone(todo.getIsDone())
                             .title(todo.getTitle())
                             .id(todo.getId())
-                            .assignee(todo.getMemberInCharge() != null ?
+                            .memberInCharge(todo.getMemberInCharge() != null ?
                                     todo.getMemberInCharge().getMember().getNickname() : null)
                             .build())
                     .toList();
