@@ -32,16 +32,16 @@ public class GroupNoteDTO {
   public static class GroupTodoInNoteDTO {
 
     private Long id;
-    private GroupMemberDTO chargedGroupMember;
+    private GroupMemberDTO memberInCharge;
     private String title;
     private Boolean isDone;
 
     public GroupTodoInNoteDTO(GroupTodo todo) {
       this.id = todo.getId();
       if (todo.getMemberInCharge() == null) {
-        this.chargedGroupMember = null;
+        this.memberInCharge = null;
       } else {
-        this.chargedGroupMember = new GroupMemberDTO(todo.getMemberInCharge());
+        this.memberInCharge = new GroupMemberDTO(todo.getMemberInCharge());
       }
       this.title = todo.getTitle();
       this.isDone = todo.getIsDone();
