@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -187,7 +186,13 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     public Integer calContributionPercent(List<GroupTodo> groupTodos, Long memberId){
         Integer totalDoneCount = groupTodos.size();
         Integer contributionCount = (int) groupTodos.stream()
-                .filter(todo -> todo.getIsDone() && Objects.equals(todo.getMemberInCharge().getMember().getId(), memberId))
+//                .filter(todo -> todo.getIsDone() && Objects.equals(todo.getMemberInCharge().getMember().getId(), memberId))
+                .filter(todo -> {
+                    if(todo.getMemberInCharge() == null){
+                        return false;
+                    }
+                    return todo.getIsDone() && todo.getMemberInCharge().getMember().getId().equals(memberId);
+                })
                 .count();
 
         if(totalDoneCount == 0){
