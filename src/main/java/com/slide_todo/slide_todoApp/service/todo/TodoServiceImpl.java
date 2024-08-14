@@ -14,7 +14,6 @@ import com.slide_todo.slide_todoApp.dto.todo.GroupTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoByGoalDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoListDTO;
-import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoCreateDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoUpdateDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
@@ -107,7 +106,7 @@ public class TodoServiceImpl implements TodoService {
 
   @Override
   public ResponseDTO<IndividualTodoListDTO> getIndividualTodoList(Long memberId,
-      Long page, Long limit, RetrieveIndividualTodoDTO request
+      Long page, Long limit, List<Long> goalIds, Boolean isDone
   ) {
     long start;
     if (limit != 0) {
@@ -118,14 +117,12 @@ public class TodoServiceImpl implements TodoService {
     }
 
     List<IndividualTodo> individualTodos = todoRepository
-        .findAllIndividualTodoByMemberId(memberId, start, limit, request.getGoalIds(),
-            request.getIsDone());
+        .findAllIndividualTodoByMemberId(memberId, start, limit, goalIds, isDone);
 
     List<IndividualTodoDTO> result = individualTodos.stream()
         .map(todo -> new IndividualTodoDTO(todo, todo.getGoal()))
         .toList();
-    Long total = todoRepository.countAllIndividualTodoByMemberId(memberId, request.getGoalIds(),
-        request.getIsDone());
+    Long total = todoRepository.countAllIndividualTodoByMemberId(memberId, goalIds, isDone);
 
     IndividualTodoListDTO response = new IndividualTodoListDTO(total, page, result);
 

@@ -2,7 +2,6 @@ package com.slide_todo.slide_todoApp.controller;
 
 import com.slide_todo.slide_todoApp.dto.todo.GroupTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoListDTO;
-import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoCreateDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoUpdateDTO;
 import com.slide_todo.slide_todoApp.service.todo.TodoService;
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -110,10 +110,13 @@ public class TodoController {
       HttpServletRequest request,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
-      @RequestBody RetrieveIndividualTodoDTO dto
+      @Parameter(description = "조회할 목표의 ID 리스트")
+      @RequestParam(name = "goal_ids", required = false) List<Long> goalIds,
+      @Parameter(description = "완료 여부")
+      @RequestParam(name = "is_done", required = false) Boolean isDone
   ) {
     Long memberId = jwtProvider.getMemberId(request);
-    return todoService.getIndividualTodoList(memberId, page, limit, dto);
+    return todoService.getIndividualTodoList(memberId, page, limit, goalIds, isDone);
   }
 
 

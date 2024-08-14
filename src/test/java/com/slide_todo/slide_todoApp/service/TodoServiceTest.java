@@ -13,7 +13,6 @@ import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.dto.todo.GroupTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoDTO;
-import com.slide_todo.slide_todoApp.dto.todo.RetrieveIndividualTodoDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoCreateDTO;
 import com.slide_todo.slide_todoApp.dto.todo.TodoUpdateDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
@@ -258,8 +257,7 @@ public class TodoServiceTest {
 
     /*when*/
     List<IndividualTodoDTO> result = todoService.getIndividualTodoList(
-        member.getId(), 1L, 100L, new RetrieveIndividualTodoDTO(List.of(goalId), false)
-    ).getData().getTodos();
+        member.getId(), 1L, 100L,List.of(goalId), false).getData().getTodos();
 
     /*then*/
     assertEquals(todos, result.size());
@@ -296,8 +294,7 @@ public class TodoServiceTest {
     /*when*/
 
     List<IndividualTodoDTO> result = todoService.getIndividualTodoList(
-        member.getId(), 1L, 100L, new RetrieveIndividualTodoDTO(List.of(goalId1), false)
-    ).getData().getTodos();
+        member.getId(), 1L, 100L, List.of(goalId1), false).getData().getTodos();
 
     /*then*/
     assertEquals(expected1, result.size());
