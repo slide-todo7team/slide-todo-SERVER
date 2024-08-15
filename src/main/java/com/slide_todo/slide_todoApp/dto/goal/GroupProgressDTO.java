@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GroupProgressDTO {
     private BigDecimal completedPercent;
-    private List<GroupGoalMemDTO> memebers;
+    private List<GroupGoalMemDTO> members;
 
     @Builder
     @Setter
