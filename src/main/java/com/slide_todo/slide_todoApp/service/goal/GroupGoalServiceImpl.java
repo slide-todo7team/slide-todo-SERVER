@@ -4,8 +4,11 @@ import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
-import com.slide_todo.slide_todoApp.dto.goal.*;
-import com.slide_todo.slide_todoApp.dto.group.admin.GroupInfoListDTO;
+import com.slide_todo.slide_todoApp.dto.goal.GoalTodosResponseDTO;
+import com.slide_todo.slide_todoApp.dto.goal.GroupGoalDTO;
+import com.slide_todo.slide_todoApp.dto.goal.GroupGoalTodoDTO;
+import com.slide_todo.slide_todoApp.dto.goal.GroupProgressDTO;
+import com.slide_todo.slide_todoApp.dto.goal.SingleGoalDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
@@ -107,7 +110,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
 
             GroupProgressDTO groupProgressDTO = GroupProgressDTO.builder()
                     .completedPercent(groupGoal.getProgressRate())
-                    .memebers(groupGoalMemDTOS)
+                    .members(groupGoalMemDTOS)
                     .build();
 
             List<GroupGoalTodoDTO.GroupTodoDTO> groupTodoDTOS = groupTodos.stream()
