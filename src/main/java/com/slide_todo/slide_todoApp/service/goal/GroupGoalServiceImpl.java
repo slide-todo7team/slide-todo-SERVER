@@ -171,6 +171,15 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     public ResponseDTO<SingleGoalDTO> getSingleGroupGoal(Long goalId) {
         GroupGoal groupGoal = groupGoalRepository.findById(goalId).orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
 
+        GroupMember groupMember = groupGoal.getGroupMember();
+        Long memberId = (groupMember != null && groupMember.getMember() != null)
+                ? groupMember.getMember().getId()
+                : null;
+
+        if (memberId == null) {
+            throw new CustomException(Exceptions.MEMBER_NOT_FOUND); 
+        }
+
         SingleGoalDTO singleGoalDTO = SingleGoalDTO.builder()
                 .id(groupGoal.getId())
                 .title(groupGoal.getTitle())
