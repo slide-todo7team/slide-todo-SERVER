@@ -169,26 +169,33 @@ public class GroupGoalServiceImpl implements GroupGoalService {
 
     @Override
     public ResponseDTO<SingleGoalDTO> getSingleGroupGoal(Long goalId) {
-        GroupGoal groupGoal = groupGoalRepository.findById(goalId).orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
+        // 목표 ID를 기반으로 GroupGoal을 조회
+        GroupGoal groupGoal = groupGoalRepository.findById(goalId)
+                .orElseThrow(() -> new CustomException(Exceptions.GOAL_NOT_FOUND));
 
+        // GroupMember를 가져오고 memberId를 안전하게 조회
         GroupMember groupMember = groupGoal.getGroupMember();
-        Long memberId = (groupMember != null && groupMember.getMember() != null)
-                ? groupMember.getMember().getId()
-                : null;
+        Long memberId = null;
 
+        if (groupMember != null && groupMember.getMember() != null) {
+            memberId = groupMember.getMember().getId();
+        }
+
+        // memberId가 null인 경우 예외 처리
         if (memberId == null) {
-            throw new CustomException(Exceptions.MEMBER_NOT_FOUND); 
+            throw new CustomException(Exceptions.MEMBER_NOT_FOUND);
         }
 
         SingleGoalDTO singleGoalDTO = SingleGoalDTO.builder()
                 .id(groupGoal.getId())
                 .title(groupGoal.getTitle())
-                .memberId(groupGoal.getGroupMember().getMember().getId())
+                .memberId(memberId)
                 .createdAt(groupGoal.getCreatedAt())
                 .updatedAt(groupGoal.getUpdatedAt())
                 .progress(groupGoal.getProgressRate())
                 .build();
-        return new ResponseDTO<>(singleGoalDTO,Responses.OK);
+
+        return new ResponseDTO<>(singleGoalDTO, Responses.OK);
     }
 
     public Integer calContributionPercent(List<GroupTodo> groupTodos, Long memberId){
