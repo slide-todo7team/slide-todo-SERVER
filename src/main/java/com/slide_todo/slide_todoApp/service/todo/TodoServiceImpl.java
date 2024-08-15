@@ -339,8 +339,13 @@ public class TodoServiceImpl implements TodoService {
       throw new CustomException(Exceptions.NOT_CHARGED_GROUP_MEMBER);
     }
 
-    groupMember.increaseTodoCount();
+//    groupMember.increaseTodoCount();
     todo.updateGroupTodoDone();
+    if (todo.getIsDone()) {
+      groupMember.increaseTodoCount();
+    } else {
+      groupMember.decreaseTodoCount();
+    }
     goal.updateProgressRate();
     return todo;
   }
