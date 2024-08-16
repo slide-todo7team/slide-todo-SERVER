@@ -27,15 +27,13 @@ public class BaseNoteRepositoryImpl implements BaseNoteRepository {
   }
 
   @Override
-  public List<Note> findAllByGoalId(Long goalId, Long start, Long limit) {
+  public List<Note> findAllByGoalId(Long goalId) {
     return em.createQuery("select n from Note n"
             + " left join fetch n.todo t"
             + " left join fetch t.goal g"
             + " where t.goal.id = :goalId"
             + " order by n.createdAt desc", Note.class)
         .setParameter("goalId", goalId)
-        .setFirstResult(start.intValue())
-        .setMaxResults(limit.intValue())
         .getResultList();
   }
 

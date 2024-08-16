@@ -9,7 +9,7 @@ public interface BaseNoteRepository {
   Note findByNoteId(Long noteId);
 
   /*목표에 따른 노트 조회*/
-  List<Note> findAllByGoalId(Long goalId, Long start, Long limit);
+  List<Note> findAllByGoalId(Long goalId);
 
   /*목표에 따른 노트 개수 조회*/
   Long countAllByGoalId(Long goalId);
