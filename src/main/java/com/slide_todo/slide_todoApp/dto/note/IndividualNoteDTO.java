@@ -32,11 +32,26 @@ public class IndividualNoteDTO {
     private Long id;
     private String title;
     private Boolean isDone;
+    private GoalInIndividualTodoDTO goal;
 
     public IndividualTodoInNoteDTO(Todo todo) {
       this.id = todo.getId();
       this.title = todo.getTitle();
       this.isDone = todo.getIsDone();
+      this.goal = new GoalInIndividualTodoDTO(todo);
+    }
+  }
+
+
+  @Data
+  public static class GoalInIndividualTodoDTO {
+
+    private Long id;
+    private String title;
+
+    public GoalInIndividualTodoDTO(Todo todo) {
+      this.id = todo.getGoal().getId();
+      this.title = todo.getGoal().getTitle();
     }
   }
 }
