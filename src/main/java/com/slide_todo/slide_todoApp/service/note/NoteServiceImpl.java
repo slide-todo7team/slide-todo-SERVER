@@ -8,6 +8,7 @@ import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
+import com.slide_todo.slide_todoApp.dto.group.GroupMemberDTO;
 import com.slide_todo.slide_todoApp.dto.note.GroupNoteDTO;
 import com.slide_todo.slide_todoApp.dto.note.GroupNoteListDTO;
 import com.slide_todo.slide_todoApp.dto.note.IndividualNoteDTO;
@@ -25,6 +26,7 @@ import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,7 +156,15 @@ public class NoteServiceImpl implements NoteService {
       GroupGoal groupGoal = (GroupGoal) goal;
       Group group = groupGoal.getGroup();
       groupMemberRepository.findByMemberIdAndGroupId(memberId, group.getId());
-      return new ResponseDTO<>(new GroupNoteListDTO(totalCount, page, notes), Responses.OK);
+      List<Long> todoIds = notes.stream().map(note -> note.getTodo().getId()).toList();
+      GroupNoteListDTO response = new GroupNoteListDTO(totalCount, page, notes);
+      Map<Long, GroupMember> assignees = groupMemberRepository.findAllByGroupTodoIds(todoIds);
+      response.getNotes().forEach(note -> {
+        if (assignees.containsKey(note.getTodo().getId())) {
+          note.getTodo().setMemberInCharge(new GroupMemberDTO(assignees.get(note.getTodo().getId())));
+        }
+      });
+      return new ResponseDTO<>(response, Responses.OK);
     }
     return new ResponseDTO<>(new IndividualNoteListDTO(totalCount, page, notes), Responses.OK);
   }
