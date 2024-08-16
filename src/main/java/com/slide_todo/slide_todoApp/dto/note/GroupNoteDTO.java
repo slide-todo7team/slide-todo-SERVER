@@ -35,6 +35,7 @@ public class GroupNoteDTO {
     private GroupMemberDTO memberInCharge;
     private String title;
     private Boolean isDone;
+    private GoalInGroupTodoDTO goal;
 
     public GroupTodoInNoteDTO(GroupTodo todo) {
       this.id = todo.getId();
@@ -45,6 +46,20 @@ public class GroupNoteDTO {
       }
       this.title = todo.getTitle();
       this.isDone = todo.getIsDone();
+      this.goal = new GoalInGroupTodoDTO(todo);
+    }
+  }
+
+
+  @Data
+  public static class GoalInGroupTodoDTO {
+
+    private Long id;
+    private String title;
+
+    public GoalInGroupTodoDTO(GroupTodo todo) {
+      this.id = todo.getGoal().getId();
+      this.title = todo.getGoal().getTitle();
     }
   }
 }

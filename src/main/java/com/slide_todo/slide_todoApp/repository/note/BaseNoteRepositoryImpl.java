@@ -30,6 +30,7 @@ public class BaseNoteRepositoryImpl implements BaseNoteRepository {
   public List<Note> findAllByGoalId(Long goalId, Long start, Long limit) {
     return em.createQuery("select n from Note n"
             + " left join fetch n.todo t"
+            + " left join fetch t.goal g"
             + " where t.goal.id = :goalId"
             + " order by n.createdAt desc", Note.class)
         .setParameter("goalId", goalId)
