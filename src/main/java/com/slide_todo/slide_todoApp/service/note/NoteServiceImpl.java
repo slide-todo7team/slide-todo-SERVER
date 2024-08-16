@@ -10,9 +10,7 @@ import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import com.slide_todo.slide_todoApp.dto.group.GroupMemberDTO;
 import com.slide_todo.slide_todoApp.dto.note.GroupNoteDTO;
-import com.slide_todo.slide_todoApp.dto.note.GroupNoteListDTO;
 import com.slide_todo.slide_todoApp.dto.note.IndividualNoteDTO;
-import com.slide_todo.slide_todoApp.dto.note.IndividualNoteListDTO;
 import com.slide_todo.slide_todoApp.dto.note.NoteCreateDTO;
 import com.slide_todo.slide_todoApp.dto.note.NoteUpdateDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
@@ -140,33 +138,26 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public ResponseDTO<?> getNotesByGoal(Long memberId, Long goalId, Long page, Long limit) {
-    long start;
-    if (limit != 0) {
-      start = (page - 1) * limit;
-    } else {
-      start = 0L;
-      limit = todoRepository.count();
-    }
-    List<Note> notes = noteRepository.findAllByGoalId(goalId, start, limit);
+  public ResponseDTO<?> getNotesByGoal(Long memberId, Long goalId) {
+    List<Note> notes = noteRepository.findAllByGoalId(goalId);
     Goal goal = goalRepository.findByGoalId(goalId);
-    Long totalCount = noteRepository.countAllByGoalId(goalId);
 
     if (goal.getDtype().equals("G")) {
       GroupGoal groupGoal = (GroupGoal) goal;
       Group group = groupGoal.getGroup();
       groupMemberRepository.findByMemberIdAndGroupId(memberId, group.getId());
       List<Long> todoIds = notes.stream().map(note -> note.getTodo().getId()).toList();
-      GroupNoteListDTO response = new GroupNoteListDTO(totalCount, page, notes);
+      List<GroupNoteDTO> response = notes.stream().map(GroupNoteDTO::new).toList();
       Map<Long, GroupMember> assignees = groupMemberRepository.findAllByGroupTodoIds(todoIds);
-      response.getNotes().forEach(note -> {
+      response.forEach(note -> {
         if (assignees.containsKey(note.getTodo().getId())) {
           note.getTodo().setMemberInCharge(new GroupMemberDTO(assignees.get(note.getTodo().getId())));
         }
       });
       return new ResponseDTO<>(response, Responses.OK);
     }
-    return new ResponseDTO<>(new IndividualNoteListDTO(totalCount, page, notes), Responses.OK);
+    List<IndividualNoteDTO> response = notes.stream().map(IndividualNoteDTO::new).toList();
+    return new ResponseDTO<>(response, Responses.OK);
   }
 
 
