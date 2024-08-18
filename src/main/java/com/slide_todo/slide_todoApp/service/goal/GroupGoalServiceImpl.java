@@ -98,7 +98,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
 
             List<GroupProgressDTO.GroupGoalMemDTO> groupGoalMemDTOS = groupMembers.stream()
                     .map(member -> {
-                        Integer contributionPercent = calContributionPercent(groupTodos, member.getId());
+                        Integer contributionPercent = calContributionPercent(groupTodos, member.getMember().getId());
 
                         return GroupProgressDTO.GroupGoalMemDTO.builder()
                                 .nickname(member.getMember().getNickname())
@@ -201,9 +201,8 @@ public class GroupGoalServiceImpl implements GroupGoalService {
     public Integer calContributionPercent(List<GroupTodo> groupTodos, Long memberId){
         Integer totalDoneCount = groupTodos.size();
         Integer contributionCount = (int) groupTodos.stream()
-//                .filter(todo -> todo.getIsDone() && Objects.equals(todo.getMemberInCharge().getMember().getId(), memberId))
                 .filter(todo -> {
-                    if(todo.getMemberInCharge() == null){
+                    if(todo.getMemberInCharge() == null || todo.getMemberInCharge().getMember() == null){
                         return false;
                     }
                     return todo.getIsDone() && todo.getMemberInCharge().getMember().getId().equals(memberId);
@@ -213,7 +212,6 @@ public class GroupGoalServiceImpl implements GroupGoalService {
         if(totalDoneCount == 0){
             return 0;
         }
-
         return (contributionCount * 100) / totalDoneCount;
 
     }
