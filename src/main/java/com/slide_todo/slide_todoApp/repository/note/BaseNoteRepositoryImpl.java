@@ -1,6 +1,7 @@
 package com.slide_todo.slide_todoApp.repository.note;
 
 import com.slide_todo.slide_todoApp.domain.note.Note;
+import com.slide_todo.slide_todoApp.dto.note.NoteSearchResultDTO;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
 import jakarta.persistence.EntityManager;
@@ -27,14 +28,25 @@ public class BaseNoteRepositoryImpl implements BaseNoteRepository {
   }
 
   @Override
-  public List<Note> findAllByGoalId(Long goalId) {
-    return em.createQuery("select n from Note n"
+  public NoteSearchResultDTO findAllByGoalId(Long goalId, long start, long limit) {
+    List<Note> notes = em.createQuery("select n from Note n"
             + " left join fetch n.todo t"
             + " left join fetch t.goal g"
-            + " where t.goal.id = :goalId"
+            + " where g.id = :goalId"
             + " order by n.createdAt desc", Note.class)
         .setParameter("goalId", goalId)
+        .setFirstResult((int) start)
+        .setMaxResults((int) limit)
         .getResultList();
+
+    long totalCount = em.createQuery("select count(n) from Note n"
+            + " left join n.todo t"
+            + " left join t.goal g"
+            + " where g.id = :goalId", Long.class)
+        .setParameter("goalId", goalId)
+        .getSingleResult();
+
+    return new NoteSearchResultDTO(notes, totalCount);
   }
 
   @Override
@@ -45,6 +57,4 @@ public class BaseNoteRepositoryImpl implements BaseNoteRepository {
         .setParameter("goalId", goalId)
         .getSingleResult();
   }
-
-
 }
