@@ -19,5 +19,5 @@ public interface NoteService {
   ResponseDTO<?> getOneNote(Long memberId, Long noteId);
 
   /*목표에 따른 노트 리스트 조회*/
-  ResponseDTO<?> getNotesByGoal(Long memberId, Long goalId);
+  ResponseDTO<?> getNotesByGoal(Long memberId, long page, long limit, Long goalId);
 }

@@ -10,8 +10,11 @@ import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import com.slide_todo.slide_todoApp.dto.group.GroupMemberDTO;
 import com.slide_todo.slide_todoApp.dto.note.GroupNoteDTO;
+import com.slide_todo.slide_todoApp.dto.note.GroupNoteListDTO;
 import com.slide_todo.slide_todoApp.dto.note.IndividualNoteDTO;
+import com.slide_todo.slide_todoApp.dto.note.IndividualNoteListDTO;
 import com.slide_todo.slide_todoApp.dto.note.NoteCreateDTO;
+import com.slide_todo.slide_todoApp.dto.note.NoteSearchResultDTO;
 import com.slide_todo.slide_todoApp.dto.note.NoteUpdateDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
 import com.slide_todo.slide_todoApp.repository.goal.GroupGoalRepository;
@@ -138,25 +141,37 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public ResponseDTO<?> getNotesByGoal(Long memberId, Long goalId) {
-    List<Note> notes = noteRepository.findAllByGoalId(goalId);
+  public ResponseDTO<?> getNotesByGoal(Long memberId, long page, long limit, Long goalId) {
+    long start;
+    if (limit != 0) {
+      start = (page - 1) * limit;
+    } else {
+      start = 0L;
+      limit = noteRepository.count();
+    }
+    NoteSearchResultDTO searchResult = noteRepository.findAllByGoalId(goalId, start, limit);
+    List<Note> notes = searchResult.getNotes();
     Goal goal = goalRepository.findByGoalId(goalId);
 
     if (goal.getDtype().equals("G")) {
       GroupGoal groupGoal = (GroupGoal) goal;
       Group group = groupGoal.getGroup();
       groupMemberRepository.findByMemberIdAndGroupId(memberId, group.getId());
+
       List<Long> todoIds = notes.stream().map(note -> note.getTodo().getId()).toList();
-      List<GroupNoteDTO> response = notes.stream().map(GroupNoteDTO::new).toList();
+      GroupNoteListDTO response = new GroupNoteListDTO(searchResult.getTotalCount(), page, notes);
+//      List<GroupNoteDTO> response = notes.stream().map(GroupNoteDTO::new).toList();
+
       Map<Long, GroupMember> assignees = groupMemberRepository.findAllByGroupTodoIds(todoIds);
-      response.forEach(note -> {
+      response.getNotes().forEach(note -> {
         if (assignees.containsKey(note.getTodo().getId())) {
           note.getTodo().setMemberInCharge(new GroupMemberDTO(assignees.get(note.getTodo().getId())));
         }
       });
       return new ResponseDTO<>(response, Responses.OK);
     }
-    List<IndividualNoteDTO> response = notes.stream().map(IndividualNoteDTO::new).toList();
+    IndividualNoteListDTO response = new IndividualNoteListDTO(searchResult.getTotalCount(), page, notes);
+//    List<IndividualNoteDTO> response = notes.stream().map(IndividualNoteDTO::new).toList();
     return new ResponseDTO<>(response, Responses.OK);
   }
 

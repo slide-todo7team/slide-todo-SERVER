@@ -108,10 +108,12 @@ public class NoteController {
   })
   public ResponseDTO<?> getNotesByGoal(
       HttpServletRequest request,
+      @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
+      @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
       @Parameter(description = "노트를 조회할 목표의 ID") @PathVariable Long goalId
   ) {
     Long memberId = jwtProvider.getMemberId(request);
-    return noteService.getNotesByGoal(memberId, goalId);
+    return noteService.getNotesByGoal(memberId, page, limit, goalId);
   }
 
 }
