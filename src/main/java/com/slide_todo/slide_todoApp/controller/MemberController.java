@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,7 +98,7 @@ public class MemberController {
   }
 
 
-  @GetMapping("/withdraw")
+  @DeleteMapping("/withdraw")
   @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 API입니다.")
   @ApiResponse(responseCode = "204", description = "회원 탈퇴 성공")
   public ResponseDTO<?> deleteMember(HttpServletRequest request) {
