@@ -164,7 +164,7 @@ public class GroupGoalServiceImpl implements GroupGoalService {
         groupGoal.deleteGoal();
         groupGoalRepository.save(groupGoal);
 
-        return new ResponseDTO<>(null,Responses.NO_CONTENT);
+        return new ResponseDTO<>("그룹 목표 삭제 완료",Responses.NO_CONTENT);
     }
 
     @Override
