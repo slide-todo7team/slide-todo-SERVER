@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Getter
@@ -97,9 +98,14 @@ public class GroupMember {
 
     public void deleteGroupMember() {
         this.getGroup().getGroupMembers().remove(this);
-        this.getChargingTodos().forEach(o -> {
-            o.updateMemberInCharge(this);
-        });
+        for (GroupTodo todo : chargingTodos) {
+            if (!todo.getIsDone()) { // 완료 상태가 아닐 경우
+                todo.setMemberInCharge(null); // memberInCharge를 null로 설정
+            }
+        }
+//        this.getChargingTodos().forEach(o -> {
+//            o.updateMemberInCharge(this);
+//        });
         this.isDeleted = true;
     }
 }

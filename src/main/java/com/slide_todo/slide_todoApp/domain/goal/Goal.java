@@ -67,8 +67,10 @@ public abstract class Goal {
      */
     public void deleteGoal() {
         this.isDeleted = true;
-        for (Todo todo : todos) {
-            todo.deleteTodo();
+        List<Todo> todosCopy = new ArrayList<>(todos); // 복사본 생성
+        for (Todo todo : todosCopy) {
+            todo.deleteTodo(); // 각 Todo의 삭제 작업 수행
+            todos.remove(todo); // 원본에서 안전하게 제거
         }
     }
 

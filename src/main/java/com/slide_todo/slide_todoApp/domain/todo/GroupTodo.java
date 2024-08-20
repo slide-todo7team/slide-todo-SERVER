@@ -55,4 +55,8 @@ public class GroupTodo extends Todo {
   public void updateGroupTodoDone() {
     this.updateDone();
   }
+
+  public void setMemberInCharge(Object o) {
+    this.memberInCharge = (GroupMember) o;
+  }
 }
