@@ -28,7 +28,7 @@ public abstract class Goal {
     @Column(name = "goal_id")
     private Long id;
 
-    @OneToMany(mappedBy = "goal", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "goal", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Todo> todos = new ArrayList<>();
 
     private String title;

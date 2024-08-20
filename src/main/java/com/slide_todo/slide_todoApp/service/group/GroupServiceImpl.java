@@ -118,9 +118,7 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
         groupMemberRepository.deleteByGroup(group);
         groupRepository.deleteById(groupId);
-
-
-        return new ResponseDTO<>(null, Responses.NO_CONTENT);
+        return new ResponseDTO<>("그룹 삭제 성공", Responses.NO_CONTENT);
     }
 
     //그룹 탈퇴
@@ -133,7 +131,7 @@ public class GroupServiceImpl implements GroupService {
             throw new CustomException(Exceptions.GROUP_MEMBER_ONLY);
         }
         groupMember.deleteGroupMember();
-        return new ResponseDTO<>(null, Responses.OK);
+        return new ResponseDTO<>("그룹 탈퇴 성공", Responses.OK);
     }
 
     //새로운 초대코드 발급
