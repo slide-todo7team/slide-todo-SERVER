@@ -1,5 +1,7 @@
 package com.slide_todo.slide_todoApp.service.member;
 
+import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
+import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
 import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberIdsDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
@@ -8,6 +10,9 @@ import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import jakarta.annotation.Nullable;
 
 public interface AdminMemberService {
+
+  /*어드민 로그인*/
+  ResponseDTO<TokenPairDTO> adminSignin(SigninDTO request);
 
   /*어드민 페이지에서 유저 리스트 조회*/
   ResponseDTO<AdminMemberListDTO> getAllMembers(long page, long limit, @Nullable String nickname,

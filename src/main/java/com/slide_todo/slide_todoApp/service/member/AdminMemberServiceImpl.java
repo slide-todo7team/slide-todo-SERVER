@@ -1,6 +1,8 @@
 package com.slide_todo.slide_todoApp.service.member;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
+import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
+import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
 import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberIdsDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberSearchResultDTO;
@@ -9,6 +11,8 @@ import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberListDTO;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
+import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
+import com.slide_todo.slide_todoApp.util.jwt.TokenType;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import com.slide_todo.slide_todoApp.util.response.Responses;
 import java.time.LocalDate;
@@ -16,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +32,28 @@ public class AdminMemberServiceImpl implements AdminMemberService {
   private final MemberRepository memberRepository;
   private final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
   private final Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
+  private final PasswordEncoder passwordEncoder;
+  private final JwtProvider jwtProvider;
+
+  @Override
+  public ResponseDTO<TokenPairDTO> adminSignin(SigninDTO request) {
+    Member member = memberRepository.findByEmail(request.getEmail());
+
+    if (member.getRole().name().equals("USER")) {
+      throw new CustomException(Exceptions.ADMIN_ONLY);
+    }
+
+    if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
+      throw new CustomException(Exceptions.WRONG_PASSWORD);
+    }
+
+    TokenPairDTO tokenPair = new TokenPairDTO(
+        jwtProvider.createToken(member.getId(), TokenType.ACCESS),
+        jwtProvider.createToken(member.getId(), TokenType.REFRESH)
+    );
+
+    return new ResponseDTO<>(tokenPair, Responses.OK);
+  }
 
   @Override
   public ResponseDTO<AdminMemberListDTO> getAllMembers(long page, long limit,
