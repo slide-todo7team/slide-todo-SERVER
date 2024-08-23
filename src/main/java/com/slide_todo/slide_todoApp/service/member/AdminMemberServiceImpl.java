@@ -1,6 +1,7 @@
 package com.slide_todo.slide_todoApp.service.member;
 
 import com.slide_todo.slide_todoApp.domain.member.Member;
+import com.slide_todo.slide_todoApp.domain.member.MemberRole;
 import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
 import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
@@ -39,7 +40,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
   public ResponseDTO<TokenPairDTO> adminSignin(SigninDTO request) {
     Member member = memberRepository.findByEmail(request.getEmail());
 
-    if (member.getRole().name().equals("USER")) {
+    if (member.getRole().name().equals(MemberRole.USER.name())) {
       throw new CustomException(Exceptions.ADMIN_ONLY);
     }
 
