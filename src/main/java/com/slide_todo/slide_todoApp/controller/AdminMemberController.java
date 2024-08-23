@@ -1,8 +1,10 @@
 package com.slide_todo.slide_todoApp.controller;
 
-import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
+import com.slide_todo.slide_todoApp.dto.jwt.TokenPairDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberIdsDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
+import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
+import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
 import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberListDTO;
 import com.slide_todo.slide_todoApp.service.member.AdminMemberService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
@@ -10,6 +12,7 @@ import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +34,19 @@ public class AdminMemberController {
 
   private final JwtProvider jwtProvider;
   private final AdminMemberService adminMemberService;
+
+
+  @PostMapping("/signin")
+  @Operation(summary = "로그인", description = "로그인 API입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "로그인 성공"),
+      @ApiResponse(responseCode = "403", description = "어드민 권한 없음")
+  })
+  public ResponseDTO<TokenPairDTO> adminSignin(
+      @RequestBody SigninDTO request
+  ) {
+    return adminMemberService.adminSignin(request);
+  }
 
   @GetMapping("")
   @Operation(summary = "어드민 페이지에서 유저 리스트 조회", description = "유저 리스트를 조회합니다.")
