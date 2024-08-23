@@ -165,14 +165,14 @@ public class AdminGoalServiceImpl implements AdminGoalService {
     LocalDateTime parsedCreatedBefore;
     if (createdAfter != null) {
       parsedCreatedAfter = LocalDate.parse(createdAfter.replace(" ", ""))
-          .atStartOfDay().plusDays(1);;
+          .atStartOfDay();
     } else {
       parsedCreatedAfter = null;
     }
 
     if (createdBefore != null) {
       parsedCreatedBefore = LocalDate.parse(createdBefore.replace(" ", ""))
-          .atStartOfDay();
+          .atStartOfDay().plusDays(1);
     } else {
       parsedCreatedBefore = null;
     }
@@ -198,14 +198,14 @@ public class AdminGoalServiceImpl implements AdminGoalService {
     LocalDateTime parsedCreatedBefore;
     if (createdAfter != null) {
       parsedCreatedAfter = LocalDate.parse(createdAfter.replace(" ", ""))
-          .atStartOfDay().plusDays(1);;
+          .atStartOfDay();
     } else {
       parsedCreatedAfter = null;
     }
 
     if (createdBefore != null) {
       parsedCreatedBefore = LocalDate.parse(createdBefore.replace(" ", ""))
-          .atStartOfDay();
+          .atStartOfDay().plusDays(1);
     } else {
       parsedCreatedBefore = null;
     }

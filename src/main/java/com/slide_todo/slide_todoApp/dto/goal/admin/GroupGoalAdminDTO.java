@@ -25,7 +25,7 @@ public class GroupGoalAdminDTO {
   @Data
   public static class GroupGoalInListDTO {
 
-    private GroupInGoalDTO groupInGoalDTO;
+    private GroupInGoalDTO group;
     private Long id;
     private String title;
     private GroupMemberInGroupGoalDTO member;
@@ -34,7 +34,7 @@ public class GroupGoalAdminDTO {
     private LocalDateTime updatedAt;
 
     public GroupGoalInListDTO(GroupGoal goal) {
-      this.groupInGoalDTO = new GroupInGoalDTO(goal.getGroup());
+      this.group = new GroupInGoalDTO(goal.getGroup());
       this.id = goal.getId();
       this.title = goal.getTitle();
       if (goal.getGroupMember() != null) {

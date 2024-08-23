@@ -2,8 +2,6 @@ package com.slide_todo.slide_todoApp.repository.goal;
 
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.goal.IndividualGoal;
-import com.slide_todo.slide_todoApp.domain.group.GroupMember;
-import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.Todo;
 import com.slide_todo.slide_todoApp.dto.goal.GroupGoalSearchResultDTO;
 import com.slide_todo.slide_todoApp.dto.goal.IndividualGoalSearchResultDTO;
@@ -39,14 +37,14 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
       countQueryBuilder.append(" and ig.title like :title");
     }
     if (createdAfter != null) {
-      queryBuilder.append(" and ig.created > :createdAfter");
-      countQueryBuilder.append(" and ig.created > :createdAfter");
+      queryBuilder.append(" and ig.createdAt >= :createdAfter");
+      countQueryBuilder.append(" and ig.createdAt >= :createdAfter");
     }
     if (createdBefore != null) {
-      queryBuilder.append(" and ig.created < :createdBefore");
-      countQueryBuilder.append(" and ig.created < :createdBefore");
+      queryBuilder.append(" and ig.createdAt <= :createdBefore");
+      countQueryBuilder.append(" and ig.createdAt <= :createdBefore");
     }
-    queryBuilder.append(" order by ig.created desc");
+    queryBuilder.append(" order by ig.createdAt desc");
 
     TypedQuery<IndividualGoal> query = em.createQuery(queryBuilder.toString(),
         IndividualGoal.class);
@@ -103,12 +101,12 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
       countQueryBuilder.append(" and gg.title like :title");
     }
     if (createdAfter != null) {
-      queryBuilder.append(" and gg.createdAt > :createdAfter");
-      countQueryBuilder.append(" and gg.createdAt > :createdAfter");
+      queryBuilder.append(" and gg.createdAt >= :createdAfter");
+      countQueryBuilder.append(" and gg.createdAt >= :createdAfter");
     }
     if (createdBefore != null) {
-      queryBuilder.append(" and gg.createdAt < :createdBefore");
-      countQueryBuilder.append(" and gg.createdAt < :createdBefore");
+      queryBuilder.append(" and gg.createdAt <= :createdBefore");
+      countQueryBuilder.append(" and gg.createdAt <= :createdBefore");
     }
     queryBuilder.append(" order by gg.createdAt desc");
 
