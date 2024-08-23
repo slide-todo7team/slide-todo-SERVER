@@ -19,6 +19,7 @@ import com.slide_todo.slide_todoApp.util.response.Responses;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -69,8 +70,9 @@ public class AdminGroupServiceImpl implements AdminGroupService {
             groups = groupRepository.findAll(groupSearchSpec);
         }
         else{
-            PageRequest pageRequest = PageRequest.of(page-1,limit);
-            groups = (List<Group>) groupRepository.findAll(groupSearchSpec,pageRequest);
+            PageRequest pageRequest = PageRequest.of(page - 1, limit);
+            Page<Group> groupPage = groupRepository.findAll(groupSearchSpec, pageRequest);
+            groups = groupPage.getContent(); // Page에서 리스트 가져오기
         }
 
         List<GroupInfoDTO> groupInfoDTOS = new ArrayList<>();
@@ -97,6 +99,8 @@ public class AdminGroupServiceImpl implements AdminGroupService {
 
         return new ResponseDTO<>(groupListDTO, Responses.OK);
     }
+
+
 
     @Override
     @Transactional
