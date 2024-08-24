@@ -8,10 +8,10 @@ import lombok.Data;
 public class MemberSearchResultDTO {
 
   private List<Member> members;
-  private long totalCount;
+  private long searchedCount;
 
-  public MemberSearchResultDTO(List<Member> members, long totalCount) {
+  public MemberSearchResultDTO(List<Member> members, long searchedCount) {
     this.members = members;
-    this.totalCount = totalCount;
+    this.searchedCount = searchedCount;
   }
 }

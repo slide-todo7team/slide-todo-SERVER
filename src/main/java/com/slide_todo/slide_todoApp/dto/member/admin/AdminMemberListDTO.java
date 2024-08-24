@@ -8,11 +8,13 @@ import lombok.Data;
 public class AdminMemberListDTO {
 
   private Long totalCount;
+  private Long searchedCount;
   private Long currentPage;
   private List<AdminMemberListRowDTO> members;
 
-  public AdminMemberListDTO(Long totalCount, Long currentPage, List<Member> members) {
+  public AdminMemberListDTO(Long totalCount, Long searchedCount, Long currentPage, List<Member> members) {
     this.totalCount = totalCount;
+    this.searchedCount = searchedCount;
     this.currentPage = currentPage;
     this.members = members.stream().map(AdminMemberListRowDTO::new).toList();
   }

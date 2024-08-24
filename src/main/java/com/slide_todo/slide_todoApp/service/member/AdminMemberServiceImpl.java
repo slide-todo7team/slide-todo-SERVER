@@ -130,12 +130,11 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     }
 
     MemberSearchResultDTO searchResult = memberRepository.findByNicknameAndEmailAndCreatedAt(
-        nickname, email,
-        parsedCreatedAfter, parsedCreatedBefore, start, limit);
+        nickname, email, parsedCreatedAfter, parsedCreatedBefore, start, limit);
 
-    return new AdminMemberListDTO(searchResult.getTotalCount(), page, searchResult.getMembers());
+    Long totalCount = memberRepository.count();
 
-//    return new MemberListDTO(searchResult.getTotalCount(), page, searchResult.getMembers());
+    return new AdminMemberListDTO(totalCount, searchResult.getSearchedCount(), page, searchResult.getMembers());
   }
 
   /*이메일 유효성 및 중복 검사*/

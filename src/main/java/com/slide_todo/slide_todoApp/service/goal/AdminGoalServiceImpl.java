@@ -181,7 +181,9 @@ public class AdminGoalServiceImpl implements AdminGoalService {
         nickname, title, parsedCreatedAfter, parsedCreatedBefore, start, limit
     );
 
-    return new IndividualGoalAdminDTO(searchResult.getTotalCount(), page, searchResult.getGoals());
+    long totalCount = goalRepository.countIndividualGoal();
+
+    return new IndividualGoalAdminDTO(totalCount, searchResult.getSearchedCount(), page, searchResult.getGoals());
   }
 
   /*그룹 목표 리스트 조회*/
@@ -214,6 +216,8 @@ public class AdminGoalServiceImpl implements AdminGoalService {
         nickname, groupName, title, parsedCreatedAfter, parsedCreatedBefore, start, limit
     );
 
-    return new GroupGoalAdminDTO(searchResult.getTotalCount(), page, searchResult.getGoals());
+    long totalCount = goalRepository.countGroupGoal();
+
+    return new GroupGoalAdminDTO(totalCount, searchResult.getSearchCount(), page, searchResult.getGoals());
   }
 }

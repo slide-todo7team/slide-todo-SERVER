@@ -11,11 +11,13 @@ import lombok.Data;
 public class IndividualGoalAdminDTO {
 
   private Long totalCount;
+  private  Long searchedCount;
   private Long currentPage;
   private List<IndividualGoalInListDTO> goals;
 
-  public IndividualGoalAdminDTO(Long totalCount, Long currentPage, List<IndividualGoal> goals) {
+  public IndividualGoalAdminDTO(Long totalCount, Long searchedCount, Long currentPage, List<IndividualGoal> goals) {
     this.totalCount = totalCount;
+    this.searchedCount = searchedCount;
     this.currentPage = currentPage;
     this.goals = goals.stream().map(IndividualGoalInListDTO::new).toList();
   }
