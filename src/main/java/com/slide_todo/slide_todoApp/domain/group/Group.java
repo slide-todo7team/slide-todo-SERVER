@@ -94,4 +94,8 @@ public class Group {
         this.secretCode = secretCode;
     }
 
+    public void setCreatedGroupMember(GroupMember groupMember) {
+        this.createdGroupMember = groupMember;
+    }
+
 }

@@ -8,7 +8,7 @@ import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 
 public interface AdminGroupService {
 
-    ResponseDTO<GroupListDTO> getAllGroups(String nickname,String group, int page, int limit);
+    ResponseDTO<GroupListDTO> getAllGroups(String nickname,String title, int page, int limit);
 
     ResponseDTO<?> deleteGroups(GroupIdDTO groupIdDTO);
 
