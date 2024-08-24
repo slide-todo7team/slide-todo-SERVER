@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class GroupListDTO {
     private int current_page;
-    private Long total_count;
+    private Long totalCount;
+    private Long searchCount;
     private List<GroupInfoDTO> groups;
 }

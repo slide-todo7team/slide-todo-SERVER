@@ -209,8 +209,11 @@ public class GroupServiceImpl implements GroupService {
         currentLeader.setIsLeader(false);
         newLeader.setIsLeader(true);
 
+        group.setCreatedGroupMember(newLeader);
+
         groupMemberRepository.save(currentLeader);
         groupMemberRepository.save(newLeader);
+        groupRepository.save(group);
 
         return new ResponseDTO<>("리더 변경 완료",Responses.OK);
     }

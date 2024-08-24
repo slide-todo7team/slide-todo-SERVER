@@ -27,10 +27,10 @@ public class AdminGroupController {
     public ResponseDTO<GroupListDTO> getAllGroups(
             HttpServletRequest request,
             @Parameter(description = "그룹장 이름") @RequestParam(required = false) String nickname,
-            @Parameter(description = "그룹 이름")@RequestParam(required = false) String group,
+            @Parameter(description = "그룹 이름")@RequestParam(required = false) String title,
             @RequestParam int page, @RequestParam int limit){
         Long adminId = jwtProvider.getAdminMemberId(request);
-        return adminGroupService.getAllGroups(nickname,group,page,limit);
+        return adminGroupService.getAllGroups(nickname,title,page,limit);
     }
 
     @DeleteMapping("")

@@ -74,6 +74,7 @@ public class AdminGroupServiceImpl implements AdminGroupService {
             Page<Group> groupPage = groupRepository.findAll(groupSearchSpec, pageRequest);
             groups = groupPage.getContent(); // Page에서 리스트 가져오기
         }
+        long totalCount = groupRepository.count();
 
         List<GroupInfoDTO> groupInfoDTOS = new ArrayList<>();
 
@@ -92,7 +93,8 @@ public class AdminGroupServiceImpl implements AdminGroupService {
         }
 
         GroupListDTO groupListDTO = GroupListDTO.builder()
-                .total_count((long) groupInfoDTOS.size())
+                .totalCount(totalCount)
+                .searchCount((long) groupInfoDTOS.size())
                 .current_page(page)
                 .groups(groupInfoDTOS)
                 .build();
@@ -184,11 +186,15 @@ public class AdminGroupServiceImpl implements AdminGroupService {
                 .findFirst()
                 .orElseThrow(()->new CustomException(Exceptions.MEMBER_NOT_FOUND));
 
+
         currentLeader.setIsLeader(false);
         newLeader.setIsLeader(true);
 
+        group.setCreatedGroupMember(newLeader);
+
         groupMemberRepository.save(currentLeader);
         groupMemberRepository.save(newLeader);
+        groupRepository.save(group);
 
         return new ResponseDTO<>("리더 변경 완료",Responses.OK);
     }
