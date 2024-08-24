@@ -33,4 +33,10 @@ public interface BaseGoalRepository {
 
   /*그룹 목표 상세정보 조회*/
   GroupGoal findGroupGoalDetail(Long goalId);
+
+  /*개인 목표 개수 조회*/
+  long countIndividualGoal();
+
+  /*그룹 목표 개수 조회*/
+  long countGroupGoal();
 }

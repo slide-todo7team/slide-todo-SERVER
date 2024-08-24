@@ -205,4 +205,18 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
       throw new CustomException(Exceptions.GOAL_NOT_FOUND);
     }
   }
+
+  @Override
+  public long countIndividualGoal() {
+    return em.createQuery("select count(ig) from IndividualGoal ig", Long.class)
+        .getSingleResult();
+  }
+
+  @Override
+  public long countGroupGoal() {
+    return em.createQuery("select count(gg) from GroupGoal gg", Long.class)
+        .getSingleResult();
+  }
+
+
 }
