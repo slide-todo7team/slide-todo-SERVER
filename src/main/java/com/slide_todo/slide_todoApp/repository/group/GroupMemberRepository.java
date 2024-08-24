@@ -6,11 +6,12 @@ import com.slide_todo.slide_todoApp.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface GroupMemberRepository extends JpaRepository<GroupMember,Long>, BaseGroupMemberRepository {
     List<GroupMember> findByGroup(Group group);
-
     List<GroupMember> findByMember(Member member);
 
     void deleteByGroup(Group group);

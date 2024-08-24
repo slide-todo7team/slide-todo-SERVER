@@ -1,6 +1,7 @@
 package com.slide_todo.slide_todoApp.domain.group;
 
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
+import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.dto.group.GroupCreateDTO;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 
@@ -19,10 +21,10 @@ import java.util.List;
 
 @Entity
 @Getter
-//@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "`group`")
+@SQLRestriction("is_deleted = false")
 public class Group {
 
     @Id
@@ -30,9 +32,8 @@ public class Group {
     @Column(name = "group_id")
     private Long id;
 
-    //그룹을 생성한 사람 (Member보다 GroupMember로 매핑하는 것이 더 자연스럽다고 생각했습니다.)
-    // ERD에 표시를 안 해뒀었더라구요 죄송합니다ㅜㅜ
-    @OneToOne(fetch = FetchType.LAZY)
+    //그룹을 생성한 사람
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "created_group_member_id") //그룹을 생성한 사람
     private GroupMember createdGroupMember;
 
@@ -59,6 +60,8 @@ public class Group {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    private Boolean isDeleted=false;
 
     @Builder
     public Group(GroupCreateDTO groupCreateDTO, Member member) {
@@ -96,6 +99,22 @@ public class Group {
 
     public void setCreatedGroupMember(GroupMember groupMember) {
         this.createdGroupMember = groupMember;
+    }
+
+    public void deleteGroup() {
+        this.isDeleted=true;
+        List<GroupMember> groupMembers = this.groupMembers;
+
+        for (GroupMember groupMember : new ArrayList<>(groupMembers)) {
+            groupMember.deleteGroupMember();
+            groupMembers.remove(groupMember);
+        }
+
+        List<GroupGoal> groupGoals = this.groupGoals;
+        for (GroupGoal groupGoal : new ArrayList<>(groupGoals)) {
+            groupGoal.deleteGroupGoal();
+            groupGoals.remove(groupGoal);
+        }
     }
 
 }
