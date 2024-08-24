@@ -116,8 +116,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public ResponseDTO<?> deleteGroup(Long groupId){
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
-        groupMemberRepository.deleteByGroup(group);
-        groupRepository.deleteById(groupId);
+        group.deleteGroup();
         return new ResponseDTO<>("그룹 삭제 성공", Responses.NO_CONTENT);
     }
 

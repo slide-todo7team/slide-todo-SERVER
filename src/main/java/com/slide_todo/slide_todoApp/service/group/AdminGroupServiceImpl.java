@@ -110,7 +110,8 @@ public class AdminGroupServiceImpl implements AdminGroupService {
         List<Long> ids = groupIdDTO.getGroupIds();
 
         for(Long id : ids){
-            groupRepository.deleteById(id);
+            Group group = groupRepository.findById(id).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
+            group.deleteGroup();
         }
 
         return new ResponseDTO<>("그룹 삭제 완료",Responses.NO_CONTENT);

@@ -5,21 +5,7 @@ import com.slide_todo.slide_todoApp.domain.goal.Goal;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -59,7 +45,7 @@ public abstract class Todo {
   private Goal goal;
 
   @Nullable
-  @OneToOne(mappedBy = "todo", fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "todo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
   private Note note;
 
 
