@@ -67,6 +67,7 @@ public class AdminGoalController {
       HttpServletRequest request,
       @Parameter(description = "검색할 페이지 번호") @RequestParam long page,
       @Parameter(description = "한 페이지에 검색할 데이터 수") @RequestParam long limit,
+      @Parameter(description = "검색할 그룹 ID 조건") @RequestParam(required = false) Long groupId,
       @Parameter(description = "검색할 닉네임 조건") @RequestParam(required = false) String nickname,
       @Parameter(description = "검색할 그룹 이름 조건")
       @RequestParam(required = false) String groupName,
@@ -77,7 +78,7 @@ public class AdminGoalController {
       @RequestParam(required = false) String createdBefore
   ) {
     Long adminId = jwtProvider.getAdminMemberId(request);
-    return adminGoalService.getGroupGoalsByAdmin(page, limit, nickname, groupName, title,
+    return adminGoalService.getGroupGoalsByAdmin(groupId, page, limit, nickname, groupName, title,
         createdAfter, createdBefore);
   }
 
