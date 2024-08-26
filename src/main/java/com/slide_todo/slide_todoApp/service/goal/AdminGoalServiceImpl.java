@@ -59,10 +59,10 @@ public class AdminGoalServiceImpl implements AdminGoalService {
    * @return
    */
   @Override
-  public ResponseDTO<GroupGoalAdminDTO> getGroupGoalsByAdmin(long page, long limit,
+  public ResponseDTO<GroupGoalAdminDTO> getGroupGoalsByAdmin(Long groupId, long page, long limit,
       String nickname, String groupName, String title, String createdAfter, String createdBefore) {
 
-    GroupGoalAdminDTO result = searchGroupGoals(page, limit, nickname, groupName, title,
+    GroupGoalAdminDTO result = searchGroupGoals(groupId, page, limit, nickname, groupName, title,
         createdAfter, createdBefore);
 
     return new ResponseDTO<>(result, Responses.OK);
@@ -187,7 +187,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
   }
 
   /*그룹 목표 리스트 조회*/
-  private GroupGoalAdminDTO searchGroupGoals(long page, long limit,
+  private GroupGoalAdminDTO searchGroupGoals(Long groupId, long page, long limit,
       String nickname, String groupName, String title, String createdAfter, String createdBefore) {
     long start;
     if (limit != 0) {
@@ -213,7 +213,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
     }
 
     GroupGoalSearchResultDTO searchResult = goalRepository.findGroupGoalByAdmin(
-        nickname, groupName, title, parsedCreatedAfter, parsedCreatedBefore, start, limit
+        groupId, nickname, groupName, title, parsedCreatedAfter, parsedCreatedBefore, start, limit
     );
 
     long totalCount = goalRepository.countGroupGoal();

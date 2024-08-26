@@ -73,7 +73,7 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
   }
 
   @Override
-  public GroupGoalSearchResultDTO findGroupGoalByAdmin(String nickname, String groupName,
+  public GroupGoalSearchResultDTO findGroupGoalByAdmin(Long groupId, String nickname, String groupName,
       String title, LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
 
     StringBuilder queryBuilder = new StringBuilder("select gg from GroupGoal gg"
@@ -88,6 +88,10 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
             + " left join gg.group g"
             + " where 1=1");
 
+    if (groupId != null) {
+      queryBuilder.append(" and g.id = :groupId");
+      countQueryBuilder.append(" and g.id = :groupId");
+    }
     if (nickname != null) {
       queryBuilder.append(" and gm.member.nickname like :nickname");
       countQueryBuilder.append(" and gm.member.nickname like :nickname");
@@ -113,6 +117,10 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
     TypedQuery<GroupGoal> query = em.createQuery(queryBuilder.toString(), GroupGoal.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryBuilder.toString(), Long.class);
 
+    if (groupId != null) {
+      query.setParameter("groupId", groupId);
+      countQuery.setParameter("groupId", groupId);
+    }
     if (nickname != null) {
       query.setParameter("nickname", "%" + nickname + "%");
       countQuery.setParameter("nickname", "%" + nickname + "%");
