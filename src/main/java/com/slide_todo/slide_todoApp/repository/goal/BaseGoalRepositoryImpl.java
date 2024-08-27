@@ -22,12 +22,20 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
   private EntityManager em;
 
   @Override
-  public IndividualGoalSearchResultDTO findIndividualGoalByAdmin(String nickname, String title,
+  public IndividualGoalSearchResultDTO findIndividualGoalByAdmin(Long memberId, String nickname, String title,
       LocalDateTime createdAfter, LocalDateTime createdBefore, long start, long limit) {
-    StringBuilder queryBuilder = new StringBuilder("select ig from IndividualGoal ig where 1=1");
+    StringBuilder queryBuilder = new StringBuilder("select ig from IndividualGoal ig"
+        + " left join fetch ig.member m"
+        + " where 1=1");
     StringBuilder countQueryBuilder = new StringBuilder(
-        "select count(ig) from IndividualGoal ig where 1=1");
+        "select count(ig) from IndividualGoal ig"
+            + " left join ig.member m"
+            + " where 1=1");
 
+    if (memberId != null) {
+      queryBuilder.append(" and m.id = :memberId");
+      countQueryBuilder.append(" and m.id = :memberId");
+    }
     if (nickname != null) {
       queryBuilder.append(" and ig.member.nickname like :nickname");
       countQueryBuilder.append(" and ig.member.nickname like :nickname");
@@ -49,6 +57,10 @@ public class BaseGoalRepositoryImpl implements BaseGoalRepository {
     TypedQuery<IndividualGoal> query = em.createQuery(queryBuilder.toString(),
         IndividualGoal.class);
     TypedQuery<Long> countQuery = em.createQuery(countQueryBuilder.toString(), Long.class);
+    if (memberId != null) {
+      query.setParameter("memberId", memberId);
+      countQuery.setParameter("memberId", memberId);
+    }
     if (nickname != null) {
       query.setParameter("nickname", "%" + nickname + "%");
       countQuery.setParameter("nickname", "%" + nickname + "%");
