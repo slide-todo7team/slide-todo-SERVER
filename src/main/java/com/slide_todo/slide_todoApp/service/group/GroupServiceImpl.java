@@ -127,7 +127,8 @@ public class GroupServiceImpl implements GroupService {
 
         GroupMember groupMember = groupMemberRepository.findByMemberIdAndGroupId(memberId,groupId);
         if(groupMember.getIsLeader().equals(true)){
-            throw new CustomException(Exceptions.GROUP_MEMBER_ONLY);
+//            throw new CustomException(Exceptions.GROUP_MEMBER_ONLY);
+            deleteGroup(groupId);
         }
         groupMember.deleteGroupMember();
         return new ResponseDTO<>("그룹 탈퇴 성공", Responses.OK);
