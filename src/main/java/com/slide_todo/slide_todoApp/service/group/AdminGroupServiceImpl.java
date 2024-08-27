@@ -67,6 +67,7 @@ public class AdminGroupServiceImpl implements AdminGroupService {
             groups = groupPage.getContent(); // Page에서 리스트 가져오기
         }
         long totalCount = groupRepository.count();
+        long searchCount = groupRepository.count(groupSearchSpec);
 
         List<GroupInfoDTO> groupInfoDTOS = new ArrayList<>();
 
@@ -86,7 +87,7 @@ public class AdminGroupServiceImpl implements AdminGroupService {
 
         GroupListDTO groupListDTO = GroupListDTO.builder()
                 .totalCount(totalCount)
-                .searchCount((long) groupInfoDTOS.size())
+                .searchCount(searchCount)
                 .current_page(page)
                 .groups(groupInfoDTOS)
                 .build();
