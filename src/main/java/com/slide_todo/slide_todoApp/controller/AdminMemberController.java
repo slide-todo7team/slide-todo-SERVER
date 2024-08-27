@@ -6,6 +6,7 @@ import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.dto.member.SigninDTO;
 import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
 import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberListDTO;
+import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberUpdateDTO;
 import com.slide_todo.slide_todoApp.service.member.AdminMemberService;
 import com.slide_todo.slide_todoApp.util.jwt.JwtProvider;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
@@ -93,7 +94,7 @@ public class AdminMemberController {
   @PatchMapping("/update/{memberId}")
   @Operation(summary = "유저 데이터 수정", description = "유저 데이터를 수정합니다.")
   @ApiResponse(responseCode = "200", description = "유저 데이터 수정 성공")
-  public ResponseDTO<AdminMemberDetailDTO> updateMemberInformation(
+  public ResponseDTO<AdminMemberUpdateDTO> updateMemberInformation(
       HttpServletRequest request,
       @PathVariable Long memberId,
       @RequestBody MemberUpdateDTO memberUpdateDTO
