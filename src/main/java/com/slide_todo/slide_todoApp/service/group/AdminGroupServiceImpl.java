@@ -34,6 +34,7 @@ public class AdminGroupServiceImpl implements AdminGroupService {
     private final MemberRepository memberRepository;
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
+    private final GroupServiceImpl groupServiceImpl;
 
     @Override
     public ResponseDTO<GroupListDTO> getAllGroups(String nickname, String title, int page, int limit) {
@@ -137,6 +138,9 @@ public class AdminGroupServiceImpl implements AdminGroupService {
     @Transactional
     public ResponseDTO<?> deleteMemeber(Long groupId, Long memberId) {
         GroupMember groupMember = groupMemberRepository.findByMemberIdAndGroupId(memberId,groupId);
+        if(groupMember.getIsLeader()){
+            groupServiceImpl.deleteGroup(groupId);
+        }
         groupMember.deleteGroupMember();
 
         return new ResponseDTO<>("멤버 탈퇴 완료",Responses.OK);
