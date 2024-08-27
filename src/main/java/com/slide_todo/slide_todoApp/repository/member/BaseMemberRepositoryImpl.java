@@ -128,7 +128,6 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   public Member findMemberWithGoalAndGroupMember(Long memberId) {
     try {
       Member member = em.createQuery("select m from Member m"
-              + " left join fetch m.individualGoals ig"
               + " where m.id =:memberId"
               + " order by m.createdAt desc", Member.class)
           .setParameter("memberId", memberId)

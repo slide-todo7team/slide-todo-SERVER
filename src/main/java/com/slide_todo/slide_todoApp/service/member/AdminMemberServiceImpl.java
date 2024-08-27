@@ -9,6 +9,7 @@ import com.slide_todo.slide_todoApp.dto.member.MemberIdsDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberSearchResultDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberListDTO;
+import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberUpdateDTO;
 import com.slide_todo.slide_todoApp.repository.member.MemberRepository;
 import com.slide_todo.slide_todoApp.util.exception.CustomException;
 import com.slide_todo.slide_todoApp.util.exception.Exceptions;
@@ -88,7 +89,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 
   @Override
   @Transactional
-  public ResponseDTO<AdminMemberDetailDTO> updateMember(Long memberId, MemberUpdateDTO request) {
+  public ResponseDTO<AdminMemberUpdateDTO> updateMember(Long memberId, MemberUpdateDTO request) {
     Member member = memberRepository.findByMemberId(memberId);
 
     if (request.getEmail() != null) {
@@ -101,7 +102,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     }
 
     member.updateMember(request.getEmail(), request.getNickname());
-    return new ResponseDTO<>(new AdminMemberDetailDTO(member), Responses.OK);
+    return new ResponseDTO<>(new AdminMemberUpdateDTO(member), Responses.OK);
   }
 
   private AdminMemberListDTO searchMembers(long page, long limit,

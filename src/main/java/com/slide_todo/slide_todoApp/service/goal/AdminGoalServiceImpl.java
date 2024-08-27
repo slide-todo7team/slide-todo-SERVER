@@ -40,9 +40,9 @@ public class AdminGoalServiceImpl implements AdminGoalService {
    */
   @Override
   public ResponseDTO<IndividualGoalAdminDTO> getIndividualGoalsByAdmin(long page, long limit,
-      String nickname, String title, String createdAfter, String createdBefore) {
+      Long memberId, String nickname, String title, String createdAfter, String createdBefore) {
 
-    IndividualGoalAdminDTO result = searchIndividualGoals(page, limit, nickname, title,
+    IndividualGoalAdminDTO result = searchIndividualGoals(page, limit, memberId, nickname, title,
         createdAfter, createdBefore);
 
     return new ResponseDTO<>(result, Responses.OK);
@@ -152,7 +152,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
   }
 
   /*개인 목표 리스트 조회*/
-  private IndividualGoalAdminDTO searchIndividualGoals(long page, long limit,
+  private IndividualGoalAdminDTO searchIndividualGoals(long page, long limit, Long memberId,
       String nickname, String title, String createdAfter, String createdBefore) {
     long start;
     if (limit != 0) {
@@ -178,7 +178,7 @@ public class AdminGoalServiceImpl implements AdminGoalService {
     }
 
     IndividualGoalSearchResultDTO searchResult = goalRepository.findIndividualGoalByAdmin(
-        nickname, title, parsedCreatedAfter, parsedCreatedBefore, start, limit
+        memberId, nickname, title, parsedCreatedAfter, parsedCreatedBefore, start, limit
     );
 
     long totalCount = goalRepository.countIndividualGoal();

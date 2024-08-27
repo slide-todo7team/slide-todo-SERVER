@@ -11,7 +11,7 @@ public interface BaseGoalRepository {
 
   /*어드민 페이지에서 개인 목표 리스트 조회*/
   IndividualGoalSearchResultDTO findIndividualGoalByAdmin(
-      String nickname, String title, LocalDateTime createdAfter, LocalDateTime createdBefore,
+      Long memberId, String nickname, String title, LocalDateTime createdAfter, LocalDateTime createdBefore,
       long start, long limit
   );
 

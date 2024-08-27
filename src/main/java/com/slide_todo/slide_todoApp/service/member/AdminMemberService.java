@@ -6,6 +6,7 @@ import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberDetailDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberIdsDTO;
 import com.slide_todo.slide_todoApp.dto.member.MemberUpdateDTO;
 import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberListDTO;
+import com.slide_todo.slide_todoApp.dto.member.admin.AdminMemberUpdateDTO;
 import com.slide_todo.slide_todoApp.util.response.ResponseDTO;
 import jakarta.annotation.Nullable;
 
@@ -25,5 +26,5 @@ public interface AdminMemberService {
   ResponseDTO<?> deleteMembers(MemberIdsDTO request);
 
   /*유저 데이터 수정*/
-  ResponseDTO<AdminMemberDetailDTO> updateMember(Long memberId, MemberUpdateDTO request);
+  ResponseDTO<AdminMemberUpdateDTO> updateMember(Long memberId, MemberUpdateDTO request);
 }

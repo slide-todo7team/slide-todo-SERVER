@@ -10,7 +10,7 @@ public interface AdminGoalService {
 
   /*어드민 페이지에서 개인 목표 리스트 조회*/
   ResponseDTO<IndividualGoalAdminDTO> getIndividualGoalsByAdmin(long page, long limit,
-      String nickname, String title, String createdAfter, String createdBefore);
+      Long memberId, String nickname, String title, String createdAfter, String createdBefore);
 
   /*어드민 페이지에서 그룹 목표 리스트 조회*/
   ResponseDTO<GroupGoalAdminDTO> getGroupGoalsByAdmin(Long groupId, long page, long limit, String groupName,
