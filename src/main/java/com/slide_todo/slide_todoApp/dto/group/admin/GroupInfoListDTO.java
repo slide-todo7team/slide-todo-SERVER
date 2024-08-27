@@ -15,7 +15,7 @@ public class GroupInfoListDTO {
     private String title;
     private String secretCode;
     private String createUser;
-    private List<GroupMemberDTO> members;
+    private List<GroupInfoDTO.GroupMemberDTO> members;
     private List<GoalDTO> goals;
 
     @Data

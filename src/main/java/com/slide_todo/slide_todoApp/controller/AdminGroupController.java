@@ -42,14 +42,14 @@ public class AdminGroupController {
 
     @GetMapping("/{groupId}")
     @Operation(summary = "그룹 관리 - 그룹 상세 조회")
-    public ResponseDTO<GroupInfoListDTO> getGroupInfo(@PathVariable Long groupId,HttpServletRequest request){
+    public ResponseDTO<GroupInfoDTO> getGroupInfo(@PathVariable Long groupId,HttpServletRequest request){
         Long adminId = jwtProvider.getAdminMemberId(request);
         return adminGroupService.getGroupInfo(groupId);
     }
 
     @PatchMapping("/{groupId}")
     @Operation(summary = "그룹 관리 - 제목 or 초대코드 수정")
-    public ResponseDTO<GroupInfoListDTO> updateGroupInfo(
+    public ResponseDTO<GroupInfoDTO> updateGroupInfo(
             HttpServletRequest request,
             @PathVariable Long groupId,@RequestBody GroupUpdateDTO groupUpdateDTO){
         Long adminId = jwtProvider.getAdminMemberId(request);

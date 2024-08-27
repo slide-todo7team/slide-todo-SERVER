@@ -5,9 +5,7 @@ import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.dto.group.GroupInfoDTO;
-import com.slide_todo.slide_todoApp.dto.group.GroupMemberDTO;
 import com.slide_todo.slide_todoApp.dto.group.admin.GroupIdDTO;
-import com.slide_todo.slide_todoApp.dto.group.admin.GroupInfoListDTO;
 import com.slide_todo.slide_todoApp.dto.group.admin.GroupListDTO;
 import com.slide_todo.slide_todoApp.repository.group.GroupMemberRepository;
 import com.slide_todo.slide_todoApp.repository.group.GroupRepository;
@@ -40,36 +38,30 @@ public class AdminGroupServiceImpl implements AdminGroupService {
     @Override
     public ResponseDTO<GroupListDTO> getAllGroups(String nickname, String title, int page, int limit) {
 
-        Specification<Group> groupSearchSpec = (root, query, criteriaBuilder) ->
-        {
+        Specification<Group> groupSearchSpec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            //그룹 이름으로 필터링하기
-            if(title != null && !title.isEmpty()){
-                predicates.add(criteriaBuilder.equal(root.get("title"),title));
+            // 그룹 이름으로 필터링하기 (부분 일치)
+            if (title != null && !title.isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("title"), title + "%")); // 부분 일치
             }
 
-            //그룹장 닉네임으로 필터링하기
-            if(nickname != null && !nickname.isEmpty()){
-                Member member = memberRepository.findByNickname(nickname);
-                if(member != null){
-                    Join<Group, GroupMember> groupMembers = root.join("groupMembers");
-                    predicates.add(criteriaBuilder.and(
-                            criteriaBuilder.equal(groupMembers.get("member"),member),
-                            criteriaBuilder.isTrue(groupMembers.get("isLeader"))
-                    ));
-                }
+            // 그룹장 닉네임으로 필터링하기 (부분 일치)
+            if (nickname != null && !nickname.isEmpty()) {
+                Join<Group, GroupMember> groupMembers = root.join("groupMembers");
+                predicates.add(criteriaBuilder.and(
+                        criteriaBuilder.like(groupMembers.get("member").get("nickname"), nickname + "%"), // 부분 일치
+                        criteriaBuilder.isTrue(groupMembers.get("isLeader"))
+                ));
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-
         };
 
         List<Group> groups;
 
-        if(limit == 0){
+        if (limit == 0) {
             groups = groupRepository.findAll(groupSearchSpec);
-        }
-        else{
+        } else {
             PageRequest pageRequest = PageRequest.of(page - 1, limit);
             Page<Group> groupPage = groupRepository.findAll(groupSearchSpec, pageRequest);
             groups = groupPage.getContent(); // Page에서 리스트 가져오기
@@ -104,6 +96,7 @@ public class AdminGroupServiceImpl implements AdminGroupService {
 
 
 
+
     @Override
     @Transactional
     public ResponseDTO<?> deleteGroups(GroupIdDTO groupIdDTO) {
@@ -118,30 +111,24 @@ public class AdminGroupServiceImpl implements AdminGroupService {
     }
 
     @Override
-    public ResponseDTO<GroupInfoListDTO> getGroupInfo(Long groupId) {
+    public ResponseDTO<GroupInfoDTO> getGroupInfo(Long groupId) {
         Group group = groupRepository.findGroupWithGroupMembers(groupId);
-
-        List<GroupInfoListDTO.GroupMemberDTO> groupMemberDTOS = new ArrayList<>();
-        for(GroupMember groupMember : group.getGroupMembers()){
-            groupMemberDTOS.add(new GroupInfoListDTO.GroupMemberDTO(groupMember));
+        if(group == null){
+            throw new CustomException(Exceptions.GROUP_NOT_FOUND);
         }
 
-        List<GroupInfoListDTO.GoalDTO> groupGoalDTOS = new ArrayList<>();
+        List<GroupMember> groupMembers = group.getGroupMembers();
+        GroupInfoDTO groupInfoDTO = new GroupInfoDTO(group);
+        groupInfoDTO.calculateContributionRank(groupMembers);
+
+        List<GroupInfoDTO.GoalDTO> groupGoalDTOS = new ArrayList<>();
         for(GroupGoal groupGoal : group.getGroupGoals()){
-            groupGoalDTOS.add(new GroupInfoListDTO.GoalDTO(groupGoal));
+            groupGoalDTOS.add(new GroupInfoDTO.GoalDTO(groupGoal));
         }
 
+        groupInfoDTO.setGoals(groupGoalDTOS);
 
-        GroupInfoListDTO groupInfoListDTO = GroupInfoListDTO.builder()
-                .id(group.getId())
-                .title(group.getTitle())
-                .createUser(group.getCreatedGroupMember().getMember().getNickname())
-                .secretCode(group.getSecretCode())
-                .members(groupMemberDTOS)
-                .goals(groupGoalDTOS)
-                .build();
-
-        return new ResponseDTO<>(groupInfoListDTO, Responses.OK);
+        return new ResponseDTO<>(groupInfoDTO, Responses.OK);
 
     }
 
@@ -156,7 +143,7 @@ public class AdminGroupServiceImpl implements AdminGroupService {
 
     @Override
     @Transactional
-    public ResponseDTO<GroupInfoListDTO> updateGroupInfo(Long groupId, String title, String secretCode) {
+    public ResponseDTO<GroupInfoDTO> updateGroupInfo(Long groupId, String title, String secretCode) {
        Group group = groupRepository.findById(groupId).orElseThrow(() -> new CustomException(Exceptions.GROUP_NOT_FOUND));
 
        if(title!=null && !title.isEmpty()){

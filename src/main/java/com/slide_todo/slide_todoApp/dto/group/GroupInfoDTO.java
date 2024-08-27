@@ -1,5 +1,6 @@
 package com.slide_todo.slide_todoApp.dto.group;
 
+import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
 import com.slide_todo.slide_todoApp.domain.group.Group;
 import com.slide_todo.slide_todoApp.domain.group.GroupMember;
 import com.slide_todo.slide_todoApp.domain.member.Member;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,6 +24,20 @@ public class GroupInfoDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<GroupMemberDTO> members;
+    private List<GoalDTO> goals;
+
+    @Data
+    public static class GoalDTO{
+        private Long id;
+        private String title;
+        private BigDecimal progress;
+
+        public GoalDTO(GroupGoal groupGoal) {
+            this.id = groupGoal.getId();
+            this.title = groupGoal.getTitle();
+            this.progress = groupGoal.getProgressRate();
+        }
+    }
 
 
     @Getter
@@ -42,16 +58,6 @@ public class GroupInfoDTO {
         this.secretCode = group.getSecretCode();
         this.createdAt = group.getCreatedAt();
         this.updatedAt = group.getUpdatedAt();
-    }
-
-    public GroupInfoDTO(Group group, List<GroupMemberDTO> members) {
-        this.id = group.getId();
-        this.title = group.getTitle();
-        this.createUser = group.getCreatedGroupMember().getMember().getNickname();
-        this.secretCode = group.getSecretCode();
-        this.createdAt = group.getCreatedAt();
-        this.updatedAt = group.getUpdatedAt();
-        this.members = members;
     }
 
     public void calculateContributionRank(List<GroupMember> groupMembers) {
