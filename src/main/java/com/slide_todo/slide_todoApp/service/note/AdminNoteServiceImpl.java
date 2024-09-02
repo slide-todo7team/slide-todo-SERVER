@@ -44,6 +44,7 @@ public class AdminNoteServiceImpl implements AdminNoteService {
   public ResponseDTO<?> deleteNoteByAdmin(Long noteId) {
     Note note = noteRepository.findByNoteId(noteId);
     note.deleteNote();
+    noteRepository.delete(note);
     return new ResponseDTO<>(null, Responses.NO_CONTENT);
   }
 }

@@ -27,7 +27,7 @@ public class Note {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne(cascade = CascadeType.REMOVE)
+  @OneToOne()
   @JoinColumn(name = "todo_id")
   private Todo todo;
 
@@ -86,7 +86,7 @@ public class Note {
    */
   public void deleteNote() {
     this.getTodo().deleteNote();
-    this.isDeleted = true;
+//    this.isDeleted = true;
     this.updatedAt = LocalDateTime.now();
   }
 }
