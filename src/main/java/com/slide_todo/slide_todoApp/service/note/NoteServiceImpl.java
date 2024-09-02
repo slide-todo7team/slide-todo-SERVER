@@ -116,10 +116,12 @@ public class NoteServiceImpl implements NoteService {
           throw new CustomException(Exceptions.MUST_CHARGE_BEFORE_DELETE_GROUP_NOTE);
         }
         note.deleteNote();
+        noteRepository.delete(note);
         return new ResponseDTO<>(null, Responses.NO_CONTENT);
       }
     }
     note.deleteNote();
+    noteRepository.delete(note);
     return new ResponseDTO<>(null, Responses.NO_CONTENT);
   }
 

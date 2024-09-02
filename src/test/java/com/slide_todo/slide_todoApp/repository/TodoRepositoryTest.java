@@ -1,10 +1,7 @@
 package com.slide_todo.slide_todoApp.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.slide_todo.slide_todoApp.TestGenerator;
 import com.slide_todo.slide_todoApp.domain.goal.GroupGoal;
@@ -14,7 +11,6 @@ import com.slide_todo.slide_todoApp.domain.member.Member;
 import com.slide_todo.slide_todoApp.domain.note.Note;
 import com.slide_todo.slide_todoApp.domain.todo.GroupTodo;
 import com.slide_todo.slide_todoApp.domain.todo.IndividualTodo;
-//import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
 import com.slide_todo.slide_todoApp.dto.todo.GroupTodoSearchResultDTO;
 import com.slide_todo.slide_todoApp.dto.todo.IndividualTodoSearchResultDTO;
 import com.slide_todo.slide_todoApp.repository.goal.GoalRepository;
@@ -186,6 +182,7 @@ public class TodoRepositoryTest {
     Long noteId = note.getId();
 
     note.deleteNote();
+    noteRepository.delete(note);
 
     /*when*/
     Exception e = assertThrows(CustomException.class, () ->
