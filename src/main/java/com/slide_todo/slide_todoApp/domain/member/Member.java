@@ -77,7 +77,13 @@ public class Member {
 
   public void deleteMember() {
     this.getIndividualGoals().forEach(IndividualGoal::deleteGoal);
-    this.getGroupMembers().forEach(GroupMember::deleteGroupMember);
+//    this.getGroupMembers().forEach(GroupMember::deleteGroupMember);
+    this.getGroupMembers().forEach(groupmember -> {
+      if (groupmember.getIsLeader().equals(true)) {
+        groupmember.getGroup().deleteGroup();
+      }
+      groupmember.deleteGroupMember();
+    });
     this.updatedAt = LocalDateTime.now();
     this.isDeleted = true;
   }
